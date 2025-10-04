@@ -18,13 +18,13 @@ const ForgotPassword = () => {
     return (
       <div className="auth-container">
         <div className="auth-card">
-          {/* Logo placeholder - ThaiHoc will replace with actual logo */}
+          {/* Green Fund Logo */}
           <div className="logo-placeholder">
-            <img src="/src/assets/logo.png" alt="Logo" className="logo" onError={(e) => {
+            <img src="/logo.png" alt="Green Fund Logo" className="logo" onError={(e) => {
               e.target.style.display = 'none';
               const parent = e.target.parentElement;
               if (parent) {
-                parent.innerHTML = '<div className="logo-text">Your Logo</div>';
+                parent.innerHTML = '<div className="logo-text">Green Fund</div>';
               }
             }} />
           </div>
@@ -51,13 +51,13 @@ const ForgotPassword = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        {/* Logo placeholder - ThaiHoc will replace with actual logo */}
+        {/* Green Fund Logo */}
         <div className="logo-placeholder">
-          <img src="/src/assets/logo.png" alt="Logo" className="logo" onError={(e) => {
+          <img src="/logo.png" alt="Green Fund Logo" className="logo" onError={(e) => {
             e.target.style.display = 'none';
             const parent = e.target.parentElement;
             if (parent) {
-              parent.innerHTML = '<div className="logo-text">Your Logo</div>';
+              parent.innerHTML = '<div className="logo-text">Green Fund</div>';
             }
           }} />
         </div>

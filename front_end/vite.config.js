@@ -7,7 +7,11 @@ export default defineConfig({
   build: {
     outDir: '../dist', // Output to root dist directory for deployment
     emptyOutDir: true,
+    // Ensure assets are copied correctly
+    assetsDir: 'assets',
   },
+  // Ensure public assets are accessible
+  publicDir: 'public',
   server: {
     host: '0.0.0.0', // Listen on all network interfaces
     port: 5173, // Default Vite port
