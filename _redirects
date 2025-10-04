@@ -1,0 +1,13 @@
+[build]
+command = "npm run build"
+publish = "dist"
+
+[build.environment]
+NODE_VERSION = "18"
+NPM_VERSION = "8"
+
+# SPA routing support
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

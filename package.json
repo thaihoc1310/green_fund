@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Green Fund - A P2P lending platform focused on ESG projects",
   "scripts": {
-    "build": "cd front_end && npm run build",
+    "build": "cd front_end && npm ci --production=false && npm run build",
     "dev": "cd front_end && npm run dev",
     "preview": "cd front_end && npm run preview",
     "install": "cd front_end && npm install",
@@ -18,5 +18,9 @@
     "vite"
   ],
   "author": "ThaiHoc",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
 }
