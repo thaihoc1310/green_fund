@@ -1,0 +1,351 @@
+.create-loan-container {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding: 24px;
+}
+
+.create-loan-header {
+  max-width: 900px;
+  margin: 0 auto 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.create-loan-header h1 {
+  color: #166534;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.progress-steps {
+  max-width: 900px;
+  margin: 0 auto 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  position: relative;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);
+}
+
+.step.completed .step-number {
+  background-color: #16a34a;
+  color: white;
+}
+
+.step span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  text-align: center;
+}
+
+.step.active span {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.step-line {
+  flex: 1;
+  height: 2px;
+  background-color: #e2e8f0;
+  margin: 0 -20px;
+  margin-top: -20px;
+  position: relative;
+  z-index: 0;
+}
+
+.loan-form {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.form-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.form-card h2 {
+  color: #166534;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-description {
+  color: #64748b;
+  font-size: 14px;
+  margin: -10px 0 20px 0;
+  line-height: 1.6;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #334155;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  color: #334155;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #86efac;
+  box-shadow: 0 0 0 4px rgba(134, 239, 172, 0.2);
+}
+
+.input-group textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.calculation-summary {
+  margin-top: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border-radius: 12px;
+  border: 1px solid #bbf7d0;
+}
+
+.calculation-summary h3 {
+  margin: 0 0 16px 0;
+  color: #166534;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.calculation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.calc-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.calc-item span {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.calc-item strong {
+  font-size: 18px;
+  color: #166534;
+  font-weight: 700;
+}
+
+.calc-item strong.highlight {
+  color: #16a34a;
+  font-size: 20px;
+}
+
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.upload-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upload-item label {
+  color: #334155;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.file-upload {
+  position: relative;
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 24px;
+  text-align: center;
+  background-color: #f8fafc;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.file-upload:hover {
+  border-color: #86efac;
+  background-color: #f0fdf4;
+}
+
+.file-upload input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.upload-placeholder {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.form-actions {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.form-actions button {
+  min-width: 150px;
+  padding: 14px 32px;
+}
+
+.btn-next,
+.btn-submit {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .create-loan-container {
+    padding: 16px;
+  }
+
+  .create-loan-header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .create-loan-header h1 {
+    font-size: 24px;
+  }
+
+  .progress-steps {
+    padding: 20px;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .step {
+    flex-direction: row;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .step-line {
+    display: none;
+  }
+
+  .step span {
+    text-align: left;
+  }
+
+  .form-card {
+    padding: 24px 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .calculation-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .create-loan-header h1 {
+    font-size: 20px;
+  }
+
+  .form-card {
+    padding: 20px 16px;
+  }
+
+  .form-card h2 {
+    font-size: 18px;
+  }
+
+  .step-number {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}

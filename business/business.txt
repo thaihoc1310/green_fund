@@ -1,0 +1,60 @@
+1. Đăng nhập/Đăng ký 
+- Đăng nhập 
+Người dùng nhập email/số điện thoại + mật khẩu để đăng nhập 
+Chức năng Quên mật khẩu: gửi link đặt lại mật khẩu qua email 
+- Đăng ký
+Người dùng nhập: Họ và tên, Số điện thoại, Email, Mật khẩu, Xác nhận lại mật khẩu 
+Xác nhận đồng ý Điều khoản & Chính sách bảo mật 
+Hệ thống gửi email xác thực tài khoản 
+2. Trang chủ sau đăng nhập (Với vai trò người vay)
+- Hiển thị thông tin người dùng (avatar, tên)
+- Hiển thị số dư tài khoản (liên kết với ngân hàng)
+- Chức năng nạp tiền vào tài khoản 
+- Các chức năng chính: 
+Tạo khoản vay mới 
+Tạo yêu cầu vay 
+Thanh toán khoản vay
+Quản lý dự án (các khoản vay của mình) 
+Lịch sử giao dịch (tiền nhận từ nhà đầu tư, lịch trả nợ)
+Tin tức & ưu đãi 
+3. Trang chủ sau đăng nhập (Với vai trò người cho vay)
+- Hiển thị thông tin người dùng (avatar, tên)
+- Hiển thị số dư tài khoản (liên kết với ngân hàng)
+- Chức năng nạp tiền vào tài khoản 
+- Các chức năng chính:
+Danh sách khoản vay cần đầu tư (list dự án)
+Chi tiết từng khoản vay (mục đích vay, lãi suất, xếp hạng tín nhiệm, ESG)
+Đầu tư ngay (chọn số tiền muốn rót vốn)
+Quản lý danh mục đầu tư (dự án đang đầu tư, lợi nhuận dự kiến)
+Lịch sử giao dịch (tiền đã giải ngân, tiền lãi nhận được)
+Tin tức & ưu đãi 
+4. Danh sách các khoản vay 
+- Hiển thị danh sách dự án cần vay vốn 
+Tên dự án
+Số tiền cần vay 
+Mục đích vay 
+Xếp hạng tín nhiệm (A,B,C..)
+Lãi suất đề xuất (%/năm)
+Mức độ ESG 
+→ Người dùng có thể Xem chi tiết khoản vay 
+5. Chi tiết khoản vay 
+- Thông tin dự án 
+Tên dự án 
+Người đại diện (Tên, chức vụ, tuổi)
+Nơi đăng ký kinh doanh, loại hình DN 
+- Lịch sử tín dụng 
+Tổng số khoản vay trước đây 
+Tỷ lệ hoàn trả đúng hạn (%)
+Tổng số tiền đã vay/trả 
+Xếp hạng tín dụng nội bộ 
+- Thông tin khoản vay hiện tại 
+Số tiền vay 
+Thời hạn vay (tháng)
+Lãi suất dự kiến (%/năm)
+Hình thức trả (gốc + lãi hàng tháng)
+Mục đích vay 
+- Nút hành động: Đầu tư ngay (cho nhà đầu tư góp vốn)
+6. Khác (mở rộng trong tương lai)
+- Dashboard thống kê: tổng đầu tư, lợi nhuận, lịch trả nợ 
+- Chat/hỗ trợ khách hàng 
+

@@ -1,0 +1,298 @@
+/* Dashboard specific styles */
+.header-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.user-info-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px;
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+  border: 1px solid #bbf7d0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.user-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3);
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-details h2 {
+  margin: 0 0 6px 0;
+  color: #166534;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.user-role {
+  margin: 0 0 8px 0 !important;
+  color: #64748b !important;
+  font-size: 14px !important;
+  font-weight: 500;
+}
+
+.user-balance {
+  margin: 0 !important;
+  color: #16a34a !important;
+  font-size: 18px !important;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-profile {
+  padding: 12px 24px;
+  background-color: white;
+  color: #16a34a;
+  border: 2px solid #16a34a;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-profile:hover {
+  background-color: #16a34a;
+  color: white;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard-btn {
+  padding: 20px !important;
+  margin: 0 !important;
+  height: auto !important;
+  transition: all 0.2s ease;
+}
+
+.btn-feature {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 120px;
+  background: white !important;
+  color: #16a34a !important;
+  border: 2px solid #16a34a !important;
+  text-align: center;
+}
+
+.btn-feature:hover {
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+  color: white !important;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(34, 197, 94, 0.3) !important;
+}
+
+.feature-icon {
+  font-size: 32px;
+}
+
+.btn-feature span {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.btn-feature.deposit-feature {
+  background: linear-gradient(135deg, #15803d, #16a34a) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(21, 128, 61, 0.3) !important;
+}
+
+.btn-feature.deposit-feature:hover {
+  background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+  color: white !important;
+  box-shadow: 0 6px 14px rgba(22, 163, 74, 0.4) !important;
+}
+
+.dashboard-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(34, 197, 94, 0.25) !important;
+}
+
+.btn-view-all {
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(34, 197, 94, 0.2);
+}
+
+.btn-view-all:hover {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(34, 197, 94, 0.3);
+}
+
+.deposit-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.deposit-input {
+  padding: 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 16px;
+  flex: 1;
+  transition: all 0.2s ease;
+  color: #334155;
+}
+
+.deposit-input:focus {
+  outline: none;
+  border-color: #86efac;
+  box-shadow: 0 0 0 4px rgba(134, 239, 172, 0.3);
+}
+
+.loan-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.loan-card:hover {
+  border-color: #c6f6d5;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.loan-info h4 {
+  margin: 0 0 8px 0;
+  color: #334155;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.loan-details p {
+  margin: 6px 0;
+  color: #64748b;
+  font-size: 15px;
+}
+
+.rating-a {
+  background-color: #dcfce7;
+  color: #16a34a;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.rating-a-plus {
+  background-color: #d1fae5;
+  color: #059669;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.role-switcher {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Responsive adjustments for dashboard */
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+  }
+  
+  .loan-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .loan-card button {
+    align-self: flex-end;
+  }
+  
+  .deposit-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 768px) {
+  .user-info-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .role-switcher {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .role-switcher h1 {
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-info-card {
+    padding: 20px 16px;
+  }
+  
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .loan-card {
+    padding: 16px;
+  }
+}
