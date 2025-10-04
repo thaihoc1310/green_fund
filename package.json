@@ -1,0 +1,22 @@
+{
+  "name": "green-fund",
+  "version": "1.0.0",
+  "description": "Green Fund - A P2P lending platform focused on ESG projects",
+  "scripts": {
+    "build": "cd front_end && npm run build",
+    "dev": "cd front_end && npm run dev",
+    "preview": "cd front_end && npm run preview",
+    "install": "cd front_end && npm install",
+    "lint": "cd front_end && npm run lint"
+  },
+  "keywords": [
+    "p2p-lending",
+    "esg",
+    "sustainable-finance",
+    "green-fund",
+    "react",
+    "vite"
+  ],
+  "author": "ThaiHoc",
+  "license": "MIT"
+}
