@@ -160,14 +160,14 @@ body {
 }
 
 .input-group {
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   text-align: left;
   position: relative;
 }
 
 .input-group input {
   width: 100%;
-  padding: 16px 20px;
+  padding: 15px 16px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   font-size: 16px;
