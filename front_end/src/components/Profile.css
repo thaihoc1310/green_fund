@@ -231,36 +231,128 @@ textarea.edit-input {
   .profile-header {
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    gap: 12px;
   }
 
   .profile-header h1 {
     font-size: 24px;
+    order: 2;
+  }
+
+  .btn-back {
+    order: 1;
+    width: 100%;
+    justify-content: center;
   }
 
   .profile-card {
-    padding: 24px 20px;
+    padding: 28px 20px;
+  }
+
+  .profile-avatar-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+  }
+
+  .avatar-large {
+    width: 100px;
+    height: 100px;
+    font-size: 40px;
+  }
+
+  .btn-upload-avatar {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .profile-info-section h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
   }
 
   .info-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 18px;
+  }
+
+  .info-group label {
+    font-size: 14px;
+  }
+
+  .info-value,
+  .info-group input,
+  .info-group select,
+  .info-group textarea {
+    font-size: 15px;
+    padding: 12px 14px;
   }
 
   .profile-actions {
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
+    align-items: stretch;
+    gap: 10px;
   }
 
   .btn-edit,
   .btn-save {
     width: 100%;
     justify-content: center;
+    padding: 14px;
+    font-size: 15px;
   }
   
   .btn-cancel {
-    width: auto;
-    min-width: 120px;
+    width: 100% !important;
+    max-width: none !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 12px;
+  }
+
+  .profile-header h1 {
+    font-size: 20px;
+  }
+
+  .profile-card {
+    padding: 24px 16px;
+  }
+
+  .avatar-large {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+
+  .btn-upload-avatar {
+    padding: 9px 18px;
+    font-size: 13px;
+  }
+
+  .profile-info-section h2 {
+    font-size: 18px;
+  }
+
+  .info-group label {
+    font-size: 13px;
+  }
+
+  .info-value,
+  .info-group input,
+  .info-group select,
+  .info-group textarea {
+    font-size: 14px;
+    padding: 11px 13px;
+  }
+
+  .btn-edit,
+  .btn-save {
+    padding: 13px;
+    font-size: 14px;
   }
 }

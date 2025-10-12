@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaIdCard, FaCalendar, FaEdit, FaSave } from 'react-icons/fa';
+import BottomNav from './BottomNav';
 import './Profile.css';
 
 const Profile = () => {
@@ -206,6 +207,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <BottomNav userRole={userRole} />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaLeaf, FaStar, FaArrowLeft, FaFilter } from 'react-icons/fa';
 import { BiMoney, BiTime } from 'react-icons/bi';
+import BottomNav from './BottomNav';
 import './LoanList.css';
 
 const LoanList = () => {
@@ -109,6 +110,14 @@ const LoanList = () => {
           <FaArrowLeft /> Quay lại
         </button>
         <h1>Danh sách khoản vay</h1>
+      </div>
+
+      {/* Featured Promotional Banner - Add your image here */}
+      <div className="loan-promo-banner">
+        <div className="loan-banner-placeholder">
+          <p>💡 Thêm ảnh quảng cáo dự án nổi bật ở đây</p>
+          <span className="loan-banner-hint">Kích thước đề xuất: 1200x400px</span>
+        </div>
       </div>
 
       <div className="filter-section">
@@ -232,6 +241,7 @@ const LoanList = () => {
           <p>Không tìm thấy khoản vay phù hợp với bộ lọc</p>
         </div>
       )}
+      <BottomNav userRole={userRole} />
     </div>
   );
 };

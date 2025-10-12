@@ -219,26 +219,42 @@
 @media (max-width: 768px) {
   .loan-management-container {
     padding: 16px;
+    padding-bottom: 80px !important; /* Space for bottom nav */
   }
 
   .loan-management-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
   }
 
   .loan-management-header h1 {
     font-size: 24px;
+    order: 2;
+  }
+
+  .btn-back {
+    order: 1;
+    width: 100%;
+    justify-content: center;
   }
 
   .loan-card-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+    padding: 18px 20px;
   }
 
   .loan-actions {
     width: 100%;
     justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .action-btn {
+    padding: 12px 16px;
+    font-size: 14px;
   }
 
   .info-grid {
@@ -594,13 +610,35 @@
 }
 
 @media (max-width: 480px) {
+  .loan-management-container {
+    padding: 12px;
+    padding-bottom: 80px !important;
+  }
+
+  .loan-management-header h1 {
+    font-size: 20px;
+  }
+
+  .loan-card-header {
+    padding: 16px;
+  }
+
+  .loan-card-body {
+    padding: 16px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
   .action-btn {
-    padding: 8px 12px;
+    padding: 11px 14px;
     font-size: 13px;
   }
 
   .action-btn span {
-    display: none;
+    display: inline; /* Keep text on small screens */
   }
 
   .modal-header {

@@ -10,7 +10,6 @@ import CreateLoan from './components/CreateLoan';
 import LoanManagement from './components/LoanManagement';
 import TransactionHistory from './components/TransactionHistory';
 import InvestmentPortfolio from './components/InvestmentPortfolio';
-import NewsPromotion from './components/NewsPromotion';
 import Deposit from './components/Deposit';
 import Profile from './components/Profile';
 import './App.css';
@@ -37,9 +36,6 @@ function App() {
           {/* Portfolio & History */}
           <Route path="/investment-portfolio" element={<InvestmentPortfolio />} />
           <Route path="/transaction-history" element={<TransactionHistory />} />
-          
-          {/* News */}
-          <Route path="/news-promotion" element={<NewsPromotion />} />
           
           {/* Static Pages */}
           <Route path="/verification" element={

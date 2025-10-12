@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft, FaChartLine, FaCheckCircle, FaClock, FaExclamationTriangle, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { BiMoney, BiTime } from 'react-icons/bi';
+import BottomNav from './BottomNav';
 import './LoanManagement.css';
 
 const LoanManagement = () => {
@@ -381,6 +382,7 @@ const LoanManagement = () => {
           </div>
         </div>
       )}
+      <BottomNav userRole={userRole} />
     </div>
   );
 };

@@ -9,6 +9,30 @@
   margin: 0 auto 24px;
 }
 
+.loan-detail-container .btn-back,
+.loan-detail-header .btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background-color: white !important;
+  color: #16a34a !important;
+  border: 2px solid #16a34a !important;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.loan-detail-container .btn-back:hover,
+.loan-detail-header .btn-back:hover {
+  background-color: white !important;
+  color: #16a34a !important;
+  border-color: #16a34a !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
 .loan-detail-content {
   max-width: 1400px;
   margin: 0 auto;

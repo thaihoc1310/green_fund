@@ -388,39 +388,191 @@
   .deposit-header {
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    gap: 12px;
   }
 
   .deposit-header h1 {
     font-size: 24px;
+    order: 2;
+  }
+
+  .btn-back {
+    order: 1;
+    width: 100%;
+    justify-content: center;
   }
 
   .deposit-card {
-    padding: 24px 20px;
+    padding: 24px 18px;
+  }
+
+  .card-header {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+  }
+
+  .card-header h2 {
+    font-size: 20px;
+  }
+
+  .card-header .header-icon {
+    font-size: 40px;
   }
 
   .payment-methods {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .payment-method {
+    padding: 18px;
+  }
+
+  .payment-method-icon {
+    font-size: 28px;
+  }
+
+  .payment-method-name {
+    font-size: 15px;
+  }
+
+  .payment-method-desc {
+    font-size: 12px;
   }
 
   .quick-amounts {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 
   .quick-btn {
-    width: 100%;
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .card-header {
-    flex-direction: column;
-    text-align: center;
+    padding: 14px;
+    font-size: 14px;
   }
 
   .amount-input-group input {
     font-size: 16px;
+    padding: 16px 20px 16px 50px;
+  }
+
+  .btn-primary {
+    padding: 16px;
+    font-size: 16px;
+  }
+
+  .info-card {
+    padding: 18px;
+  }
+
+  .info-icon {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .deposit-container {
+    padding: 12px;
+  }
+
+  .deposit-header h1 {
+    font-size: 20px;
+  }
+
+  .deposit-card {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .card-header .header-icon {
+    font-size: 36px;
+  }
+
+  .card-header h2 {
+    font-size: 18px;
+  }
+
+  .card-header p {
+    font-size: 13px;
+  }
+
+  .form-section label {
+    font-size: 14px;
+  }
+
+  .amount-input-group input {
+    font-size: 16px;
+    padding: 14px 16px 14px 48px;
+  }
+
+  .input-icon {
+    font-size: 20px;
+    left: 14px;
+  }
+
+  .quick-amounts {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .quick-btn {
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .payment-methods {
+    gap: 10px;
+  }
+
+  .payment-method {
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .payment-method-icon {
+    font-size: 24px;
+  }
+
+  .payment-method-name {
+    font-size: 14px;
+  }
+
+  .payment-method-desc {
+    font-size: 11px;
+  }
+
+  .btn-primary {
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+
+  .info-card {
+    padding: 16px;
+  }
+
+  .info-icon {
+    font-size: 24px;
+  }
+
+  .info-card h3 {
+    font-size: 15px;
+  }
+
+  .info-card p,
+  .info-card li {
+    font-size: 13px;
+  }
+
+  .promo-code {
+    padding: 6px 14px;
+    font-size: 12px;
   }
 }
