@@ -6,6 +6,7 @@ import logo from '../assets/logo.png';
 const LandingPage = () => {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+  const [activeTab, setActiveTab] = useState('investor'); // 'investor' or 'borrower'
 
   useEffect(() => {
     const handleScroll = () => {
@@ -155,31 +156,80 @@ const LandingPage = () => {
         <div className="section-container">
           <div className="section-header">
             <h2>Cách hoạt động</h2>
-            <p>Bắt đầu đầu tư chỉ với 3 bước đơn giản</p>
+            <p>Dành cho cả nhà đầu tư và người đi vay</p>
           </div>
-          <div className="steps-container">
-            <div className="step-item">
-              <div className="step-number">01</div>
-              <div className="step-content">
-                <h3>Đăng ký tài khoản</h3>
-                <p>Tạo tài khoản miễn phí chỉ trong vài phút với thông tin cơ bản</p>
-              </div>
-            </div>
-            <div className="step-item">
-              <div className="step-number">02</div>
-              <div className="step-content">
-                <h3>Nạp tiền & Chọn dự án</h3>
-                <p>Nạp tiền vào ví và khám phá các dự án xanh phù hợp với bạn</p>
-              </div>
-            </div>
-            <div className="step-item">
-              <div className="step-number">03</div>
-              <div className="step-content">
-                <h3>Nhận lợi nhuận</h3>
-                <p>Theo dõi đầu tư và nhận lãi định kỳ vào tài khoản của bạn</p>
-              </div>
-            </div>
+
+          {/* Tabs */}
+          <div className="tabs-container">
+            <button 
+              className={`tab-button ${activeTab === 'investor' ? 'active' : ''}`}
+              onClick={() => setActiveTab('investor')}
+            >
+              <span className="tab-icon">💰</span>
+              Dành cho Nhà đầu tư
+            </button>
+            <button 
+              className={`tab-button ${activeTab === 'borrower' ? 'active' : ''}`}
+              onClick={() => setActiveTab('borrower')}
+            >
+              <span className="tab-icon">🏢</span>
+              Dành cho Người đi vay
+            </button>
           </div>
+
+          {/* Investor Steps */}
+          {activeTab === 'investor' && (
+            <div className="steps-container">
+              <div className="step-item">
+                <div className="step-number">01</div>
+                <div className="step-content">
+                  <h3>Đăng ký tài khoản</h3>
+                  <p>Tạo tài khoản miễn phí chỉ trong vài phút với thông tin cơ bản</p>
+                </div>
+              </div>
+              <div className="step-item">
+                <div className="step-number">02</div>
+                <div className="step-content">
+                  <h3>Nạp tiền & Chọn dự án</h3>
+                  <p>Nạp tiền vào ví và khám phá các dự án xanh phù hợp với bạn</p>
+                </div>
+              </div>
+              <div className="step-item">
+                <div className="step-number">03</div>
+                <div className="step-content">
+                  <h3>Nhận lợi nhuận</h3>
+                  <p>Theo dõi đầu tư và nhận lãi định kỳ vào tài khoản của bạn</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Borrower Steps */}
+          {activeTab === 'borrower' && (
+            <div className="steps-container">
+              <div className="step-item">
+                <div className="step-number">01</div>
+                <div className="step-content">
+                  <h3>Đăng ký & Xác thực</h3>
+                  <p>Tạo tài khoản và hoàn tất xác thực thông tin doanh nghiệp/cá nhân</p>
+                </div>
+              </div>
+              <div className="step-item">
+                <div className="step-number">02</div>
+                <div className="step-content">
+                  <h3>Tạo khoản vay</h3>
+                  <p>Mô tả dự án xanh của bạn, số tiền cần vay và mục đích sử dụng</p>
+                </div>
+              </div>
+              <div className="step-item">
+                <div className="step-number">03</div>
+                <div className="step-content">
+                  <h3>Nhận vốn & Hoàn trả</h3>
+                  <p>Sau khi được phê duyệt, nhận vốn và trả nợ theo lịch trình đã cam kết</p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
