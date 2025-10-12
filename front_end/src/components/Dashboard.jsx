@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FaLeaf, FaUser, FaWallet, FaHistory, FaNewspaper, FaChartLine, FaHandHoldingUsd } from 'react-icons/fa';
 import { BiMoney } from 'react-icons/bi';
 import BottomNav from './BottomNav';
+import backgroundDb from '../assets/background_db.jpg';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -104,10 +105,7 @@ const Dashboard = () => {
         <main className="dashboard-content">
           {/* Hero Background Section */}
           <div className="hero-background">
-            <div className="background-placeholder">
-              <p>🖼️ Thêm ảnh background ở đây</p>
-              <span className="bg-hint">Kích thước đề xuất: 1920x400px (Phong cảnh, thành phố)</span>
-            </div>
+            <img src={backgroundDb} alt="Green Fund Background" />
           </div>
 
           {/* Account Card Overlap */}
@@ -286,10 +284,7 @@ const Dashboard = () => {
         <main className="dashboard-content">
           {/* Hero Background Section */}
           <div className="hero-background">
-            <div className="background-placeholder">
-              <p>🖼️ Thêm ảnh background ở đây</p>
-              <span className="bg-hint">Kích thước đề xuất: 1920x400px (Phong cảnh, thành phố)</span>
-            </div>
+            <img src={backgroundDb} alt="Green Fund Background" />
           </div>
 
           {/* Account Card Overlap */}

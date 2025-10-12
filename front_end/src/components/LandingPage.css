@@ -236,10 +236,10 @@
 
 .floating-card {
   position: absolute;
-  background: white;
+  background: rgba(255, 255, 255, 0);
   padding: 1.5rem;
   border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); */
   animation: float 3s ease-in-out infinite;
 }
 
@@ -254,20 +254,26 @@
 
 .floating-card.card-1 {
   top: 50px;
-  left: 50px;
+  left: 80px;
   animation-delay: 0s;
 }
 
 .floating-card.card-2 {
-  top: 200px;
-  right: 80px;
+  top: 80px;
+  right: 60px;
   animation-delay: 1s;
 }
 
 .floating-card.card-3 {
-  bottom: 80px;
+  bottom: 100px;
   left: 100px;
   animation-delay: 2s;
+}
+
+.floating-card.card-4 {
+  bottom: 70px;
+  right: 50px;
+  animation-delay: 1.5s;
 }
 
 .card-icon {
@@ -292,9 +298,28 @@
 .features-section {
   padding: 100px 0;
   background: white;
+  background-image: url('../assets/background_hp2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.features-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 1;
 }
 
 .section-container {
+  position: relative;
+  z-index: 2;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
@@ -314,7 +339,8 @@
 
 .section-header p {
   font-size: 1.25rem;
-  color: #6b7280;
+  font-weight: 600;
+  color: #4b5563;
 }
 
 .features-grid {
@@ -330,6 +356,7 @@
   border: 2px solid #f3f4f6;
   transition: all 0.3s ease;
   cursor: pointer;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .feature-card:hover {

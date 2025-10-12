@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 import logo from '../assets/logo.png';
+import backgroundHp2 from '../assets/background_hp2.jpg';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -104,6 +105,11 @@ const LandingPage = () => {
               <div className="card-icon">📈</div>
               <h4>Lợi nhuận ổn định</h4>
               <p className="card-growth">8-15% / năm</p>
+            </div>
+            <div className="floating-card card-4">
+              <div className="card-icon">🌿</div>
+              <h4>Bảo vệ môi trường</h4>
+              <p className="card-growth">Tương lai xanh</p>
             </div>
           </div>
         </div>
