@@ -5,6 +5,7 @@ import {
   FaMapMarkerAlt, FaChartLine, FaHistory, FaCheckCircle 
 } from 'react-icons/fa';
 import { BiMoney, BiTime, BiTrendingUp } from 'react-icons/bi';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import './LoanDetail.css';
 
 const LoanDetail = () => {
@@ -223,40 +224,57 @@ const LoanDetail = () => {
             <div className="detail-card">
               <h2><FaLeaf /> Đánh giá ESG</h2>
               <div className="esg-breakdown">
-                <div className="esg-item">
-                  <div className="esg-label">
-                    <span>Environmental (Môi trường)</span>
-                    <strong>{loanData.esgDetails.environmental}/100</strong>
+                <ResponsiveContainer width="100%" height={350}>
+                  <RadarChart data={[
+                    { 
+                      subject: 'Environmental\n(Môi trường)', 
+                      value: loanData.esgDetails.environmental,
+                      fullMark: 100 
+                    },
+                    { 
+                      subject: 'Social\n(Xã hội)', 
+                      value: loanData.esgDetails.social,
+                      fullMark: 100 
+                    },
+                    { 
+                      subject: 'Governance\n(Quản trị)', 
+                      value: loanData.esgDetails.governance,
+                      fullMark: 100 
+                    }
+                  ]}>
+                    <PolarGrid stroke="#e2e8f0" />
+                    <PolarAngleAxis 
+                      dataKey="subject" 
+                      tick={{ fill: '#64748b', fontSize: 13, fontWeight: 500 }}
+                      style={{ whiteSpace: 'pre-wrap' }}
+                    />
+                    <PolarRadiusAxis 
+                      angle={90} 
+                      domain={[0, 100]}
+                      tick={{ fill: '#94a3b8', fontSize: 11 }}
+                    />
+                    <Radar 
+                      name="ESG Score" 
+                      dataKey="value" 
+                      stroke="#16a34a" 
+                      fill="#22c55e" 
+                      fillOpacity={0.6}
+                      strokeWidth={2}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
+                <div className="esg-legend">
+                  <div className="esg-legend-item">
+                    <span className="esg-dot environmental"></span>
+                    <span>Environmental: <strong>{loanData.esgDetails.environmental}/100</strong></span>
                   </div>
-                  <div className="esg-bar">
-                    <div 
-                      className="esg-fill environmental" 
-                      style={{ width: `${loanData.esgDetails.environmental}%` }}
-                    ></div>
+                  <div className="esg-legend-item">
+                    <span className="esg-dot social"></span>
+                    <span>Social: <strong>{loanData.esgDetails.social}/100</strong></span>
                   </div>
-                </div>
-                <div className="esg-item">
-                  <div className="esg-label">
-                    <span>Social (Xã hội)</span>
-                    <strong>{loanData.esgDetails.social}/100</strong>
-                  </div>
-                  <div className="esg-bar">
-                    <div 
-                      className="esg-fill social" 
-                      style={{ width: `${loanData.esgDetails.social}%` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="esg-item">
-                  <div className="esg-label">
-                    <span>Governance (Quản trị)</span>
-                    <strong>{loanData.esgDetails.governance}/100</strong>
-                  </div>
-                  <div className="esg-bar">
-                    <div 
-                      className="esg-fill governance" 
-                      style={{ width: `${loanData.esgDetails.governance}%` }}
-                    ></div>
+                  <div className="esg-legend-item">
+                    <span className="esg-dot governance"></span>
+                    <span>Governance: <strong>{loanData.esgDetails.governance}/100</strong></span>
                   </div>
                 </div>
               </div>

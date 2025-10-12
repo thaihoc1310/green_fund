@@ -354,6 +354,47 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  align-items: center;
+}
+
+.esg-legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.esg-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #334155;
+}
+
+.esg-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.esg-dot.environmental {
+  background: #22c55e;
+}
+
+.esg-dot.social {
+  background: #3b82f6;
+}
+
+.esg-dot.governance {
+  background: #8b5cf6;
+}
+
+.esg-legend-item strong {
+  color: #16a34a;
+  font-weight: 700;
 }
 
 .esg-item {
