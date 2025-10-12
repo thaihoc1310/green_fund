@@ -31,7 +31,7 @@ const Login = () => {
         {/* Header with Logo and Title */}
         <div className="auth-header">
           <div className="logo-small">
-            <img src="/logo.png" alt="Green Fund Logo" className="logo" onError={(e) => {
+            <img src="/logo.png" alt="GreenFund Logo" className="logo" onError={(e) => {
               e.target.style.display = 'none';
               const parent = e.target.parentElement;
               if (parent) {
@@ -39,11 +39,11 @@ const Login = () => {
               }
             }} />
           </div>
-          <span className="brand-name">Green Fund</span>
+          <span className="brand-name">GreenFund</span>
           <h2>Đăng nhập</h2>
         </div>
         
-        <p className="welcome-text">Chào mừng Quý khách đến với Green Fund</p>
+        <p className="welcome-text">Chào mừng Quý khách đến với GreenFund</p>
         
         {loginError && (
           <div className="error-message">

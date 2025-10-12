@@ -353,7 +353,7 @@ const LoanManagement = () => {
                 <div className="method-options">
                   <label className="method-option">
                     <input type="radio" name="payment-method" defaultChecked />
-                    <span>💳 Ví Green Fund</span>
+                    <span>💳 Ví GreenFund</span>
                   </label>
                   <label className="method-option">
                     <input type="radio" name="payment-method" />

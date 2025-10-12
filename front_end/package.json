@@ -2,7 +2,7 @@
   "name": "green-fund-frontend",
   "private": true,
   "version": "1.0.0",
-  "description": "Frontend for Green Fund - A P2P lending platform focused on ESG projects",
+  "description": "Frontend for GreenFund - A P2P lending platform focused on ESG projects",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -21,7 +21,7 @@
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.08),
     inset 0 1px 1px rgba(255, 255, 255, 0.9);
-  padding: 16px 40px;
+  padding: 8px 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -31,6 +31,14 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   border-top: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.dashboard-header-new.scrolled {
+  padding: 0px 50px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
 }
 
 .header-left {
@@ -47,6 +55,11 @@
 
 .logo-container:hover {
   opacity: 0.8;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
 }
 
 .logo-icon {

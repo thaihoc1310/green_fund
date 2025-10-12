@@ -4,6 +4,7 @@ import { FaLeaf, FaUser, FaWallet, FaHistory, FaNewspaper, FaChartLine, FaHandHo
 import { BiMoney } from 'react-icons/bi';
 import BottomNav from './BottomNav';
 import backgroundDb from '../assets/background_db.jpg';
+import logo from '../assets/logo.png';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -32,6 +33,23 @@ const Dashboard = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showUserMenu]);
 
+  // Handle scroll for header animation
+  useEffect(() => {
+    const handleScroll = () => {
+      const header = document.querySelector('.dashboard-header-new');
+      if (header) {
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleLogout = () => {
     // TODO: Implement logout logic
     navigate('/login');
@@ -54,15 +72,15 @@ const Dashboard = () => {
       <div className="dashboard-container">
         <header className="dashboard-header-new">
           <div className="header-left">
-            <div className="logo-container">
-              <FaLeaf className="logo-icon" />
-              <span className="logo-text">Green Fund</span>
+            <div className="logo-container" onClick={() => navigate('/dashboard')}>
+              <img src={logo} alt="GreenFund Logo" className="logo-image" />
+              <span className="logo-text">GreenFund</span>
             </div>
           </div>
           
           <div className="header-center">
             <div className="search-container">
-              <input type="text" placeholder="Tìm kiếm trong Green Fund" className="search-input" />
+              <input type="text" placeholder="Tìm kiếm trong GreenFund" className="search-input" />
             </div>
           </div>
           
@@ -105,7 +123,7 @@ const Dashboard = () => {
         <main className="dashboard-content">
           {/* Hero Background Section */}
           <div className="hero-background">
-            <img src={backgroundDb} alt="Green Fund Background" />
+            <img src={backgroundDb} alt="GreenFund Background" />
           </div>
 
           {/* Account Card Overlap */}
@@ -185,8 +203,8 @@ const Dashboard = () => {
                 </div>
                 <div className="news-content">
                   <span className="news-badge">Tin tức</span>
-                  <h3>Green Fund đạt mốc 10,000 người dùng</h3>
-                  <p>Cảm ơn sự tin tưởng của quý khách hàng đã đồng hành cùng Green Fund...</p>
+                  <h3>GreenFund đạt mốc 10,000 người dùng</h3>
+                  <p>Cảm ơn sự tin tưởng của quý khách hàng đã đồng hành cùng GreenFund...</p>
                   <div className="news-meta">
                     <span className="news-date">🕒 08/10/2025</span>
                   </div>
@@ -233,15 +251,15 @@ const Dashboard = () => {
       <div className="dashboard-container">
         <header className="dashboard-header-new">
           <div className="header-left">
-            <div className="logo-container">
-              <FaLeaf className="logo-icon" />
-              <span className="logo-text">Green Fund</span>
+            <div className="logo-container" onClick={() => navigate('/')}>
+              <img src={logo} alt="GreenFund Logo" className="logo-image" />
+              <span className="logo-text">GreenFund</span>
             </div>
           </div>
           
           <div className="header-center">
             <div className="search-container">
-              <input type="text" placeholder="Tìm kiếm trong Green Fund" className="search-input" />
+              <input type="text" placeholder="Tìm kiếm trong GreenFund" className="search-input" />
             </div>
           </div>
           
@@ -284,7 +302,7 @@ const Dashboard = () => {
         <main className="dashboard-content">
           {/* Hero Background Section */}
           <div className="hero-background">
-            <img src={backgroundDb} alt="Green Fund Background" />
+            <img src={backgroundDb} alt="GreenFund Background" />
           </div>
 
           {/* Account Card Overlap */}
@@ -364,8 +382,8 @@ const Dashboard = () => {
                 </div>
                 <div className="news-content">
                   <span className="news-badge">Tin tức</span>
-                  <h3>Green Fund đạt mốc 10,000 người dùng</h3>
-                  <p>Cảm ơn sự tin tưởng của quý khách hàng đã đồng hành cùng Green Fund...</p>
+                  <h3>GreenFund đạt mốc 10,000 người dùng</h3>
+                  <p>Cảm ơn sự tin tưởng của quý khách hàng đã đồng hành cùng GreenFund...</p>
                   <div className="news-meta">
                     <span className="news-date">🕒 08/10/2025</span>
                   </div>

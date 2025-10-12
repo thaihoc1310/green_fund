@@ -1,4 +1,4 @@
-# Green Fund - P2P Lending Platform
+# GreenFund - P2P Lending Platform
 
 ## 🎉 Cập nhật gần đây
 
@@ -12,7 +12,7 @@
 - ✅ **Chức năng Thanh toán**: Khi nhấn "Thanh toán kỳ hạn", hiện modal thanh toán với:
   - Thông tin kỳ thanh toán
   - Số tiền cần thanh toán
-  - Lựa chọn phương thức thanh toán (Ví Green Fund, Chuyển khoản, Thẻ tín dụng)
+  - Lựa chọn phương thức thanh toán (Ví GreenFund, Chuyển khoản, Thẻ tín dụng)
   - Xác nhận thanh toán
 
 ## 🚀 Chạy ứng dụng

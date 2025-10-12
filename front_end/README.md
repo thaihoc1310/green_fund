@@ -1,6 +1,6 @@
-# Green Fund Frontend
+# GreenFund Frontend
 
-This is the frontend for the Green Fund application, a peer-to-peer lending platform focused on sustainable and ESG-friendly projects.
+This is the frontend for the GreenFund application, a peer-to-peer lending platform focused on sustainable and ESG-friendly projects.
 
 ## Features
 

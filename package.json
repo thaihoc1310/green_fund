@@ -1,7 +1,7 @@
 {
   "name": "green-fund",
   "version": "1.0.0",
-  "description": "Green Fund - A P2P lending platform focused on ESG projects",
+  "description": "GreenFund - A P2P lending platform focused on ESG projects",
   "scripts": {
     "build": "cd front_end && npm ci --production=false && npm run build",
     "dev": "cd front_end && npm run dev",

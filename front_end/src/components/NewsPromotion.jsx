@@ -12,7 +12,7 @@ const NewsPromotion = () => {
     {
       id: 1,
       type: 'news',
-      title: 'Green Fund ra mắt chương trình tín dụng xanh 2025',
+      title: 'GreenFund ra mắt chương trình tín dụng xanh 2025',
       description: 'Nền tảng công bố gói tín dụng 500 tỷ đồng dành cho các dự án năng lượng tái tạo và nông nghiệp bền vững',
       date: '2025-10-01',
       image: 'https://via.placeholder.com/400x250?text=Green+Fund+2025'
@@ -46,7 +46,7 @@ const NewsPromotion = () => {
     {
       id: 5,
       type: 'news',
-      title: 'Green Fund nhận giải thưởng "Startup công nghệ tài chính xuất sắc 2025"',
+      title: 'GreenFund nhận giải thưởng "Startup công nghệ tài chính xuất sắc 2025"',
       description: 'Nền tảng được vinh danh tại lễ trao giải Vietnam Fintech Awards 2025 cho những đóng góp vào tài chính bền vững',
       date: '2025-09-15',
       image: 'https://via.placeholder.com/400x250?text=Award+2025'
@@ -134,7 +134,7 @@ const NewsPromotion = () => {
         <div className="subscribe-card">
           <FaBullhorn className="subscribe-icon" />
           <h2>Đăng ký nhận thông báo</h2>
-          <p>Nhận tin tức và ưu đãi mới nhất từ Green Fund</p>
+          <p>Nhận tin tức và ưu đãi mới nhất từ GreenFund</p>
           <div className="subscribe-form">
             <input 
               type="email" 

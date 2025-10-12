@@ -30,8 +30,8 @@ const LandingPage = () => {
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-container">
           <div className="nav-logo" onClick={() => navigate('/')}>
-            <img src={logo} alt="Green Fund Logo" />
-            <span>Green Fund</span>
+            <img src={logo} alt="GreenFund Logo" />
+            <span>GreenFund</span>
           </div>
           <ul className="nav-menu">
             <li><a onClick={() => scrollToSection('home')}>Trang chủ</a></li>
@@ -119,7 +119,7 @@ const LandingPage = () => {
       <section id="features" className="features-section">
         <div className="section-container">
           <div className="section-header">
-            <h2>Tại sao chọn Green Fund?</h2>
+            <h2>Tại sao chọn GreenFund?</h2>
             <p>Nền tảng đầu tư xanh toàn diện với nhiều tính năng vượt trội</p>
           </div>
           <div className="features-grid">
@@ -244,9 +244,9 @@ const LandingPage = () => {
         <div className="section-container">
           <div className="about-content">
             <div className="about-text">
-              <h2>Về Green Fund</h2>
+              <h2>Về GreenFund</h2>
               <p>
-                Green Fund là nền tảng cho vay và đầu tư xanh tiên phong tại Việt Nam, 
+                GreenFund là nền tảng cho vay và đầu tư xanh tiên phong tại Việt Nam, 
                 kết nối nhà đầu tư với các dự án năng lượng tái tạo, nông nghiệp bền vững, 
                 và các giải pháp thân thiện với môi trường.
               </p>
@@ -276,7 +276,7 @@ const LandingPage = () => {
       <section className="cta-section">
         <div className="cta-container">
           <h2>Sẵn sàng bắt đầu hành trình đầu tư xanh?</h2>
-          <p>Tham gia cùng hàng ngàn nhà đầu tư thông minh đã tin tưởng Green Fund</p>
+          <p>Tham gia cùng hàng ngàn nhà đầu tư thông minh đã tin tưởng GreenFund</p>
           <button className="btn-cta" onClick={() => navigate('/register')}>
             Đăng ký miễn phí ngay
           </button>
@@ -288,8 +288,8 @@ const LandingPage = () => {
         <div className="footer-container">
           <div className="footer-section">
             <div className="footer-logo">
-              <img src={logo} alt="Green Fund Logo" />
-              <span>Green Fund</span>
+              <img src={logo} alt="GreenFund Logo" />
+              <span>GreenFund</span>
             </div>
             <p>Nền tảng đầu tư xanh hàng đầu Việt Nam</p>
           </div>
@@ -319,7 +319,7 @@ const LandingPage = () => {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2024 Green Fund. All rights reserved.</p>
+          <p>&copy; 2024 GreenFund. All rights reserved.</p>
         </div>
       </footer>
     </div>

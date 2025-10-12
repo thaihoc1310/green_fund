@@ -21,7 +21,7 @@ const ForgotPassword = () => {
           {/* Header with Logo and Title */}
           <div className="auth-header">
             <div className="logo-small">
-              <img src="/logo.png" alt="Green Fund Logo" className="logo" onError={(e) => {
+              <img src="/logo.png" alt="GreenFund Logo" className="logo" onError={(e) => {
                 e.target.style.display = 'none';
                 const parent = e.target.parentElement;
                 if (parent) {
@@ -29,7 +29,7 @@ const ForgotPassword = () => {
                 }
               }} />
             </div>
-            <span className="brand-name">Green Fund</span>
+            <span className="brand-name">GreenFund</span>
             <h2>Khôi phục mật khẩu</h2>
           </div>
           
@@ -58,7 +58,7 @@ const ForgotPassword = () => {
         {/* Header with Logo and Title */}
         <div className="auth-header">
           <div className="logo-small">
-            <img src="/logo.png" alt="Green Fund Logo" className="logo" onError={(e) => {
+            <img src="/logo.png" alt="GreenFund Logo" className="logo" onError={(e) => {
               e.target.style.display = 'none';
               const parent = e.target.parentElement;
               if (parent) {
@@ -66,7 +66,7 @@ const ForgotPassword = () => {
               }
             }} />
           </div>
-          <span className="brand-name">Green Fund</span>
+          <span className="brand-name">GreenFund</span>
           <h2>Quên mật khẩu</h2>
         </div>
         
