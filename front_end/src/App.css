@@ -28,28 +28,34 @@ body {
 
 .auth-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f0fdf4, #dcfce7, #bbf7d0);
+  background-image: url('/src/assets/background_login.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
   padding: 20px;
   width: 100vw;
   max-width: 100%;
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 }
 
 .auth-card {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  padding: 48px 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  padding: 32px 40px 24px 40px;
   width: 100%;
   max-width: 460px;
   text-align: center;
   position: relative;
   overflow: hidden;
-  margin: 0 auto;
+  margin-left: 5%;
   box-sizing: border-box;
+  z-index: 1;
 }
 
 .auth-card::before {
@@ -62,6 +68,77 @@ body {
   background: linear-gradient(90deg, #4ade80, #22c55e, #16a34a);
 }
 
+/* Auth Header with Logo and Title */
+.auth-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 0px;
+}
+
+.logo-small {
+  flex-shrink: 0;
+  position: relative;
+  top: -10px;
+}
+
+.logo-small .logo {
+  max-width: 60px;
+  height: auto;
+}
+
+.logo-text-small {
+  font-size: 22px;
+  font-weight: 700;
+  color: #15803d;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  border-radius: 12px;
+}
+
+.brand-name {
+  color: #166534;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-left: -10px;
+  position: relative;
+  top: -4px;
+}
+
+.auth-card h2 {
+  color: #166534;
+  margin: 0;
+  margin-left: auto;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-align: right;
+  position: relative;
+  top: -4px;
+}
+
+.welcome-text {
+  color: #64748b;
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.auth-card p {
+  color: #64748b;
+  margin-bottom: 32px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Legacy logo styles (for other pages) */
 .logo-placeholder {
   margin-bottom: 24px;
   display: flex;
@@ -80,21 +157,6 @@ body {
   color: #15803d;
   margin-bottom: 10px;
   letter-spacing: -0.5px;
-}
-
-.auth-card h2 {
-  color: #166534;
-  margin-bottom: 8px;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.auth-card p {
-  color: #64748b;
-  margin-bottom: 32px;
-  font-size: 16px;
-  line-height: 1.5;
 }
 
 .input-group {
@@ -140,6 +202,10 @@ body {
   margin-top: 8px;
   transition: all 0.2s ease;
   box-shadow: 0 4px 6px rgba(34, 197, 94, 0.2);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-primary:hover {
@@ -169,7 +235,12 @@ body {
 }
 
 .auth-links {
-  margin-top: 24px;
+  margin-top: 15px;
+  margin-bottom: 0px;
+}
+
+.auth-links p {
+  margin-bottom: 0px;
 }
 
 .auth-links a {
@@ -186,7 +257,7 @@ body {
 }
 
 .divider {
-  margin: 30px 0;
+  margin: 15px 0;
   color: #94a3b8;
   font-weight: 500;
   position: relative;

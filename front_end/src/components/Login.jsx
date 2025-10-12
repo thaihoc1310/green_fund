@@ -28,19 +28,22 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        {/* Green Fund Logo */}
-        <div className="logo-placeholder">
-          <img src="/logo.png" alt="Green Fund Logo" className="logo" onError={(e) => {
-            e.target.style.display = 'none';
-            const parent = e.target.parentElement;
-            if (parent) {
-              parent.innerHTML = '<div className="logo-text">Green Fund</div>';
-            }
-          }} />
+        {/* Header with Logo and Title */}
+        <div className="auth-header">
+          <div className="logo-small">
+            <img src="/logo.png" alt="Green Fund Logo" className="logo" onError={(e) => {
+              e.target.style.display = 'none';
+              const parent = e.target.parentElement;
+              if (parent) {
+                parent.innerHTML = '<div className="logo-text-small">GF</div>';
+              }
+            }} />
+          </div>
+          <span className="brand-name">Green Fund</span>
+          <h2>Đăng nhập</h2>
         </div>
         
-        <h2>Đăng nhập</h2>
-        <p>Vui lòng đăng nhập để tiếp tục</p>
+        <p className="welcome-text">Chào mừng Quý khách đến với Green Fund</p>
         
         {loginError && (
           <div className="error-message">
