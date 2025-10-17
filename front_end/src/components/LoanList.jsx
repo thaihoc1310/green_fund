@@ -3,6 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FaLeaf, FaStar, FaArrowLeft, FaFilter } from 'react-icons/fa';
 import { BiMoney, BiTime } from 'react-icons/bi';
 import './LoanList.css';
+import khoanvay1 from '../assets/khoanvay1.jpg';
+import khoanvay2 from '../assets/khoanvay2.jpg';
+import khoanvay3 from '../assets/khoanvay3.jpg';
 
 const LoanList = () => {
   const navigate = useNavigate();
@@ -111,11 +114,12 @@ const LoanList = () => {
         <h1>Danh sách khoản vay</h1>
       </div>
 
-      {/* Featured Promotional Banner - Add your image here */}
+      {/* Featured Promotional Banner */}
       <div className="loan-promo-banner">
-        <div className="loan-banner-placeholder">
-          <p>💡 Thêm ảnh quảng cáo dự án nổi bật ở đây</p>
-          <span className="loan-banner-hint">Kích thước đề xuất: 1200x400px</span>
+        <div className="loan-banner-images">
+          <img src={khoanvay1} alt="Khoản vay 1" className="loan-banner-img" />
+          <img src={khoanvay2} alt="Khoản vay 2" className="loan-banner-img" />
+          <img src={khoanvay3} alt="Khoản vay 3" className="loan-banner-img" />
         </div>
       </div>
 

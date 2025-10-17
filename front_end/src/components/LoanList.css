@@ -28,33 +28,18 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.loan-banner-placeholder {
-  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #a7f3d0 100%);
-  padding: 80px 40px;
-  text-align: center;
-  border: 2px dashed #6ee7b7;
-  border-radius: 16px;
-}
-
-.loan-banner-placeholder p {
-  margin: 0 0 8px 0;
-  color: #059669;
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.loan-banner-hint {
-  color: #64748b;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.loan-promo-banner img {
+.loan-banner-images {
+  display: flex;
+  gap: 0;
   width: 100%;
+}
+
+.loan-banner-img {
+  width: 33.333%;
   height: auto;
   display: block;
   object-fit: cover;
-  max-height: 400px;
+  flex-shrink: 0;
 }
 
 .loan-list-container .btn-back,
@@ -128,8 +113,8 @@
 
 .filter-btn:hover {
   background-color: #f1f5f9 !important;
-  color: #475569 !important;
-  border-color: transparent !important;
+  color: #16a34a;
+  border-color: #16a34a;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
@@ -433,14 +418,6 @@
   .loans-grid {
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   }
-
-  .loan-banner-placeholder {
-    padding: 60px 30px;
-  }
-
-  .loan-banner-placeholder p {
-    font-size: 20px;
-  }
 }
 
 @media (max-width: 768px) {
@@ -467,19 +444,7 @@
   }
 
   .loan-promo-banner {
-    margin-bottom: 20px;
-  }
-
-  .loan-banner-placeholder {
-    padding: 50px 20px;
-  }
-
-  .loan-banner-placeholder p {
-    font-size: 18px;
-  }
-
-  .loan-banner-hint {
-    font-size: 13px;
+    display: none;
   }
 
   .loans-grid {
@@ -536,18 +501,6 @@
 
   .loan-list-header h1 {
     font-size: 20px;
-  }
-
-  .loan-banner-placeholder {
-    padding: 40px 16px;
-  }
-
-  .loan-banner-placeholder p {
-    font-size: 16px;
-  }
-
-  .loan-banner-hint {
-    font-size: 12px;
   }
 
   .filter-section {

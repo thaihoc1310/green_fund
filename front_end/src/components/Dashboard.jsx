@@ -96,7 +96,7 @@ const Dashboard = () => {
                 type="text" 
                 placeholder="Tìm kiếm trong GreenFund" 
                 className="search-input"
-                value={searchQuery}
+                value={searchQuery || ''}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
@@ -144,7 +144,7 @@ const Dashboard = () => {
               type="text" 
               placeholder="Tìm kiếm trong GreenFund" 
               className="search-input"
-              value={searchQuery}
+              value={searchQuery || ''}
               onChange={(e) => setSearchQuery(e.target.value)}
               autoFocus
             />

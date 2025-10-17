@@ -371,9 +371,6 @@ const LoanManagement = () => {
             </div>
             
             <div className="modal-footer">
-              <button className="btn-cancel" onClick={() => setShowPaymentModal(false)}>
-                Hủy
-              </button>
               <button className="btn-confirm" onClick={confirmPayment}>
                 Xác nhận thanh toán
               </button>
