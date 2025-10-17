@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaLeaf, FaUser, FaWallet, FaHistory, FaNewspaper, FaChartLine, FaHandHoldingUsd } from 'react-icons/fa';
 import { BiMoney } from 'react-icons/bi';
-import BottomNav from './BottomNav';
 import backgroundDb from '../assets/background_db.jpg';
 import logo from '../assets/logo.png';
 import newsInterestRate from '../assets/Ảnh chương trình lãi suất (trang chủ).png';
@@ -224,7 +223,6 @@ const Dashboard = () => {
             </div>
           </div>
         </main>
-        <BottomNav userRole="borrower" />
       </div>
     );
   } 
@@ -383,7 +381,6 @@ const Dashboard = () => {
             </div>
           </div>
         </main>
-        <BottomNav userRole="lender" />
       </div>
     );
   }

@@ -633,8 +633,27 @@ button:disabled {
     border-radius: 12px;
   }
 
+  .auth-header {
+    gap: 12px;
+  }
+
+  .logo-small .logo {
+    max-width: 48px;
+  }
+
+  .logo-text-small {
+    font-size: 18px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .brand-name {
+    font-size: 20px;
+    margin-left: -8px;
+  }
+
   .auth-card h2 {
-    font-size: 22px;
+    font-size: 18px;
   }
 
   .auth-card p {

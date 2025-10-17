@@ -171,10 +171,6 @@ const LandingPage = () => {
             <div className="agricultural-main-image">
               <img src={projectImage1} alt="Công nhân tại nhà máy trồng rau" />
               <div className="agricultural-overlay">
-                <div className="agricultural-badge">
-                  <span className="badge-icon">🌱</span>
-                  <span className="badge-text">Nông nghiệp công nghệ cao</span>
-                </div>
                 <h3>Nhà máy trồng rau thủy canh hiện đại</h3>
                 <p>Ứng dụng công nghệ IoT và AI trong sản xuất rau sạch, mang lại hiệu quả cao và bền vững cho môi trường</p>
                 <div className="agricultural-stats">

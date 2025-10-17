@@ -855,25 +855,30 @@
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 16px;
+    padding-bottom: 32px;
   }
 
   .dashboard-header-new {
     flex-wrap: wrap;
-    padding: 12px 16px;
+    padding: 10px 16px;
     gap: 12px;
     position: fixed;
   }
 
+  .dashboard-header-new.scrolled {
+    padding: 8px 16px;
+  }
+
   .dashboard-content {
-    padding-top: 120px; /* Increased for wrapped mobile header */
+    padding-top: 130px; /* Increased for wrapped mobile header */
   }
 
   .header-left {
     flex: 1;
   }
 
-  .logo-icon {
-    font-size: 28px;
+  .logo-image {
+    height: 32px;
   }
 
   .logo-text {
@@ -903,48 +908,29 @@
     padding: 6px;
   }
 
+  .user-avatar-small {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
   .user-dropdown-menu {
     right: 0;
-    min-width: 260px;
-  }
-
-  .dashboard-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .dashboard-header h1 {
-    font-size: 24px;
-  }
-
-  .role-switcher {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-  
-  .role-switcher h1 {
-    margin: 0;
-    text-align: center;
-  }
-
-  .role-switcher button {
-    width: 100%;
+    min-width: 280px;
   }
 
   .hero-background {
-    height: 40vh;
-    min-height: 300px;
-    margin-bottom: -100px;
+    height: 35vh;
+    min-height: 280px;
+    margin-bottom: -90px;
   }
 
   .background-placeholder p {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .bg-hint {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .account-card-overlap {
@@ -952,48 +938,76 @@
   }
 
   .account-card {
-    padding: 20px 24px;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .account-header {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+  }
+
+  .account-label {
+    font-size: 14px;
+  }
+
+  .btn-manage {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+
+  .number-display {
+    font-size: 17px;
+  }
+
+  .balance-value {
+    font-size: 24px;
+  }
+
+  .balance-label {
+    font-size: 24px;
   }
 
   .service-buttons {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 20px;
   }
 
   .service-btn {
-    padding: 14px 12px;
+    flex-direction: column;
+    padding: 18px 12px;
     font-size: 13px;
+    gap: 8px;
+    border-radius: 12px;
   }
 
   .service-icon {
-    font-size: 15px;
+    font-size: 22px;
   }
 
-  .number-display {
-    font-size: 18px;
-  }
-
-  .balance-value {
-    font-size: 20px;
-  }
-
-  /* News Section Mobile */
+  /* News Section Tablet */
   .news-section {
     padding: 0 16px;
-    margin: 32px auto;
+    margin: 36px auto;
   }
 
   .news-header h2 {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .news-icon {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .news-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 20px;
+  }
+
+  .news-card {
+    border-radius: 16px;
   }
 
   .news-card.featured {
@@ -1001,68 +1015,58 @@
     grid-template-columns: 1fr;
   }
 
+  .news-image,
   .news-image-placeholder {
-    height: 200px;
+    height: 220px;
   }
 
+  .news-image.small {
+    height: 220px;
+  }
+
+  .news-card.featured .news-image,
   .news-card.featured .news-image-placeholder {
-    min-height: 200px;
+    min-height: 220px;
   }
 
   .news-content {
-    padding: 20px;
+    padding: 22px;
   }
 
   .news-card.featured .news-content {
-    padding: 24px;
+    padding: 26px;
+  }
+
+  .news-badge {
+    padding: 6px 14px;
+    font-size: 11px;
   }
 
   .news-content h3 {
-    font-size: 16px;
+    font-size: 17px;
+    line-height: 1.4;
   }
 
   .news-card.featured .news-content h3 {
-    font-size: 20px;
+    font-size: 21px;
   }
 
   .news-content p {
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 1.6;
   }
 
   .news-card.featured .news-content p {
-    font-size: 14px;
+    font-size: 15px;
   }
 
-  .user-details h2 {
-    font-size: 20px;
+  .news-date {
+    font-size: 12px;
   }
 
-  .user-balance {
-    justify-content: center;
-    font-size: 16px !important;
-  }
-
-  .btn-profile {
-    width: 100%;
-    padding: 14px 24px;
-  }
-  
   .dashboard-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .dashboard-btn {
-    padding: 16px 10px !important;
-    min-height: 110px;
-  }
-
-  .feature-icon {
-    font-size: 28px;
-  }
-
-  .btn-feature span {
-    font-size: 13px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
 
   .banner-placeholder {
@@ -1070,27 +1074,58 @@
   }
 
   .banner-placeholder p {
-    font-size: 16px;
-  }
-
-  .banner-hint {
-    font-size: 12px;
+    font-size: 17px;
   }
 }
 
 @media (max-width: 480px) {
   .dashboard-container {
     padding: 12px;
+    padding-bottom: 24px;
   }
 
-  .dashboard-header h1 {
-    font-size: 20px;
+  .dashboard-header-new {
+    padding: 8px 12px;
+    gap: 10px;
+  }
+
+  .dashboard-header-new.scrolled {
+    padding: 6px 12px;
+  }
+
+  .dashboard-content {
+    padding-top: 120px;
+  }
+
+  .logo-image {
+    height: 28px;
+  }
+
+  .logo-text {
+    font-size: 16px;
+  }
+
+  .search-input {
+    padding: 9px 14px;
+    font-size: 13px;
+    border-radius: 20px;
+  }
+
+  .user-avatar-small {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .user-dropdown-menu {
+    min-width: 260px;
+    right: -8px;
   }
 
   .hero-background {
-    height: 35vh;
-    min-height: 250px;
-    margin-bottom: -80px;
+    height: 30vh;
+    min-height: 240px;
+    margin-bottom: -70px;
   }
 
   .background-placeholder p {
@@ -1098,7 +1133,7 @@
   }
 
   .bg-hint {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .account-card-overlap {
@@ -1106,25 +1141,8 @@
   }
 
   .account-card {
-    padding: 18px 20px;
-  }
-
-  .service-buttons {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    margin-top: 20px;
-    padding-top: 16px;
-  }
-
-  .service-btn {
-    flex-direction: column;
-    padding: 16px 8px;
-    font-size: 12px;
-    gap: 6px;
-  }
-
-  .service-icon {
-    font-size: 18px;
+    padding: 18px;
+    border-radius: 18px;
   }
 
   .account-header {
@@ -1134,7 +1152,6 @@
 
   .account-label {
     font-size: 13px;
-    color: #16a34a;
   }
 
   .btn-manage {
@@ -1143,29 +1160,134 @@
   }
 
   .number-display {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .balance-value {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .balance-label {
-    font-size: 18px;
+    font-size: 20px;
   }
-  
-  .loan-card {
-    padding: 16px;
+
+  .service-buttons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+
+  .service-btn {
+    flex-direction: column;
+    padding: 16px 10px;
+    font-size: 12px;
+    gap: 6px;
+    border-radius: 10px;
+  }
+
+  .service-icon {
+    font-size: 20px;
+  }
+
+  /* News Section Phone */
+  .news-section {
+    padding: 0 12px;
+    margin: 28px auto;
+  }
+
+  .news-header {
+    margin-bottom: 18px;
+  }
+
+  .news-header h2 {
+    font-size: 19px;
+  }
+
+  .news-icon {
+    font-size: 20px;
+  }
+
+  .news-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .news-card {
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .news-card.featured {
+    grid-column: span 1;
+    grid-template-columns: 1fr;
+  }
+
+  .news-image,
+  .news-image-placeholder {
+    height: 180px;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .news-image.small {
+    height: 180px;
+  }
+
+  .news-card.featured .news-image,
+  .news-card.featured .news-image-placeholder {
+    min-height: 180px;
+  }
+
+  .news-content {
+    padding: 18px;
+  }
+
+  .news-card.featured .news-content {
+    padding: 20px;
+  }
+
+  .news-badge {
+    padding: 5px 12px;
+    font-size: 10px;
+    margin-bottom: 10px;
+  }
+
+  .news-content h3 {
+    font-size: 15px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .news-card.featured .news-content h3 {
+    font-size: 17px;
+  }
+
+  .news-content p {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .news-card.featured .news-content p {
+    font-size: 14px;
+  }
+
+  .news-meta {
+    margin-top: 12px;
+  }
+
+  .news-date {
+    font-size: 11px;
   }
 
   .dashboard-grid {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 12px;
   }
 
   .dashboard-btn {
     padding: 20px !important;
-    min-height: 100px;
+    min-height: 90px;
   }
 
   .feature-icon {
@@ -1177,66 +1299,20 @@
   }
 
   .banner-placeholder {
-    padding: 30px 16px;
+    padding: 32px 18px;
+    border-radius: 14px;
   }
 
   .banner-placeholder p {
     font-size: 15px;
   }
 
-  /* News Section Small Mobile */
-  .news-section {
-    padding: 0 12px;
-    margin: 24px auto;
-  }
-
-  .news-header h2 {
-    font-size: 18px;
-  }
-
-  .news-icon {
-    font-size: 20px;
-  }
-
-  .news-image-placeholder {
-    height: 160px;
-    font-size: 12px;
-  }
-
-  .news-card.featured .news-image-placeholder {
-    min-height: 160px;
-  }
-
-  .news-content {
-    padding: 16px;
-  }
-
-  .news-card.featured .news-content {
-    padding: 20px;
-  }
-
-  .news-badge {
-    padding: 4px 10px;
-    font-size: 10px;
-  }
-
-  .news-content h3 {
-    font-size: 15px;
-  }
-
-  .news-card.featured .news-content h3 {
-    font-size: 18px;
-  }
-
-  .news-content p {
-    font-size: 12px;
-  }
-
-  .news-card.featured .news-content p {
-    font-size: 13px;
-  }
-
-  .news-date {
+  .banner-hint {
     font-size: 11px;
+  }
+
+  .loan-card {
+    padding: 16px;
+    border-radius: 14px;
   }
 }
