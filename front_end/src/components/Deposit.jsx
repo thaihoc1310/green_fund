@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft, FaWallet, FaUniversity, FaCreditCard, FaMobileAlt } from 'react-icons/fa';
 import { BiMoney } from 'react-icons/bi';
-import BottomNav from './BottomNav';
 import './Deposit.css';
 
 const Deposit = () => {
@@ -247,7 +246,6 @@ const Deposit = () => {
           </div>
         </div>
       </div>
-      <BottomNav userRole={userRole} />
     </div>
   );
 };

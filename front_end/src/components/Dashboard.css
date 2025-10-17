@@ -1060,14 +1060,15 @@
 
   .service-btn {
     flex-direction: column;
-    padding: 18px 12px;
+    padding: 14px 12px;
     font-size: 13px;
-    gap: 8px;
+    gap: 6px;
     border-radius: 12px;
+    min-height: 70px;
   }
 
   .service-icon {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   /* News Section Tablet */
@@ -1263,14 +1264,15 @@
 
   .service-btn {
     flex-direction: column;
-    padding: 16px 10px;
+    padding: 12px 10px;
     font-size: 12px;
-    gap: 6px;
+    gap: 4px;
     border-radius: 10px;
+    min-height: 65px;
   }
 
   .service-icon {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   /* News Section Phone */

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft, FaChartLine, FaLeaf, FaStar, FaCheckCircle } from 'react-icons/fa';
 import { BiMoney, BiTrendingUp } from 'react-icons/bi';
-import BottomNav from './BottomNav';
 import './InvestmentPortfolio.css';
 
 const InvestmentPortfolio = () => {
@@ -327,7 +326,6 @@ const InvestmentPortfolio = () => {
           </div>
         </div>
       )}
-      <BottomNav userRole={userRole} />
     </div>
   );
 };

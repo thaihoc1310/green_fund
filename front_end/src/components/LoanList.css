@@ -574,31 +574,92 @@
 
   .loan-card-body {
     padding: 16px;
+    gap: 12px;
+  }
+
+  .loan-company {
+    padding-bottom: 12px;
+  }
+
+  .loan-company strong {
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  .loan-company p {
+    font-size: 13px;
   }
 
   .loan-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
   .stat-item {
-    padding: 10px;
+    padding: 10px 8px;
+    gap: 8px;
+  }
+
+  .stat-icon {
+    font-size: 20px;
   }
 
   .stat-label {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .stat-value {
+    font-size: 14px;
+  }
+
+  .loan-details-row {
+    padding: 10px 8px;
+    gap: 12px;
+  }
+
+  .detail-item span {
+    font-size: 12px;
+  }
+
+  .interest-rate {
     font-size: 15px;
   }
 
+  .esg-badge {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+
+  .loan-purpose {
+    padding: 10px;
+  }
+
+  .purpose-label {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .loan-purpose p {
+    font-size: 13px;
+  }
+
+  .progress-header {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .progress-bar {
+    height: 6px;
+  }
+
   .loan-card-footer {
-    padding: 16px;
+    padding: 14px 16px;
+    gap: 10px;
   }
 
   .btn-view-detail,
   .btn-invest {
-    padding: 12px;
-    font-size: 14px;
+    padding: 10px;
+    font-size: 13px;
   }
 }

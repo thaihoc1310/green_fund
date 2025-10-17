@@ -288,15 +288,34 @@
   }
 
   .progress-steps {
-    padding: 20px;
+    padding: 24px 20px;
     flex-direction: column;
-    gap: 20px;
+    gap: 0;
+    align-items: stretch;
   }
 
   .step {
     flex-direction: row;
     width: 100%;
     justify-content: flex-start;
+    gap: 16px;
+    padding: 12px 0;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 52px;
+    width: 2px;
+    height: calc(100% - 12px);
+    background-color: #e2e8f0;
+    z-index: 0;
+  }
+
+  .step.completed:not(:last-child)::after {
+    background-color: #16a34a;
   }
 
   .step-line {
@@ -305,6 +324,14 @@
 
   .step span {
     text-align: left;
+    flex: 1;
+    font-size: 15px;
+  }
+
+  .step-number {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
   }
 
   .form-card {
@@ -331,8 +358,30 @@
 }
 
 @media (max-width: 480px) {
+  .create-loan-container {
+    padding: 16px;
+  }
+
   .create-loan-header h1 {
     font-size: 20px;
+  }
+
+  .progress-steps {
+    padding: 20px 16px;
+  }
+
+  .step {
+    padding: 10px 0;
+    gap: 14px;
+  }
+
+  .step:not(:last-child)::after {
+    left: 18px;
+    top: 46px;
+  }
+
+  .step span {
+    font-size: 14px;
   }
 
   .form-card {

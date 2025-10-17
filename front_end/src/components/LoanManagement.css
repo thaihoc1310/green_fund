@@ -627,6 +627,47 @@
     padding: 16px;
   }
 
+  .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .info-item {
+    gap: 6px;
+  }
+
+  .info-item-with-icon {
+    gap: 8px;
+  }
+
+  .info-icon {
+    font-size: 20px;
+  }
+
+  .info-label {
+    font-size: 12px;
+  }
+
+  .info-value {
+    font-size: 14px;
+  }
+
+  .progress-text {
+    font-size: 13px;
+  }
+
+  .pending-notice,
+  .warning-notice {
+    padding: 12px;
+    margin-top: 12px;
+  }
+
+  .pending-notice p,
+  .warning-notice p {
+    font-size: 13px;
+  }
+
   .stats-grid {
     grid-template-columns: 1fr;
     gap: 10px;

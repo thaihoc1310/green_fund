@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaLeaf, FaStar, FaArrowLeft, FaFilter } from 'react-icons/fa';
 import { BiMoney, BiTime } from 'react-icons/bi';
-import BottomNav from './BottomNav';
 import './LoanList.css';
 
 const LoanList = () => {
@@ -241,7 +240,6 @@ const LoanList = () => {
           <p>Không tìm thấy khoản vay phù hợp với bộ lọc</p>
         </div>
       )}
-      <BottomNav userRole={userRole} />
     </div>
   );
 };
