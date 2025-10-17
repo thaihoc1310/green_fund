@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { 
   FaArrowLeft, FaLeaf, FaStar, FaUser, FaBuilding, 
   FaMapMarkerAlt, FaChartLine, FaHistory, FaCheckCircle 
@@ -7,76 +7,93 @@ import {
 import { BiMoney, BiTime, BiTrendingUp } from 'react-icons/bi';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import './LoanDetail.css';
+import { loansData, calculateESGScore } from '../data/loansData';
 
 const LoanDetail = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const [investAmount, setInvestAmount] = useState('');
   const [showInvestModal, setShowInvestModal] = useState(false);
 
-  // Mock data - sẽ thay bằng API call
-  const loanData = {
-    id: parseInt(id),
-    projectName: 'Dự án năng lượng mặt trời Ninh Thuận',
-    amount: 200000000,
-    purpose: 'Đầu tư hệ thống pin mặt trời công suất 500kW cho nhà máy sản xuất, giảm chi phí điện năng và phát thải carbon',
-    creditRating: 'A+',
-    interestRate: 8.5,
-    esgScore: 95,
-    term: 24,
-    funded: 65,
-    paymentMethod: 'Trả gốc + lãi hàng tháng',
-    
-    representative: {
-      name: 'Nguyễn Văn An',
-      position: 'Giám đốc',
-      age: 45
-    },
-    
-    company: {
-      name: 'Công ty TNHH Green Energy',
-      type: 'Công ty TNHH',
-      registrationLocation: 'TP. Hồ Chí Minh',
-      establishedYear: 2015,
-      employees: 150,
-      revenue: 50000000000
-    },
+  // Get selected package from navigation state
+  const selectedPackage = location.state?.selectedPackage;
+  const userRole = location.state?.userRole || 'lender';
 
-    creditHistory: {
-      totalLoans: 5,
+  // Find loan by id from shared data
+  const loan = loansData.find(loan => loan.id === parseInt(id));
+  
+  // Fallback if loan not found
+  if (!loan) {
+    return (
+      <div className="loan-detail-container">
+        <div className="loan-detail-header">
+          <button className="btn-back" onClick={() => navigate('/loan-list', { 
+            state: { selectedPackage, userRole } 
+          })}>
+            <FaArrowLeft /> Quay lại danh sách
+          </button>
+        </div>
+        <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+          <h2>Không tìm thấy khoản vay</h2>
+          <p>Khoản vay ID {id} không tồn tại trong hệ thống.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Prepare loanData with all needed fields
+  const loanData = {
+    ...loan,
+    representative: loan.representative || {
+      name: 'Chưa cập nhật',
+      position: 'Đại diện',
+      age: 40
+    },
+    company: loan.company || {
+      name: loan.company,
+      type: 'Công ty',
+      registrationLocation: 'Việt Nam',
+      establishedYear: 2020,
+      employees: 30,
+      revenue: 10000000000
+    },
+    creditHistory: loan.creditHistory || {
+      totalLoans: 2,
       onTimePaymentRate: 98,
-      totalBorrowed: 800000000,
-      totalRepaid: 650000000,
+      totalBorrowed: 2000000000,
+      totalRepaid: 1500000000,
       defaultCount: 0
     },
-
     projectDetails: {
-      description: 'Dự án lắp đặt hệ thống pin mặt trời công suất lớn nhằm cung cấp năng lượng sạch, giảm phụ thuộc vào lưới điện quốc gia và giảm chi phí sản xuất dài hạn.',
-      benefits: [
-        'Giảm 70% chi phí điện năng',
-        'Giảm 500 tấn CO2/năm',
-        'Tạo 20 việc làm mới',
-        'Thời gian hoàn vốn: 7 năm'
-      ],
-      timeline: [
+      description: loan.description || loan.purpose,
+      benefits: loan.benefits || [],
+      timeline: loan.timeline || [
         { phase: 'Chuẩn bị', duration: '2 tháng', status: 'completed' },
         { phase: 'Thi công', duration: '4 tháng', status: 'in-progress' },
-        { phase: 'Vận hành', duration: '18 tháng', status: 'pending' }
+        { phase: 'Vận hành', duration: `${loan.term - 6} tháng`, status: 'pending' }
       ]
     },
-
-    esgDetails: {
-      environmental: 95,
-      social: 90,
-      governance: 98
-    },
-
-    documents: [
+    documents: loan.documents || [
       { name: 'Giấy phép kinh doanh', verified: true },
       { name: 'Báo cáo tài chính 2024', verified: true },
-      { name: 'Hợp đồng mua bán điện', verified: true },
       { name: 'Giấy chứng nhận ESG', verified: true }
     ]
+  };
+
+  // Calculate ESG Score from esgDetails
+  const esgScore = calculateESGScore(loanData.esgDetails);
+
+  const getESGColor = (score) => {
+    if (score >= 80) return 'esg-high';
+    if (score >= 70) return 'esg-medium';
+    return 'esg-low';
+  };
+
+  const getRatingColor = (rating) => {
+    if (rating.includes('A')) return 'rating-a';
+    if (rating.includes('B')) return 'rating-b';
+    return 'rating-c';
   };
 
   const formatCurrency = (amount) => {
@@ -97,9 +114,27 @@ const LoanDetail = () => {
   return (
     <div className="loan-detail-container">
       <div className="loan-detail-header">
-        <button className="btn-back" onClick={() => navigate('/loan-list')}>
+        <button className="btn-back" onClick={() => navigate('/loan-list', { 
+          state: { selectedPackage, userRole } 
+        })}>
           <FaArrowLeft /> Quay lại danh sách
         </button>
+      </div>
+
+      {/* Loan Image Banner */}
+      <div className="loan-detail-image-banner">
+        <img src={loanData.image} alt={loanData.projectName} />
+        <div className="loan-detail-overlay">
+          <h1>{loanData.projectName}</h1>
+          <div className="rating-badges">
+            <span className="rating-badge rating-a">
+              <FaStar /> {loanData.creditRating}
+            </span>
+            <span className={`esg-badge ${getESGColor(esgScore)}`}>
+              <FaLeaf /> ESG {esgScore}
+            </span>
+          </div>
+        </div>
       </div>
 
       <div className="loan-detail-content">
@@ -107,18 +142,9 @@ const LoanDetail = () => {
         <div className="main-info-card">
           <div className="project-header">
             <div>
-              <h1>{loanData.projectName}</h1>
               <div className="company-info">
                 <FaBuilding /> {loanData.company.name}
               </div>
-            </div>
-            <div className="rating-badges">
-              <span className="rating-badge rating-a">
-                <FaStar /> {loanData.creditRating}
-              </span>
-              <span className="esg-badge esg-high">
-                <FaLeaf /> ESG {loanData.esgScore}
-              </span>
             </div>
           </div>
 

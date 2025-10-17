@@ -168,7 +168,7 @@ const Dashboard = () => {
               <div className="account-balance">
                 <span className="balance-label">Số dư khả dụng</span>
                 <div className="balance-amount">
-                  <span className="balance-value">5,000,000 <span className="currency">VND</span></span>
+                  <span className="balance-value">15,000,000 <span className="currency">VND</span></span>
                 </div>
               </div>
 

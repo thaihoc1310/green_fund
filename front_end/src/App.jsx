@@ -13,11 +13,13 @@ import TransactionHistory from './components/TransactionHistory';
 import InvestmentPortfolio from './components/InvestmentPortfolio';
 import Deposit from './components/Deposit';
 import Profile from './components/Profile';
+import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="App">
         <Routes>
           <Route path="/" element={<LandingPage />} />
