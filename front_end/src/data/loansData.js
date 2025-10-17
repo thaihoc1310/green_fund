@@ -1,4 +1,26 @@
-import loanPackageImg from '../assets/Ảnh dự án nông nghiệp xanh.jpg';
+// Import images for Green Agriculture
+import greenAg1 from '../assets/loan_packages/green_agriculture/1.jpg';
+import greenAg2 from '../assets/loan_packages/green_agriculture/2.png';
+import greenAg3 from '../assets/loan_packages/green_agriculture/3.jpg';
+import greenAg4 from '../assets/loan_packages/green_agriculture/4.jpg';
+
+// Import images for Renewable Energy
+import renewableEnergy1 from '../assets/loan_packages/renewable_energy/1.jpg';
+import renewableEnergy2 from '../assets/loan_packages/renewable_energy/2.png';
+import renewableEnergy3 from '../assets/loan_packages/renewable_energy/3.jpg';
+import renewableEnergy4 from '../assets/loan_packages/renewable_energy/4.jpeg';
+
+// Import images for Sustainable Consumption
+import sustainGoods1 from '../assets/loan_packages/sustain_goods/1.jpg';
+import sustainGoods2 from '../assets/loan_packages/sustain_goods/2.jpg';
+import sustainGoods3 from '../assets/loan_packages/sustain_goods/3.jpg';
+import sustainGoods4 from '../assets/loan_packages/sustain_goods/4.jpg';
+
+// Import images for Environmental Tech
+import envTech1 from '../assets/loan_packages/env_tech/1.jpg';
+import envTech2 from '../assets/loan_packages/env_tech/2.jpg';
+import envTech3 from '../assets/loan_packages/env_tech/3.jpg';
+import envTech4 from '../assets/loan_packages/env_tech/4.png';
 
 export const loansData = [
   // GREEN AGRICULTURE
@@ -30,7 +52,7 @@ export const loansData = [
       employees: 35,
       revenue: 12000000000
     },
-    image: loanPackageImg,
+    image: greenAg1,
     benefits: ['Tiết kiệm 40% nước', 'Giảm 12 tấn CO₂/năm', 'Tạo 25 việc làm'],
     paymentMethod: 'Trả gốc đều theo quý, lãi hàng tháng',
     description: 'Dự án mở rộng trang trại rau hữu cơ với công nghệ cao, áp dụng hệ thống tưới nhỏ giọt Israel và nhà màng hiện đại để nâng cao năng suất và chất lượng.',
@@ -81,7 +103,7 @@ export const loansData = [
       employees: 25,
       revenue: 8000000000
     },
-    image: loanPackageImg,
+    image: greenAg2,
     benefits: ['Giảm 50% thuốc trừ sâu', 'Giảm 18 tấn CO₂/năm', 'Tạo 15 việc làm kỹ thuật'],
     paymentMethod: 'Gốc trả nửa năm/lần, lãi hàng tháng',
     description: 'Startup công nghệ nông nghiệp phát triển hệ thống drone và AI giám sát cây trồng, giúp nông dân tiết kiệm thuốc trừ sâu và tăng năng suất.',
@@ -132,7 +154,7 @@ export const loansData = [
       employees: 60,
       revenue: 15000000000
     },
-    image: loanPackageImg,
+    image: greenAg3,
     benefits: ['Giảm 12.000 tấn CO₂/năm', 'Cải thiện năng suất 12%', 'Tạo 50 việc làm'],
     paymentMethod: 'Gốc trả theo quý, lãi tháng, 6 tháng ân hạn',
     description: 'Nhà máy sản xuất phân bón hữu cơ vi sinh từ phế phẩm nông nghiệp, góp phần giảm ô nhiễm và cải thiện chất lượng đất trồng.',
@@ -183,7 +205,7 @@ export const loansData = [
       employees: 40,
       revenue: 10000000000
     },
-    image: loanPackageImg,
+    image: greenAg4,
     benefits: ['Giảm 85% rác thải', 'Giảm 10 tấn CO₂/năm', 'Tạo 30 việc làm'],
     paymentMethod: 'Gốc đều theo quý, lãi tháng',
     description: 'Mô hình nông trại tuần hoàn khép kín, tận dụng 100% phế phẩm để tạo ra sản phẩm mới, không tạo ra rác thải.',
@@ -236,7 +258,7 @@ export const loansData = [
       employees: 45,
       revenue: 18000000000
     },
-    image: loanPackageImg,
+    image: renewableEnergy1,
     benefits: ['Tiết kiệm 1.100 tấn CO₂/năm', 'Giảm 35% chi phí điện', 'Thu nhập từ bán điện'],
     paymentMethod: 'Lãi hàng tháng, gốc niên kim, 6 tháng ân hạn',
     description: 'Dự án năng lượng mặt trời cộng đồng, cung cấp điện sạch cho hộ nghèo nông thôn với chi phí thấp hơn lưới điện quốc gia.',
@@ -287,7 +309,7 @@ export const loansData = [
       employees: 30,
       revenue: 9000000000
     },
-    image: loanPackageImg,
+    image: renewableEnergy2,
     benefits: ['Loại bỏ máy phát diesel', 'Giảm 300 tấn CO₂/năm', 'Đào tạo 30 kỹ thuật viên'],
     paymentMethod: 'Lãi hàng tháng, gốc 6 tháng/lần, 3 tháng ân hạn',
     description: 'Giải pháp năng lượng gió nhỏ cho vùng núi, đảm bảo điện cho trường học và y tế, giảm phụ thuộc máy phát diesel gây ô nhiễm.',
@@ -338,7 +360,7 @@ export const loansData = [
       employees: 28,
       revenue: 11000000000
     },
-    image: loanPackageImg,
+    image: renewableEnergy3,
     benefits: ['Giảm thất thoát từ 25% xuống 8%', 'Tiết kiệm 1,2 tỷ/năm', 'Hợp tác 150 hộ nông dân'],
     paymentMethod: 'Lãi hàng tháng, gốc hàng năm',
     description: 'Kho lạnh năng lượng mặt trời giúp bảo quản nông sản tươi, giảm thất thoát sau thu hoạch, nâng cao thu nhập nông dân.',
@@ -389,7 +411,7 @@ export const loansData = [
       employees: 22,
       revenue: 5000000000
     },
-    image: loanPackageImg,
+    image: renewableEnergy4,
     benefits: ['Giảm 600 tấn CO₂/năm', 'Thúc đẩy chuyển dịch EV', 'Kết hợp F&B'],
     paymentMethod: 'Niên kim (gốc + lãi đều hàng tháng)',
     description: 'Hệ thống trạm sạc xe điện xanh, sử dụng năng lượng tái tạo, góp phần thúc đẩy giao thông bền vững.',
@@ -442,7 +464,7 @@ export const loansData = [
       employees: 48,
       revenue: 14000000000
     },
-    image: loanPackageImg,
+    image: sustainGoods1,
     benefits: ['Thay thế 50 triệu túi nilon/năm', 'Giảm 400 tấn CO₂/năm', 'Hợp tác 20 nhà máy mía'],
     paymentMethod: 'Gốc hàng năm, lãi hàng tháng',
     description: 'Sản xuất bao bì sinh học từ bã mía, thay thế nhựa nilon, giảm ô nhiễm môi trường và tận dụng phế phẩm nông nghiệp.',
@@ -493,7 +515,7 @@ export const loansData = [
       employees: 32,
       revenue: 8500000000
     },
-    image: loanPackageImg,
+    image: sustainGoods2,
     benefits: ['Nâng giá trị dược liệu', 'Thu nhập 200 hộ trồng', 'Giảm 20% nhựa bao bì'],
     paymentMethod: 'Trả đều gốc & lãi hàng tháng',
     description: 'Sản xuất mỹ phẩm thiên nhiên từ dược liệu địa phương, bảo tồn tri thức bản địa và tạo thu nhập cho nông dân.',
@@ -544,7 +566,7 @@ export const loansData = [
       employees: 20,
       revenue: 6000000000
     },
-    image: loanPackageImg,
+    image: sustainGoods3,
     benefits: ['Giảm hóa chất độc hại', 'Giảm 40% nhựa mới', 'Thu gom rác tái chế'],
     paymentMethod: 'Lãi hàng tháng, gốc 6 tháng/lần',
     description: 'Phát triển nước giặt sinh học thân thiện môi trường, sử dụng bao bì tái chế, giảm rác thải nhựa.',
@@ -595,7 +617,7 @@ export const loansData = [
       employees: 50,
       revenue: 12000000000
     },
-    image: loanPackageImg,
+    image: sustainGoods4,
     benefits: ['Thu hồi 200 tấn nhựa/năm', 'Giảm 500 tấn CO₂/năm', 'Tạo 40 việc làm'],
     paymentMethod: 'Lãi hàng tháng, gốc năm/6 tháng',
     description: 'Nhà máy tái chế nhựa PET, chuyển hóa rác thải nhựa thành hạt tái chế chất lượng cao cho ngành sản xuất.',
@@ -648,7 +670,7 @@ export const loansData = [
       employees: 55,
       revenue: 25000000000
     },
-    image: loanPackageImg,
+    image: envTech1,
     benefits: ['Giảm 35% chi phí xử lý', 'Giảm 2.000 tấn CO₂/năm', 'Đạt QCVN 40:2011'],
     paymentMethod: 'Gốc 1 năm/lần, lãi hàng tháng',
     description: 'Hệ thống xử lý nước thải thông minh sử dụng AI tối ưu hóa quy trình, tiết kiệm hóa chất và năng lượng.',
@@ -699,7 +721,7 @@ export const loansData = [
       employees: 38,
       revenue: 13000000000
     },
-    image: loanPackageImg,
+    image: envTech2,
     benefits: ['Tăng tỷ lệ tái chế từ 15% lên 45%', 'Giảm 20% chi phí vận chuyển', 'Tích điểm đổi quà'],
     paymentMethod: 'Gốc theo quý, lãi hàng tháng',
     description: 'Thùng rác thông minh tích hợp AI phân loại rác tự động, khuyến khích người dân phân loại rác bằng hệ thống tích điểm.',
@@ -750,7 +772,7 @@ export const loansData = [
       employees: 42,
       revenue: 15000000000
     },
-    image: loanPackageImg,
+    image: envTech3,
     benefits: ['Thu hồi Li, Co, Ni', 'Giảm 50 tấn chất thải nguy hại/năm', 'An toàn phòng cháy'],
     paymentMethod: 'Lãi hàng quý, gốc cuối kỳ',
     description: 'Nhà máy tái chế pin lithium chuyên nghiệp, thu hồi kim loại quý, xử lý chất thải nguy hại an toàn.',
@@ -801,7 +823,7 @@ export const loansData = [
       employees: 28,
       revenue: 7000000000
     },
-    image: loanPackageImg,
+    image: envTech4,
     benefits: ['Tuân thủ GHG protocol', 'Minh bạch blockchain', 'Onboarding 200 DN'],
     paymentMethod: 'Lãi hàng tháng, gốc cuối kỳ',
     description: 'Nền tảng công nghệ đo lường carbon footprint và giao dịch tín chỉ carbon trên blockchain, giúp SME tuân thủ quy định ESG.',
