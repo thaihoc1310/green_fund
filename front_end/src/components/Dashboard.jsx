@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaLeaf, FaUser, FaWallet, FaHistory, FaNewspaper, FaChartLine, FaHandHoldingUsd } from 'react-icons/fa';
+import { FaLeaf, FaUser, FaWallet, FaHistory, FaNewspaper, FaChartLine, FaHandHoldingUsd, FaSearch, FaTimes } from 'react-icons/fa';
 import { BiMoney } from 'react-icons/bi';
 import backgroundDb from '../assets/background_db.jpg';
 import logo from '../assets/logo.png';
@@ -15,6 +15,8 @@ const Dashboard = () => {
   const [userRole, setUserRole] = useState('borrower'); // 'borrower' or 'lender'
   const [depositAmount, setDepositAmount] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Nhận userRole từ navigation state nếu có
   useEffect(() => {
@@ -29,11 +31,15 @@ const Dashboard = () => {
       if (showUserMenu && !event.target.closest('.user-menu-container')) {
         setShowUserMenu(false);
       }
+      // Close search overlay when clicking outside
+      if (isSearchExpanded && !event.target.closest('.search-overlay-mobile') && !event.target.closest('.search-icon-mobile')) {
+        setIsSearchExpanded(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showUserMenu]);
+  }, [showUserMenu, isSearchExpanded]);
 
   // Handle scroll for header animation
   useEffect(() => {
@@ -78,11 +84,21 @@ const Dashboard = () => {
               <img src={logo} alt="GreenFund Logo" className="logo-image" />
               <span className="logo-text">GreenFund</span>
             </div>
+            {/* Mobile Search Icon */}
+            <button className="search-icon-mobile" onClick={() => setIsSearchExpanded(true)}>
+              <FaSearch />
+            </button>
           </div>
           
           <div className="header-center">
             <div className="search-container">
-              <input type="text" placeholder="Tìm kiếm trong GreenFund" className="search-input" />
+              <input 
+                type="text" 
+                placeholder="Tìm kiếm trong GreenFund" 
+                className="search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
           </div>
           
@@ -121,6 +137,21 @@ const Dashboard = () => {
               )}
             </div>
           </div>
+
+          {/* Mobile Search Overlay */}
+          <div className={`search-overlay-mobile ${isSearchExpanded ? 'active' : ''}`}>
+            <input 
+              type="text" 
+              placeholder="Tìm kiếm trong GreenFund" 
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+            />
+            <button className="close-search" onClick={() => setIsSearchExpanded(false)}>
+              <FaTimes />
+            </button>
+          </div>
         </header>
         <main className="dashboard-content">
           {/* Hero Background Section */}
@@ -137,7 +168,7 @@ const Dashboard = () => {
               <div className="account-balance">
                 <span className="balance-label">Số dư khả dụng</span>
                 <div className="balance-amount">
-                  <span className="balance-value">5,000,000 VND</span>
+                  <span className="balance-value">5,000,000 <span className="currency">VND</span></span>
                 </div>
               </div>
 
@@ -295,7 +326,7 @@ const Dashboard = () => {
               <div className="account-balance">
                 <span className="balance-label">Số dư khả dụng</span>
                 <div className="balance-amount">
-                  <span className="balance-value">15,000,000 VND</span>
+                  <span className="balance-value">15,000,000 <span className="currency">VND</span></span>
                 </div>
               </div>
 

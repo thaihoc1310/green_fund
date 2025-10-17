@@ -14,6 +14,8 @@
 .dashboard-header-new {
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(30px) saturate(200%) brightness(110%);
@@ -31,6 +33,7 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.6);
   border-top: 1px solid rgba(255, 255, 255, 0.8);
+  box-sizing: border-box;
 }
 
 .dashboard-header-new.scrolled {
@@ -105,6 +108,70 @@
 
 .search-input::placeholder {
   color: #94a3b8;
+}
+
+/* Mobile Search Icon */
+.search-icon-mobile {
+  display: none;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #16a34a;
+  font-size: 20px;
+  transition: all 0.2s ease;
+}
+
+.search-icon-mobile:hover {
+  color: #15803d;
+  transform: scale(1.1);
+}
+
+/* Mobile Search Overlay */
+.search-overlay-mobile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.search-overlay-mobile.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.search-overlay-mobile .search-input {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+.search-overlay-mobile .close-search {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #64748b;
+  font-size: 20px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.search-overlay-mobile .close-search:hover {
+  color: #334155;
+  transform: scale(1.1);
 }
 
 .header-right {
@@ -479,6 +546,11 @@
   font-weight: 700;
   color: #16a34a;
   letter-spacing: 1px;
+}
+
+.balance-value .currency {
+  font-size: 0.7em;
+  font-weight: 600;
 }
 
 /* News Section */
@@ -859,9 +931,9 @@
   }
 
   .dashboard-header-new {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     padding: 10px 16px;
-    gap: 12px;
+    gap: 8px;
     position: fixed;
   }
 
@@ -870,10 +942,17 @@
   }
 
   .dashboard-content {
-    padding-top: 130px; /* Increased for wrapped mobile header */
+    padding-top: 80px;
   }
 
   .header-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-container {
     flex: 1;
   }
 
@@ -886,9 +965,13 @@
   }
 
   .header-center {
-    order: 3;
-    width: 100%;
-    max-width: none;
+    display: none;
+  }
+
+  /* Show search icon on mobile */
+  .search-icon-mobile {
+    display: block;
+    margin-left: auto;
   }
 
   .search-input {
@@ -961,11 +1044,11 @@
   }
 
   .balance-value {
-    font-size: 24px;
+    font-size: 18px;
   }
 
   .balance-label {
-    font-size: 24px;
+    font-size: 12px;
   }
 
   .service-buttons {
@@ -1164,11 +1247,11 @@
   }
 
   .balance-value {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   .balance-label {
-    font-size: 20px;
+    font-size: 11px;
   }
 
   .service-buttons {
