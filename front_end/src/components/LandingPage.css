@@ -673,6 +673,217 @@
   margin: 0;
 }
 
+/* Agricultural Section */
+.agricultural-section {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.agricultural-content {
+  margin-top: 3rem;
+}
+
+.agricultural-main-image {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  height: 500px;
+}
+
+.agricultural-main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.agricultural-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+  padding: 3rem 2.5rem 2rem;
+  color: white;
+}
+
+.agricultural-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(16, 185, 129, 0.9);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.badge-icon {
+  font-size: 1.125rem;
+}
+
+.agricultural-overlay h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: white;
+}
+
+.agricultural-overlay p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.agricultural-stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.agricultural-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.agricultural-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.agricultural-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card-image-container {
+  height: 250px;
+  overflow: hidden;
+}
+
+.card-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.agricultural-card:hover .card-image-container img {
+  transform: scale(1.1);
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-content h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+}
+
+.card-content p {
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.interest-rate {
+  font-weight: 600;
+  color: #10b981;
+  font-size: 0.875rem;
+}
+
+.btn-learn-more {
+  padding: 0.5rem 1.25rem;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+}
+
+.btn-learn-more:hover {
+  background: #059669;
+  transform: translateX(4px);
+}
+
+.agricultural-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.info-item:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateX(8px);
+}
+
+.info-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.info-content h5 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.info-content p {
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
 /* Responsive Design */
 @media (max-width: 968px) {
   .nav-menu {
@@ -723,6 +934,26 @@
     grid-template-columns: 1fr;
   }
 
+  .agricultural-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .agricultural-main-image {
+    height: 400px;
+  }
+
+  .agricultural-overlay h3 {
+    font-size: 1.5rem;
+  }
+
+  .agricultural-overlay p {
+    font-size: 1rem;
+  }
+
+  .agricultural-stats {
+    gap: 1.5rem;
+  }
+
   .footer-container {
     grid-template-columns: 1fr 1fr;
   }
@@ -743,6 +974,26 @@
 
   .features-grid {
     grid-template-columns: 1fr;
+  }
+
+  .agricultural-main-image {
+    height: 350px;
+  }
+
+  .agricultural-overlay {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .agricultural-overlay h3 {
+    font-size: 1.25rem;
+  }
+
+  .agricultural-overlay p {
+    font-size: 0.875rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
   }
 
   .footer-container {

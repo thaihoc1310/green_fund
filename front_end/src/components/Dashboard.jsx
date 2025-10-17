@@ -5,6 +5,9 @@ import { BiMoney } from 'react-icons/bi';
 import BottomNav from './BottomNav';
 import backgroundDb from '../assets/background_db.jpg';
 import logo from '../assets/logo.png';
+import newsInterestRate from '../assets/Ảnh chương trình lãi suất (trang chủ).png';
+import newsFinancial from '../assets/Bản tin Tài chính hôm nay (trang chủ).jpg';
+import newsAutoInvest from '../assets/Đầu tư tự động (trang chủ).jpg';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -184,57 +187,37 @@ const Dashboard = () => {
             
             <div className="news-grid">
               <div className="news-card featured">
-                <div className="news-image-placeholder">
-                  <span>🖼️ Thêm ảnh banner chính</span>
-                </div>
+                <img src={newsInterestRate} alt="Chương trình lãi suất ưu đãi" className="news-image" />
                 <div className="news-content">
                   <span className="news-badge featured-badge">Nổi bật</span>
-                  <h3>Chương trình khuyến mãi lãi suất ưu đãi</h3>
-                  <p>Nhận ngay lãi suất ưu đãi 0.5%/tháng cho các khoản vay dưới 50 triệu đồng. Áp dụng cho khách hàng mới.</p>
+                  <h3>Chương trình lãi suất ưu đãi đặc biệt</h3>
+                  <p>Nhận ngay lãi suất ưu đãi 0.5%/tháng cho các khoản vay dưới 50 triệu đồng. Chương trình áp dụng từ ngày 15/10 đến 30/11/2025 cho khách hàng mới đăng ký.</p>
                   <div className="news-meta">
-                    <span className="news-date">🕒 10/10/2025</span>
+                    <span className="news-date">🕒 15/10/2025</span>
                   </div>
                 </div>
               </div>
 
               <div className="news-card">
-                <div className="news-image-placeholder small">
-                  <span>🖼️ Ảnh</span>
-                </div>
+                <img src={newsFinancial} alt="Bản tin tài chính" className="news-image small" />
                 <div className="news-content">
                   <span className="news-badge">Tin tức</span>
-                  <h3>GreenFund đạt mốc 10,000 người dùng</h3>
-                  <p>Cảm ơn sự tin tưởng của quý khách hàng đã đồng hành cùng GreenFund...</p>
+                  <h3>Bản tin tài chính hôm nay</h3>
+                  <p>Cập nhật thông tin thị trường tài chính, xu hướng đầu tư xanh và các cơ hội đầu tư hấp dẫn trong tuần này...</p>
                   <div className="news-meta">
-                    <span className="news-date">🕒 08/10/2025</span>
+                    <span className="news-date">🕒 17/10/2025</span>
                   </div>
                 </div>
               </div>
 
               <div className="news-card">
-                <div className="news-image-placeholder small">
-                  <span>🖼️ Ảnh</span>
-                </div>
+                <img src={newsAutoInvest} alt="Đầu tư tự động" className="news-image small" />
                 <div className="news-content">
-                  <span className="news-badge">Hướng dẫn</span>
-                  <h3>Cách tạo khoản vay hiệu quả</h3>
-                  <p>Hướng dẫn chi tiết cách tạo hồ sơ vay vốn để tăng cơ hội được duyệt...</p>
+                  <span className="news-badge">Tính năng mới</span>
+                  <h3>Ra mắt tính năng đầu tư tự động</h3>
+                  <p>Tối ưu hóa lợi nhuận với công nghệ AI, tự động phân bổ vốn vào các dự án phù hợp với hồ sơ rủi ro của bạn...</p>
                   <div className="news-meta">
-                    <span className="news-date">🕒 05/10/2025</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="news-card">
-                <div className="news-image-placeholder small">
-                  <span>🖼️ Ảnh</span>
-                </div>
-                <div className="news-content">
-                  <span className="news-badge">Cập nhật</span>
-                  <h3>Tính năng mới: Đầu tư tự động</h3>
-                  <p>Ra mắt tính năng đầu tư tự động giúp tối ưu hóa lợi nhuận của bạn...</p>
-                  <div className="news-meta">
-                    <span className="news-date">🕒 01/10/2025</span>
+                    <span className="news-date">🕒 12/10/2025</span>
                   </div>
                 </div>
               </div>
@@ -363,57 +346,37 @@ const Dashboard = () => {
             
             <div className="news-grid">
               <div className="news-card featured">
-                <div className="news-image-placeholder">
-                  <span>🖼️ Thêm ảnh banner chính</span>
-                </div>
+                <img src={newsInterestRate} alt="Chương trình lãi suất ưu đãi" className="news-image" />
                 <div className="news-content">
                   <span className="news-badge featured-badge">Nổi bật</span>
-                  <h3>Chương trình khuyến mãi lãi suất ưu đãi</h3>
-                  <p>Nhận ngay lãi suất ưu đãi 0.5%/tháng cho các khoản vay dưới 50 triệu đồng. Áp dụng cho khách hàng mới.</p>
+                  <h3>Chương trình lãi suất ưu đãi đặc biệt</h3>
+                  <p>Nhận ngay lãi suất ưu đãi 0.5%/tháng cho các khoản vay dưới 50 triệu đồng. Chương trình áp dụng từ ngày 15/10 đến 30/11/2025 cho khách hàng mới đăng ký.</p>
                   <div className="news-meta">
-                    <span className="news-date">🕒 10/10/2025</span>
+                    <span className="news-date">🕒 15/10/2025</span>
                   </div>
                 </div>
               </div>
 
               <div className="news-card">
-                <div className="news-image-placeholder small">
-                  <span>🖼️ Ảnh</span>
-                </div>
+                <img src={newsFinancial} alt="Bản tin tài chính" className="news-image small" />
                 <div className="news-content">
                   <span className="news-badge">Tin tức</span>
-                  <h3>GreenFund đạt mốc 10,000 người dùng</h3>
-                  <p>Cảm ơn sự tin tưởng của quý khách hàng đã đồng hành cùng GreenFund...</p>
+                  <h3>Bản tin tài chính hôm nay</h3>
+                  <p>Cập nhật thông tin thị trường tài chính, xu hướng đầu tư xanh và các cơ hội đầu tư hấp dẫn trong tuần này...</p>
                   <div className="news-meta">
-                    <span className="news-date">🕒 08/10/2025</span>
+                    <span className="news-date">🕒 17/10/2025</span>
                   </div>
                 </div>
               </div>
 
               <div className="news-card">
-                <div className="news-image-placeholder small">
-                  <span>🖼️ Ảnh</span>
-                </div>
+                <img src={newsAutoInvest} alt="Đầu tư tự động" className="news-image small" />
                 <div className="news-content">
-                  <span className="news-badge">Hướng dẫn</span>
-                  <h3>Cách tạo khoản vay hiệu quả</h3>
-                  <p>Hướng dẫn chi tiết cách tạo hồ sơ vay vốn để tăng cơ hội được duyệt...</p>
+                  <span className="news-badge">Tính năng mới</span>
+                  <h3>Ra mắt tính năng đầu tư tự động</h3>
+                  <p>Tối ưu hóa lợi nhuận với công nghệ AI, tự động phân bổ vốn vào các dự án phù hợp với hồ sơ rủi ro của bạn...</p>
                   <div className="news-meta">
-                    <span className="news-date">🕒 05/10/2025</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="news-card">
-                <div className="news-image-placeholder small">
-                  <span>🖼️ Ảnh</span>
-                </div>
-                <div className="news-content">
-                  <span className="news-badge">Cập nhật</span>
-                  <h3>Tính năng mới: Đầu tư tự động</h3>
-                  <p>Ra mắt tính năng đầu tư tự động giúp tối ưu hóa lợi nhuận của bạn...</p>
-                  <div className="news-meta">
-                    <span className="news-date">🕒 01/10/2025</span>
+                    <span className="news-date">🕒 12/10/2025</span>
                   </div>
                 </div>
               </div>

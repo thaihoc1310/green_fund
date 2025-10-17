@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 import logo from '../assets/logo.png';
 import backgroundHp2 from '../assets/background_hp2.jpg';
+import projectImage1 from '../assets/Ảnh dự án nông nghiệp xanh(1).jpg';
+import projectImage2 from '../assets/Ảnh dự án nông nghiệp xanh.jpg';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -152,6 +154,88 @@ const LandingPage = () => {
               <div className="feature-icon">📊</div>
               <h3>Minh bạch 100%</h3>
               <p>Báo cáo chi tiết, theo dõi đầu tư real-time mọi lúc mọi nơi</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Agricultural Projects Showcase Section */}
+      <section className="agricultural-section">
+        <div className="section-container">
+          <div className="section-header">
+            <h2>Dự án Nông nghiệp Xanh</h2>
+            <p>Kết nối đầu tư với các dự án nông nghiệp bền vững, công nghệ cao</p>
+          </div>
+          
+          <div className="agricultural-content">
+            <div className="agricultural-main-image">
+              <img src={projectImage1} alt="Công nhân tại nhà máy trồng rau" />
+              <div className="agricultural-overlay">
+                <div className="agricultural-badge">
+                  <span className="badge-icon">🌱</span>
+                  <span className="badge-text">Nông nghiệp công nghệ cao</span>
+                </div>
+                <h3>Nhà máy trồng rau thủy canh hiện đại</h3>
+                <p>Ứng dụng công nghệ IoT và AI trong sản xuất rau sạch, mang lại hiệu quả cao và bền vững cho môi trường</p>
+                <div className="agricultural-stats">
+                  <div className="stat-box">
+                    <span className="stat-number">500+</span>
+                    <span className="stat-label">Tấn rau/năm</span>
+                  </div>
+                  <div className="stat-box">
+                    <span className="stat-number">90%</span>
+                    <span className="stat-label">Tiết kiệm nước</span>
+                  </div>
+                  <div className="stat-box">
+                    <span className="stat-number">0</span>
+                    <span className="stat-label">Thuốc trừ sâu</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="agricultural-grid">
+              <div className="agricultural-card">
+                <div className="card-image-container">
+                  <img src={projectImage2} alt="Các hoạt động nông nghiệp xanh" />
+                </div>
+                <div className="card-content">
+                  <h4>🌾 Canh tác hữu cơ đa dạng</h4>
+                  <p>Mô hình canh tác đa dạng sinh học, kết hợp trồng trọt và chăn nuôi bền vững</p>
+                  <div className="card-footer">
+                    <span className="interest-rate">Lợi nhuận: 12-14%/năm</span>
+                    <button className="btn-learn-more" onClick={() => navigate('/loan-list')}>
+                      Tìm hiểu →
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="agricultural-info">
+                <div className="info-item">
+                  <div className="info-icon">🎯</div>
+                  <div className="info-content">
+                    <h5>Mục tiêu phát triển</h5>
+                    <p>Xây dựng chuỗi cung ứng nông sản sạch, từ trang trại đến bàn ăn, đảm bảo chất lượng và an toàn thực phẩm</p>
+                  </div>
+                </div>
+                
+                <div className="info-item">
+                  <div className="info-icon">💡</div>
+                  <div className="info-content">
+                    <h5>Công nghệ ứng dụng</h5>
+                    <p>IoT, AI giám sát tự động, hệ thống tưới tiêu thông minh, quản lý dinh dưỡng tối ưu</p>
+                  </div>
+                </div>
+                
+                <div className="info-item">
+                  <div className="info-icon">🌍</div>
+                  <div className="info-content">
+                    <h5>Tác động môi trường</h5>
+                    <p>Giảm 60% phát thải CO₂, tái sử dụng 95% nước, không sử dụng hóa chất độc hại</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
