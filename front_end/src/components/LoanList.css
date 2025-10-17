@@ -418,6 +418,10 @@
   .loans-grid {
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   }
+
+  .loan-promo-banner {
+    border-radius: 14px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -444,7 +448,8 @@
   }
 
   .loan-promo-banner {
-    display: none;
+    margin-bottom: 20px;
+    border-radius: 12px;
   }
 
   .loans-grid {
