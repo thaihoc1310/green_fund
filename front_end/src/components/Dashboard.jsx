@@ -7,6 +7,7 @@ import logo from '../assets/logo.png';
 import newsInterestRate from '../assets/Ảnh chương trình lãi suất (trang chủ).png';
 import newsFinancial from '../assets/Bản tin Tài chính hôm nay (trang chủ).jpg';
 import newsAutoInvest from '../assets/Đầu tư tự động (trang chủ).jpg';
+import ChatBot from './ChatBot';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -414,6 +415,9 @@ const Dashboard = () => {
             </div>
           </div>
         </main>
+
+        {/* ChatBot - Only for Lender */}
+        <ChatBot />
       </div>
     );
   }
