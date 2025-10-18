@@ -164,6 +164,7 @@ const Dashboard = () => {
             <div className="account-card">
               <div className="account-header">
                 <span className="account-label">Ví GreenFund</span>
+                <span className="account-role">Người đi vay</span>
               </div>
               <div className="account-balance">
                 <span className="balance-label">Số dư khả dụng</span>
@@ -322,6 +323,7 @@ const Dashboard = () => {
             <div className="account-card">
               <div className="account-header">
                 <span className="account-label">Ví GreenFund</span>
+                <span className="account-role">Nhà đầu tư</span>
               </div>
               <div className="account-balance">
                 <span className="balance-label">Số dư khả dụng</span>
