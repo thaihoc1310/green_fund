@@ -183,7 +183,6 @@ textarea.edit-input {
 
 .btn-edit:hover {
   background: linear-gradient(135deg, #15803d, #16a34a);
-  transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(22, 163, 74, 0.4);
 }
 
@@ -195,7 +194,6 @@ textarea.edit-input {
 
 .btn-save:hover {
   background: linear-gradient(135deg, #15803d, #16a34a);
-  transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(22, 163, 74, 0.4);
 }
 

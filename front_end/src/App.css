@@ -344,7 +344,7 @@ body {
 .error {
   color: #ef4444;
   font-size: 14px;
-  display: block;
+  /* display: block; */
   margin-top: 8px;
   font-weight: 500;
 }
@@ -356,6 +356,16 @@ body {
   border-radius: 12px;
   margin-bottom: 20px;
   border: 1px solid #fecaca;
+  font-weight: 500;
+}
+
+.success-message {
+  color: #059669;
+  background-color: #d1fae5;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #6ee7b7;
   font-weight: 500;
 }
 
@@ -765,8 +775,8 @@ button:disabled {
 /* Focus styles for accessibility */
 input:focus,
 button:focus {
-  outline: 2px solid #86efac;
-  outline-offset: 2px;
+  /* outline: 2px solid #86efac; */
+  /* outline-offset: 2px; */
 }
 
 /* Ensure all input types have proper text color */

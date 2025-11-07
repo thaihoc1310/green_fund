@@ -1,45 +1,141 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { FaArrowLeft, FaBuilding, FaLeaf, FaUpload } from 'react-icons/fa';
+import { FaArrowLeft, FaBuilding, FaLeaf, FaUpload, FaInfoCircle } from 'react-icons/fa';
 import { BiMoney } from 'react-icons/bi';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabaseClient';
 import './CreateLoan.css';
 
 const CreateLoan = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userRole = location.state?.userRole || 'borrower';
-  const { register, handleSubmit, formState: { errors }, watch } = useForm();
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({});
+  const { user } = useAuth();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm({
+    defaultValues: {
+      interestRate: 8,
+      termMonths: 12,
+      repaymentMethod: 'monthly'
+    }
+  });
+  
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
-  const onSubmitStep1 = (data) => {
-    setFormData({ ...formData, ...data });
-    setStep(2);
+  const onSubmit = async (data) => {
+    if (!user) {
+      setErrorMessage('Vui lòng đăng nhập để tạo khoản vay');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setErrorMessage('');
+
+      let imageUrl = null;
+
+      // Upload image nếu có
+      if (imageFile) {
+        setUploadingImage(true);
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+        const filePath = fileName;
+
+        const { error: uploadError } = await supabase.storage
+          .from('loan-images')
+          .upload(filePath, imageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('loan-images')
+          .getPublicUrl(filePath);
+
+        imageUrl = publicUrl;
+        setUploadingImage(false);
+      }
+
+      // Tạo loan record
+      const { error: insertError } = await supabase
+        .from('loans')
+        .insert({
+          borrower_id: user.id,
+          project_name: data.projectName,
+          package: data.package,
+          detailed_description: data.detailedDescription,
+          company_name: data.companyName,
+          business_type: data.businessType,
+          business_address: data.businessAddress,
+          business_registration_number: data.businessRegistrationNumber,
+          company_founded_year: data.companyFoundedYear ? parseInt(data.companyFoundedYear) : null,
+          company_employees: data.companyEmployees ? parseInt(data.companyEmployees) : null,
+          company_revenue_2024: data.companyRevenue2024 ? parseFloat(data.companyRevenue2024) : null,
+          representative_name: data.representativeName,
+          representative_position: data.representativePosition,
+          representative_phone: data.representativePhone,
+          representative_email: data.representativeEmail,
+          loan_purpose: data.loanPurpose,
+          amount: parseFloat(data.amount),
+          interest_rate: parseFloat(data.interestRate),
+          term_months: parseInt(data.termMonths),
+          repayment_method: data.repaymentMethod,
+          image_url: imageUrl,
+          status: 'pending'
+        });
+
+      if (insertError) throw insertError;
+
+      alert('Yêu cầu vay vốn đã được gửi thành công! Vui lòng đợi admin phê duyệt.');
+      navigate('/loan-management', { state: { userRole } });
+    } catch (error) {
+      console.error('Error creating loan:', error);
+      setErrorMessage(error.message || 'Đã xảy ra lỗi khi tạo khoản vay');
+    } finally {
+      setLoading(false);
+      setUploadingImage(false);
+    }
   };
 
-  const onSubmitStep2 = (data) => {
-    setFormData({ ...formData, ...data });
-    setStep(3);
+
+  // Handle image upload
+  const handleImageChange = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate
+    if (!file.type.startsWith('image/')) {
+      setErrorMessage('Vui lòng chọn file ảnh hợp lệ');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMessage('Kích thước ảnh không được vượt quá 5MB');
+      return;
+    }
+
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+    setErrorMessage('');
   };
 
-  const onSubmitFinal = (data) => {
-    const finalData = { ...formData, ...data };
-    console.log('Loan Application:', finalData);
-    // TODO: Submit to API
-    alert('Yêu cầu vay vốn đã được gửi thành công!');
-    navigate('/loan-management');
-  };
-
-  const loanAmount = watch('loanAmount', 0);
+  const loanAmount = watch('amount', 0);
   const interestRate = watch('interestRate', 8);
-  const loanTerm = watch('loanTerm', 12);
+  const loanTerm = watch('termMonths', 12);
 
   const calculateMonthlyPayment = () => {
     if (!loanAmount || !interestRate || !loanTerm) return 0;
     const principal = parseFloat(loanAmount);
     const monthlyRate = parseFloat(interestRate) / 100 / 12;
     const numPayments = parseInt(loanTerm);
+    
+    if (monthlyRate === 0) return principal / numPayments;
     
     const monthlyPayment = 
       (principal * monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
@@ -58,318 +154,366 @@ const CreateLoan = () => {
         <button className="btn-back" onClick={() => navigate('/dashboard', { state: { userRole } })}>
           <FaArrowLeft /> Quay lại
         </button>
-        <h1>Tạo yêu cầu vay vốn</h1>
+        <h1>Tạo yêu cầu vay vốn xanh</h1>
       </div>
 
-      <div className="progress-steps">
-        <div className={`step ${step >= 1 ? 'active' : ''} ${step > 1 ? 'completed' : ''}`}>
-          <div className="step-number">1</div>
-          <span>Thông tin dự án</span>
-        </div>
-        <div className="step-line"></div>
-        <div className={`step ${step >= 2 ? 'active' : ''} ${step > 2 ? 'completed' : ''}`}>
-          <div className="step-number">2</div>
-          <span>Thông tin vay</span>
-        </div>
-        <div className="step-line"></div>
-        <div className={`step ${step >= 3 ? 'active' : ''}`}>
-          <div className="step-number">3</div>
-          <span>Xác nhận</span>
-        </div>
-      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="loan-form">
+        {errorMessage && (
+          <div className="form-card error-card">
+            <p style={{ color: '#dc2626', margin: 0 }}>{errorMessage}</p>
+          </div>
+        )}
 
-      {step === 1 && (
-        <form onSubmit={handleSubmit(onSubmitStep1)} className="loan-form">
-          <div className="form-card">
-            <h2><FaBuilding /> Thông tin dự án</h2>
-            
-            <div className="input-group">
-              <label>Tên dự án *</label>
-              <input
-                type="text"
-                {...register('projectName', { 
-                  required: 'Vui lòng nhập tên dự án',
-                  minLength: { value: 10, message: 'Tên dự án phải có ít nhất 10 ký tự' }
-                })}
-                placeholder="VD: Dự án năng lượng mặt trời Ninh Thuận"
-              />
-              {errors.projectName && <span className="error">{errors.projectName.message}</span>}
-            </div>
-
-            <div className="input-group">
-              <label>Tên doanh nghiệp *</label>
-              <input
-                type="text"
-                {...register('companyName', { 
-                  required: 'Vui lòng nhập tên doanh nghiệp'
-                })}
-                placeholder="Công ty TNHH..."
-              />
-              {errors.companyName && <span className="error">{errors.companyName.message}</span>}
-            </div>
-
-            <div className="form-row">
-              <div className="input-group">
-                <label>Loại hình doanh nghiệp *</label>
-                <select {...register('companyType', { required: 'Vui lòng chọn loại hình' })}>
-                  <option value="">-- Chọn loại hình --</option>
-                  <option value="TNHH">Công ty TNHH</option>
-                  <option value="CP">Công ty Cổ phần</option>
-                  <option value="HTX">Hợp tác xã</option>
-                  <option value="TTNM">Tư nhân</option>
-                </select>
-                {errors.companyType && <span className="error">{errors.companyType.message}</span>}
-              </div>
-
-              <div className="input-group">
-                <label>Nơi đăng ký kinh doanh *</label>
-                <input
-                  type="text"
-                  {...register('registrationLocation', { required: 'Vui lòng nhập nơi đăng ký' })}
-                  placeholder="TP. Hồ Chí Minh"
-                />
-                {errors.registrationLocation && <span className="error">{errors.registrationLocation.message}</span>}
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="input-group">
-                <label>Người đại diện *</label>
-                <input
-                  type="text"
-                  {...register('representative', { required: 'Vui lòng nhập tên người đại diện' })}
-                  placeholder="Nguyễn Văn A"
-                />
-                {errors.representative && <span className="error">{errors.representative.message}</span>}
-              </div>
-
-              <div className="input-group">
-                <label>Chức vụ *</label>
-                <input
-                  type="text"
-                  {...register('position', { required: 'Vui lòng nhập chức vụ' })}
-                  placeholder="Giám đốc"
-                />
-                {errors.position && <span className="error">{errors.position.message}</span>}
-              </div>
-            </div>
-
-            <div className="input-group">
-              <label>Mục đích vay *</label>
-              <textarea
-                {...register('purpose', { 
-                  required: 'Vui lòng nhập mục đích vay',
-                  minLength: { value: 50, message: 'Mô tả phải có ít nhất 50 ký tự' }
-                })}
-                placeholder="Mô tả chi tiết mục đích sử dụng vốn vay..."
-                rows="4"
-              ></textarea>
-              {errors.purpose && <span className="error">{errors.purpose.message}</span>}
-            </div>
-
-            <div className="input-group">
-              <label>Mô tả chi tiết dự án *</label>
-              <textarea
-                {...register('description', { 
-                  required: 'Vui lòng nhập mô tả dự án',
-                  minLength: { value: 100, message: 'Mô tả phải có ít nhất 100 ký tự' }
-                })}
-                placeholder="Mô tả toàn diện về dự án, lợi ích mang lại..."
-                rows="6"
-              ></textarea>
-              {errors.description && <span className="error">{errors.description.message}</span>}
-            </div>
+        {/* Thông tin dự án */}
+        <div className="form-card">
+          <h2><FaBuilding /> Thông tin dự án</h2>
+          
+          <div className="input-group">
+            <label>Tên dự án *</label>
+            <input
+              type="text"
+              {...register('projectName', { 
+                required: 'Vui lòng nhập tên dự án',
+                minLength: { value: 10, message: 'Tên dự án phải có ít nhất 10 ký tự' },
+                maxLength: { value: 500, message: 'Tên dự án không vượt quá 500 ký tự' }
+              })}
+              placeholder="VD: Dự án năng lượng mặt trời Ninh Thuận"
+            />
+            {errors.projectName && <span className="error">{errors.projectName.message}</span>}
           </div>
 
-          <button type="submit" className="btn-primary btn-next">
-            Tiếp tục
-          </button>
-        </form>
-      )}
+          <div className="input-group">
+            <label>Gói vay xanh *</label>
+            <select {...register('package', { required: 'Vui lòng chọn gói vay' })}>
+              <option value="">-- Chọn gói vay --</option>
+              <option value="green-agriculture">Nông nghiệp xanh</option>
+              <option value="renewable-energy">Năng lượng tái tạo</option>
+              <option value="environmental-tech">Công nghệ môi trường</option>
+              <option value="sustainable-consumption">Tiêu dùng bền vững</option>
+            </select>
+            {errors.package && <span className="error">{errors.package.message}</span>}
+          </div>
 
-      {step === 2 && (
-        <form onSubmit={handleSubmit(onSubmitStep2)} className="loan-form">
-          <div className="form-card">
-            <h2><BiMoney /> Thông tin khoản vay</h2>
+          <div className="input-group">
+            <label>Mô tả chi tiết dự án *</label>
+            <textarea
+              {...register('detailedDescription', { 
+                required: 'Vui lòng nhập mô tả dự án',
+                minLength: { value: 100, message: 'Mô tả phải có ít nhất 100 ký tự' }
+              })}
+              placeholder="Mô tả toàn diện về dự án: mục tiêu, lợi ích môi trường, tác động xã hội..."
+              rows="6"
+            ></textarea>
+            {errors.detailedDescription && <span className="error">{errors.detailedDescription.message}</span>}
+          </div>
 
-            <div className="input-group">
-              <label>Số tiền vay (VND) *</label>
-              <input
-                type="number"
-                {...register('loanAmount', { 
-                  required: 'Vui lòng nhập số tiền vay',
-                  min: { value: 10000000, message: 'Số tiền tối thiểu 10,000,000 VND' },
-                  max: { value: 10000000000, message: 'Số tiền tối đa 10,000,000,000 VND' }
-                })}
-                placeholder="100000000"
-                step="1000000"
-              />
-              {errors.loanAmount && <span className="error">{errors.loanAmount.message}</span>}
-            </div>
-
-            <div className="form-row">
-              <div className="input-group">
-                <label>Lãi suất đề xuất (%/năm) *</label>
-                <input
-                  type="number"
-                  {...register('interestRate', { 
-                    required: 'Vui lòng nhập lãi suất',
-                    min: { value: 5, message: 'Lãi suất tối thiểu 5%' },
-                    max: { value: 20, message: 'Lãi suất tối đa 20%' }
-                  })}
-                  placeholder="8.5"
-                  step="0.1"
-                />
-                {errors.interestRate && <span className="error">{errors.interestRate.message}</span>}
-              </div>
-
-              <div className="input-group">
-                <label>Thời hạn vay (tháng) *</label>
-                <input
-                  type="number"
-                  {...register('loanTerm', { 
-                    required: 'Vui lòng nhập thời hạn',
-                    min: { value: 6, message: 'Thời hạn tối thiểu 6 tháng' },
-                    max: { value: 60, message: 'Thời hạn tối đa 60 tháng' }
-                  })}
-                  placeholder="24"
-                  step="1"
-                />
-                {errors.loanTerm && <span className="error">{errors.loanTerm.message}</span>}
-              </div>
-            </div>
-
-            <div className="input-group">
-              <label>Hình thức trả nợ *</label>
-              <select {...register('paymentMethod', { required: 'Vui lòng chọn hình thức' })}>
-                <option value="">-- Chọn hình thức --</option>
-                <option value="monthly">Trả gốc + lãi hàng tháng</option>
-                <option value="interest-only">Trả lãi hàng tháng, gốc cuối kỳ</option>
-                <option value="end-term">Trả gốc + lãi cuối kỳ</option>
-              </select>
-              {errors.paymentMethod && <span className="error">{errors.paymentMethod.message}</span>}
-            </div>
-
-            {loanAmount > 0 && interestRate > 0 && loanTerm > 0 && (
-              <div className="calculation-summary">
-                <h3>Dự kiến thanh toán</h3>
-                <div className="calculation-grid">
-                  <div className="calc-item">
-                    <span>Trả hàng tháng:</span>
-                    <strong>{formatCurrency(calculateMonthlyPayment())}</strong>
-                  </div>
-                  <div className="calc-item">
-                    <span>Tổng lãi phải trả:</span>
-                    <strong>{formatCurrency(calculateMonthlyPayment() * loanTerm - loanAmount)}</strong>
-                  </div>
-                  <div className="calc-item">
-                    <span>Tổng thanh toán:</span>
-                    <strong className="highlight">{formatCurrency(calculateMonthlyPayment() * loanTerm)}</strong>
-                  </div>
-                </div>
+          <div className="input-group">
+            <label>Ảnh dự án (tùy chọn)</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="file-input"
+            />
+            {imagePreview && (
+              <div className="image-preview">
+                <img src={imagePreview} alt="Preview" style={{ maxWidth: '300px', maxHeight: '200px', borderRadius: '8px', marginTop: '10px' }} />
               </div>
             )}
+            <small style={{ color: '#666', fontSize: '12px', display: 'block', marginTop: '5px' }}>
+              Tối đa 5MB, định dạng: JPG, PNG
+            </small>
+          </div>
+        </div>
+
+        {/* Thông tin doanh nghiệp */}
+        <div className="form-card">
+          <h2><FaBuilding /> Thông tin doanh nghiệp</h2>
+
+          <div className="input-group">
+            <label>Tên doanh nghiệp *</label>
+            <input
+              type="text"
+              {...register('companyName', { 
+                required: 'Vui lòng nhập tên doanh nghiệp',
+                maxLength: { value: 255, message: 'Tên doanh nghiệp không vượt quá 255 ký tự' }
+              })}
+              placeholder="Công ty TNHH..."
+            />
+            {errors.companyName && <span className="error">{errors.companyName.message}</span>}
           </div>
 
-          <div className="form-card">
-            <h2><FaLeaf /> Thông tin ESG (Tùy chọn)</h2>
-            <p className="card-description">Cung cấp thông tin về tác động môi trường, xã hội và quản trị để tăng cơ hội được tài trợ</p>
+          <div className="form-row">
+            <div className="input-group">
+              <label>Loại hình doanh nghiệp *</label>
+              <input
+                type="text"
+                {...register('businessType', { 
+                  required: 'Vui lòng nhập loại hình doanh nghiệp',
+                  maxLength: { value: 100, message: 'Không vượt quá 100 ký tự' }
+                })}
+                placeholder="VD: Công ty TNHH, Công ty Cổ phần, HTX..."
+              />
+              {errors.businessType && <span className="error">{errors.businessType.message}</span>}
+            </div>
 
             <div className="input-group">
-              <label>Tác động môi trường</label>
-              <textarea
-                {...register('environmentalImpact')}
-                placeholder="Dự án giảm lượng khí thải CO2, sử dụng năng lượng tái tạo..."
-                rows="3"
-              ></textarea>
+              <label>Số đăng ký kinh doanh *</label>
+              <input
+                type="text"
+                {...register('businessRegistrationNumber', { 
+                  required: 'Vui lòng nhập số đăng ký kinh doanh',
+                  maxLength: { value: 50, message: 'Không vượt quá 50 ký tự' }
+                })}
+                placeholder="0123456789"
+              />
+              {errors.businessRegistrationNumber && <span className="error">{errors.businessRegistrationNumber.message}</span>}
+            </div>
+          </div>
+
+          <div className="input-group">
+            <label>Địa chỉ doanh nghiệp *</label>
+            <input
+              type="text"
+              {...register('businessAddress', { 
+                required: 'Vui lòng nhập địa chỉ doanh nghiệp',
+                maxLength: { value: 500, message: 'Không vượt quá 500 ký tự' }
+              })}
+              placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố"
+            />
+            {errors.businessAddress && <span className="error">{errors.businessAddress.message}</span>}
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
+              <label>Năm thành lập (tùy chọn)</label>
+              <input
+                type="number"
+                {...register('companyFoundedYear', {
+                  min: { value: 1900, message: 'Năm không hợp lệ' },
+                  max: { value: new Date().getFullYear(), message: 'Năm không hợp lệ' }
+                })}
+                placeholder="2020"
+                min="1900"
+                max={new Date().getFullYear()}
+              />
+              {errors.companyFoundedYear && <span className="error">{errors.companyFoundedYear.message}</span>}
             </div>
 
             <div className="input-group">
-              <label>Tác động xã hội</label>
-              <textarea
-                {...register('socialImpact')}
-                placeholder="Tạo việc làm, cải thiện điều kiện sống cộng đồng..."
-                rows="3"
-              ></textarea>
+              <label>Số lượng nhân viên (tùy chọn)</label>
+              <input
+                type="number"
+                {...register('companyEmployees', {
+                  min: { value: 0, message: 'Số lượng phải >= 0' }
+                })}
+                placeholder="50"
+                min="0"
+              />
+              {errors.companyEmployees && <span className="error">{errors.companyEmployees.message}</span>}
+            </div>
+          </div>
+
+          <div className="input-group">
+            <label>Doanh thu năm 2024 (VND, tùy chọn)</label>
+            <input
+              type="number"
+              {...register('companyRevenue2024', {
+                min: { value: 0, message: 'Doanh thu phải >= 0' }
+              })}
+              placeholder="1000000000"
+              step="1000000"
+              min="0"
+            />
+            {errors.companyRevenue2024 && <span className="error">{errors.companyRevenue2024.message}</span>}
+          </div>
+        </div>
+
+        {/* Người đại diện */}
+        <div className="form-card">
+          <h2><FaInfoCircle /> Thông tin người đại diện</h2>
+
+          <div className="form-row">
+            <div className="input-group">
+              <label>Họ và tên *</label>
+              <input
+                type="text"
+                {...register('representativeName', { 
+                  required: 'Vui lòng nhập tên người đại diện',
+                  maxLength: { value: 255, message: 'Không vượt quá 255 ký tự' }
+                })}
+                placeholder="Nguyễn Văn A"
+              />
+              {errors.representativeName && <span className="error">{errors.representativeName.message}</span>}
             </div>
 
             <div className="input-group">
-              <label>Quản trị doanh nghiệp</label>
-              <textarea
-                {...register('governanceInfo')}
-                placeholder="Chính sách quản trị minh bạch, tuân thủ pháp luật..."
-                rows="3"
-              ></textarea>
+              <label>Chức vụ *</label>
+              <input
+                type="text"
+                {...register('representativePosition', { 
+                  required: 'Vui lòng nhập chức vụ',
+                  maxLength: { value: 100, message: 'Không vượt quá 100 ký tự' }
+                })}
+                placeholder="Giám đốc"
+              />
+              {errors.representativePosition && <span className="error">{errors.representativePosition.message}</span>}
             </div>
           </div>
 
-          <div className="form-actions">
-            <button type="button" className="btn-secondary" onClick={() => setStep(1)}>
-              Quay lại
-            </button>
-            <button type="submit" className="btn-primary">
-              Tiếp tục
-            </button>
-          </div>
-        </form>
-      )}
-
-      {step === 3 && (
-        <form onSubmit={handleSubmit(onSubmitFinal)} className="loan-form">
-          <div className="form-card">
-            <h2><FaUpload /> Tải lên tài liệu</h2>
-            <p className="card-description">Tải lên các tài liệu cần thiết để xác minh thông tin</p>
-
-            <div className="upload-section">
-              <div className="upload-item">
-                <label>Giấy phép kinh doanh *</label>
-                <div className="file-upload">
-                  <input type="file" accept=".pdf,.jpg,.png" />
-                  <span className="upload-placeholder">Chọn file hoặc kéo thả vào đây</span>
-                </div>
-              </div>
-
-              <div className="upload-item">
-                <label>Báo cáo tài chính gần nhất *</label>
-                <div className="file-upload">
-                  <input type="file" accept=".pdf,.xlsx" />
-                  <span className="upload-placeholder">Chọn file hoặc kéo thả vào đây</span>
-                </div>
-              </div>
-
-              <div className="upload-item">
-                <label>Hợp đồng/tài liệu liên quan (nếu có)</label>
-                <div className="file-upload">
-                  <input type="file" accept=".pdf,.jpg,.png" multiple />
-                  <span className="upload-placeholder">Chọn file hoặc kéo thả vào đây</span>
-                </div>
-              </div>
+          <div className="form-row">
+            <div className="input-group">
+              <label>Số điện thoại *</label>
+              <input
+                type="tel"
+                {...register('representativePhone', { 
+                  required: 'Vui lòng nhập số điện thoại',
+                  pattern: {
+                    value: /^[0-9]{10,11}$/,
+                    message: 'Số điện thoại không hợp lệ (10-11 chữ số)'
+                  },
+                  maxLength: { value: 20, message: 'Không vượt quá 20 ký tự' }
+                })}
+                placeholder="0912345678"
+              />
+              {errors.representativePhone && <span className="error">{errors.representativePhone.message}</span>}
             </div>
 
-            <div className="checkbox-group">
-              <label>
-                <input
-                  type="checkbox"
-                  {...register('agreedTerms', { 
-                    required: 'Bạn phải đồng ý với điều khoản' 
-                  })}
-                />
-                <span>Tôi xác nhận rằng tất cả thông tin được cung cấp là chính xác và đồng ý với <a href="/terms">điều khoản sử dụng</a></span>
-              </label>
-              {errors.agreedTerms && <span className="error">{errors.agreedTerms.message}</span>}
+            <div className="input-group">
+              <label>Email *</label>
+              <input
+                type="email"
+                {...register('representativeEmail', { 
+                  required: 'Vui lòng nhập email',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Email không hợp lệ'
+                  },
+                  maxLength: { value: 255, message: 'Không vượt quá 255 ký tự' }
+                })}
+                placeholder="nguyen.vana@company.com"
+              />
+              {errors.representativeEmail && <span className="error">{errors.representativeEmail.message}</span>}
+            </div>
+          </div>
+        </div>
+
+        {/* Thông tin vay */}
+        <div className="form-card">
+          <h2><BiMoney /> Thông tin khoản vay</h2>
+
+          <div className="input-group">
+            <label>Mục đích vay vốn *</label>
+            <textarea
+              {...register('loanPurpose', { 
+                required: 'Vui lòng nhập mục đích vay',
+                minLength: { value: 50, message: 'Mô tả phải có ít nhất 50 ký tự' }
+              })}
+              placeholder="Mô tả chi tiết mục đích sử dụng vốn vay, kế hoạch triển khai..."
+              rows="4"
+            ></textarea>
+            {errors.loanPurpose && <span className="error">{errors.loanPurpose.message}</span>}
+          </div>
+
+          <div className="input-group">
+            <label>Số tiền vay (VND) *</label>
+            <input
+              type="number"
+              {...register('amount', { 
+                required: 'Vui lòng nhập số tiền vay',
+                min: { value: 1000000, message: 'Số tiền tối thiểu 1,000,000 VND' },
+                max: { value: 50000000000, message: 'Số tiền tối đa 50,000,000,000 VND' }
+              })}
+              placeholder="100000000"
+              step="1000000"
+            />
+            {errors.amount && <span className="error">{errors.amount.message}</span>}
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
+              <label>Lãi suất đề xuất (%/năm) *</label>
+              <input
+                type="number"
+                {...register('interestRate', { 
+                  required: 'Vui lòng nhập lãi suất',
+                  min: { value: 0.1, message: 'Lãi suất tối thiểu 0.1%' },
+                  max: { value: 30, message: 'Lãi suất tối đa 30%' }
+                })}
+                placeholder="8.5"
+                step="0.1"
+              />
+              {errors.interestRate && <span className="error">{errors.interestRate.message}</span>}
+            </div>
+
+            <div className="input-group">
+              <label>Thời hạn vay (tháng) *</label>
+              <input
+                type="number"
+                {...register('termMonths', { 
+                  required: 'Vui lòng nhập thời hạn',
+                  min: { value: 1, message: 'Thời hạn tối thiểu 1 tháng' },
+                  max: { value: 120, message: 'Thời hạn tối đa 120 tháng' }
+                })}
+                placeholder="24"
+                step="1"
+              />
+              {errors.termMonths && <span className="error">{errors.termMonths.message}</span>}
             </div>
           </div>
 
-          <div className="form-actions">
-            <button type="button" className="btn-secondary" onClick={() => setStep(2)}>
-              Quay lại
-            </button>
-            <button type="submit" className="btn-primary btn-submit">
-              Gửi yêu cầu
-            </button>
+          <div className="input-group">
+            <label>Hình thức trả nợ *</label>
+            <select {...register('repaymentMethod', { required: 'Vui lòng chọn hình thức' })}>
+              <option value="monthly">Trả gốc + lãi hàng tháng</option>
+              <option value="quarterly">Trả gốc + lãi hàng quý</option>
+              <option value="end_term">Trả gốc + lãi cuối kỳ</option>
+            </select>
+            {errors.repaymentMethod && <span className="error">{errors.repaymentMethod.message}</span>}
           </div>
-        </form>
-      )}
+
+          {loanAmount > 0 && interestRate > 0 && loanTerm > 0 && (
+            <div className="calculation-summary">
+              <h3>Dự kiến thanh toán</h3>
+              <div className="calculation-grid">
+                <div className="calc-item">
+                  <span>Trả hàng tháng:</span>
+                  <strong>{formatCurrency(calculateMonthlyPayment())}</strong>
+                </div>
+                <div className="calc-item">
+                  <span>Tổng lãi phải trả:</span>
+                  <strong>{formatCurrency(calculateMonthlyPayment() * loanTerm - loanAmount)}</strong>
+                </div>
+                <div className="calc-item">
+                  <span>Tổng thanh toán:</span>
+                  <strong className="highlight">{formatCurrency(calculateMonthlyPayment() * loanTerm)}</strong>
+                </div>
+              </div>
+              <small style={{ color: '#666', fontSize: '12px', marginTop: '10px', display: 'block' }}>
+                * Đây là số liệu ước tính. Số liệu chính thác sẽ được tính sau khi admin phê duyệt.
+              </small>
+            </div>
+          )}
+        </div>
+
+        <div className="form-actions">
+          <button 
+            type="button" 
+            className="btn-secondary" 
+            onClick={() => navigate('/dashboard', { state: { userRole } })}
+            disabled={loading}
+          >
+            Hủy
+          </button>
+          <button 
+            type="submit" 
+            className="btn-primary btn-submit"
+            disabled={loading || uploadingImage}
+          >
+            {loading ? 'Đang gửi...' : uploadingImage ? 'Đang tải ảnh...' : 'Gửi yêu cầu vay vốn'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

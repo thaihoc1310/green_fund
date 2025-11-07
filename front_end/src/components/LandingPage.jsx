@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './LandingPage.css';
 import logo from '../assets/logo.png';
 import backgroundHp2 from '../assets/background_hp2.jpg';
@@ -8,8 +9,10 @@ import projectImage2 from '../assets/Ảnh dự án nông nghiệp xanh.jpg';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { user, getUserRole } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState('investor'); // 'investor' or 'borrower'
+  const [navigating, setNavigating] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +26,37 @@ const LandingPage = () => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleNavigateToDashboard = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      setNavigating(true);
+      const { role, error } = await getUserRole();
+      
+      if (error) {
+        console.error('Error getting user role:', error);
+        // Fallback to dashboard if error
+        navigate('/dashboard');
+        return;
+      }
+
+      // Navigate based on role
+      if (role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error('Error navigating:', error);
+      navigate('/dashboard');
+    } finally {
+      setNavigating(false);
     }
   };
 
@@ -42,12 +76,24 @@ const LandingPage = () => {
             <li><a onClick={() => scrollToSection('about')}>Về chúng tôi</a></li>
           </ul>
           <div className="nav-buttons">
-            <button className="btn-login" onClick={() => navigate('/login')}>
-              Đăng nhập
-            </button>
-            <button className="btn-register" onClick={() => navigate('/register')}>
-              Đăng ký
-            </button>
+            {user ? (
+              <button 
+                className="btn-login" 
+                onClick={handleNavigateToDashboard}
+                disabled={navigating}
+              >
+                {navigating ? 'Đang chuyển...' : 'Vào trang chủ'}
+              </button>
+            ) : (
+              <>
+                <button className="btn-login" onClick={() => navigate('/login')}>
+                  Đăng nhập
+                </button>
+                <button className="btn-register" onClick={() => navigate('/register')}>
+                  Đăng ký
+                </button>
+              </>
+            )}
           </div>
         </div>
       </nav>

@@ -1,17 +1,38 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../contexts/AuthContext';
 import './ForgotPassword.css';
 
 const ForgotPassword = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const { resetPassword } = useAuth();
 
-  const onSubmit = (data) => {
-    // TODO: Implement password reset logic
-    console.log('Password reset requested for:', data.email);
-    setSubmitted(true);
+  const onSubmit = async (data) => {
+    setLoading(true);
+    setErrorMessage('');
+
+    try {
+      const { error } = await resetPassword(data.email);
+
+      if (error) {
+        setErrorMessage(error.message || 'Đã xảy ra lỗi khi gửi email khôi phục');
+        setLoading(false);
+        return;
+      }
+
+      // Thành công
+      setSubmitted(true);
+    } catch (error) {
+      console.error('Reset password error:', error);
+      setErrorMessage('Đã xảy ra lỗi không mong muốn');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -71,6 +92,13 @@ const ForgotPassword = () => {
         </div>
         
         <p className="welcome-text">Nhập email của bạn để nhận link đặt lại mật khẩu</p>
+        
+        {errorMessage && (
+          <div className="error-message">
+            {errorMessage}
+          </div>
+        )}
+        
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="input-group">
             <input
@@ -83,10 +111,13 @@ const ForgotPassword = () => {
                   message: 'Email không hợp lệ'
                 }
               })}
+              disabled={loading}
             />
             {errors.email && <span className="error">{errors.email.message}</span>}
           </div>
-          <button type="submit" className="btn-primary">Gửi yêu cầu</button>
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'Đang gửi...' : 'Gửi yêu cầu'}
+          </button>
         </form>
         
         <div className="auth-links">

@@ -101,6 +101,12 @@
   border: 1px solid #e2e8f0;
 }
 
+.form-card.error-card {
+  background: #fef2f2;
+  border-color: #fecaca;
+  padding: 16px 24px;
+}
+
 .form-card h2 {
   color: #166534;
   font-size: 22px;
@@ -118,6 +124,19 @@
   line-height: 1.6;
 }
 
+.image-preview {
+  margin-top: 10px;
+}
+
+.image-preview img {
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.file-input {
+  padding: 10px 16px !important;
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -132,6 +151,14 @@
   font-size: 14px;
 }
 
+.input-group .error {
+  display: block;
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
 .input-group input,
 .input-group select,
 .input-group textarea {
@@ -143,6 +170,12 @@
   transition: all 0.2s ease;
   font-family: inherit;
   color: #334155;
+}
+
+.input-group input.error-input,
+.input-group select.error-input,
+.input-group textarea.error-input {
+  border-color: #fca5a5;
 }
 
 .input-group input:focus,

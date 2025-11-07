@@ -1,0 +1,573 @@
+.admin-loan-detail {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.btn-back:hover {
+  background: #5a6268;
+  transform: translateX(-3px);
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit,
+.btn-delete,
+.btn-save,
+.btn-cancel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-edit {
+  background: #007bff;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #0056b3;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #c82333;
+}
+
+.btn-save {
+  background: #28a745;
+  color: white;
+}
+
+.btn-save:hover {
+  background: #218838;
+}
+
+.btn-cancel {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background: #5a6268;
+}
+
+/* Main Content */
+.detail-content {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.detail-column-left,
+.detail-column-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0; /* Fix overflow issue */
+}
+
+.detail-column-right {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Split Row for Side-by-Side Cards */
+.detail-row-split {
+  display: grid;
+  grid-template-columns: 4fr 6fr;
+  gap: 20px;
+}
+
+/* Detail Card */
+.detail-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.detail-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.detail-card h3 svg {
+  color: #27ae60;
+}
+
+/* Loan Image */
+.loan-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.no-image {
+  width: 100%;
+  height: 200px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+}
+
+.no-image svg {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+/* Borrower Info */
+.borrower-info {
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+}
+
+.borrower-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.borrower-details {
+  flex: 1;
+}
+
+.borrower-details p {
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #495057;
+}
+
+.borrower-details p:first-child {
+  font-size: 16px;
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+.borrower-details svg {
+  color: #27ae60;
+  font-size: 12px;
+}
+
+/* Info Grid */
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 100%;
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 15px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row label {
+  font-weight: 500;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.info-row span {
+  color: #2c3e50;
+  font-size: 14px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.info-row .highlight {
+  color: #27ae60;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.info-row input,
+.info-row select {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.info-row input:focus,
+.info-row select:focus {
+  outline: none;
+  border-color: #27ae60;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-approved {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-funding {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status-active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-cancelled {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+/* Funding Info */
+.funding-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.funding-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-item label {
+  font-size: 13px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.stat-item span {
+  font-size: 16px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.stat-item .highlight {
+  color: #27ae60;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #e9ecef;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #27ae60, #2ecc71);
+  transition: width 0.3s ease;
+}
+
+/* Company & Representative Info */
+.company-info,
+.representative-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.company-info p,
+.representative-info p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #495057;
+}
+
+.company-info p:first-child,
+.representative-info p:first-child {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.company-info svg,
+.representative-info svg {
+  color: #27ae60;
+  font-size: 12px;
+}
+
+/* Edit Field Styling */
+.company-info .edit-field,
+.representative-info .edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.company-info .edit-field label,
+.representative-info .edit-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.company-info .edit-field input,
+.representative-info .edit-field input {
+  padding: 8px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.company-info .edit-field input:focus,
+.representative-info .edit-field input:focus {
+  outline: none;
+  border-color: #27ae60;
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+/* Company Meta (2 columns for tax/year and revenue/employees) */
+.company-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.company-meta > div {
+  display: flex;
+  gap: 4px;
+}
+
+.meta-label {
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.meta-value {
+  font-size: 14px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* Project Details */
+.project-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.detail-section h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.detail-section p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #495057;
+}
+
+.detail-section textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.detail-section textarea:focus {
+  outline: none;
+  border-color: #27ae60;
+}
+
+/* Timestamps */
+.timestamps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.timestamp-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.timestamp-item:last-child {
+  border-bottom: none;
+}
+
+.timestamp-item label {
+  font-weight: 500;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.timestamp-item span {
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+/* Loading & Error */
+.loading,
+.error {
+  text-align: center;
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.error {
+  color: #dc3545;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .detail-content {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-row-split {
+    grid-template-columns: 1fr;
+  }
+
+  .funding-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-loan-detail {
+    padding: 15px;
+  }
+
+  .detail-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .header-actions button {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .info-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .detail-card {
+    padding: 16px;
+  }
+}

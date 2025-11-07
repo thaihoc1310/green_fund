@@ -1,18 +1,60 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../contexts/AuthContext';
 import './Register.css';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const navigate = useNavigate();
   const password = watch('password');
+  const [loading, setLoading] = useState(false);
+  const [registerError, setRegisterError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const { signUp } = useAuth();
 
-  const onSubmit = (data) => {
-    // TODO: Implement actual registration logic
-    console.log('Registration data:', data);
-    // Redirect to verification page after successful registration
-    navigate('/verification');
+  const onSubmit = async (data) => {
+    setLoading(true);
+    setRegisterError('');
+    setSuccessMessage('');
+
+    try {
+      // Đăng ký với Supabase
+      const { data: authData, error } = await signUp(
+        data.email,
+        data.password,
+        data.fullName,
+        data.phoneNumber
+      );
+
+      if (error) {
+        // Xử lý các lỗi cụ thể
+        if (error.message.includes('User already registered')) {
+          setRegisterError('Email này đã được đăng ký');
+        } else if (error.message.includes('already exists')) {
+          setRegisterError('Email này đã được đăng ký');
+        } else {
+          setRegisterError(error.message || 'Đã xảy ra lỗi khi đăng ký');
+        }
+        setLoading(false);
+        return;
+      }
+
+      if (authData?.user) {
+        // Đăng ký thành công
+        setSuccessMessage('Đăng ký thành công! Vui lòng kiểm tra email để xác nhận tài khoản.');
+        
+        // Chuyển đến trang đăng nhập sau 2 giây
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      setRegisterError('Đã xảy ra lỗi không mong muốn');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -34,6 +76,19 @@ const Register = () => {
         </div>
         
         <p className="welcome-text">Chào mừng Quý khách đến với GreenFund</p>
+        
+        {registerError && (
+          <div className="error-message">
+            {registerError}
+          </div>
+        )}
+        
+        {successMessage && (
+          <div className="success-message">
+            {successMessage}
+          </div>
+        )}
+        
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="input-group">
             <input
@@ -50,6 +105,7 @@ const Register = () => {
                   message: 'Họ và tên quá dài'
                 }
               })}
+              disabled={loading}
             />
             {errors.fullName && <span className="error">{errors.fullName.message}</span>}
           </div>
@@ -65,6 +121,7 @@ const Register = () => {
                   message: 'Số điện thoại không hợp lệ'
                 }
               })}
+              disabled={loading}
             />
             {errors.phoneNumber && <span className="error">{errors.phoneNumber.message}</span>}
           </div>
@@ -80,6 +137,7 @@ const Register = () => {
                   message: 'Email không hợp lệ'
                 }
               })}
+              disabled={loading}
             />
             {errors.email && <span className="error">{errors.email.message}</span>}
           </div>
@@ -99,6 +157,7 @@ const Register = () => {
                   message: 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số'
                 }
               })}
+              disabled={loading}
             />
             {errors.password && <span className="error">{errors.password.message}</span>}
           </div>
@@ -111,6 +170,7 @@ const Register = () => {
                 required: 'Vui lòng xác nhận mật khẩu',
                 validate: (value) => value === password || 'Mật khẩu xác nhận không khớp'
               })}
+              disabled={loading}
             />
             {errors.confirmPassword && <span className="error">{errors.confirmPassword.message}</span>}
           </div>
@@ -122,13 +182,16 @@ const Register = () => {
                 {...register('agreed', { 
                   required: 'Bạn phải đồng ý với Điều khoản & Chính sách bảo mật' 
                 })}
+                disabled={loading}
               />
               <span>Tôi đồng ý với <Link to="/terms">Điều khoản</Link> & <Link to="/privacy">Chính sách bảo mật</Link></span>
             </label>
           </div>
           {errors.agreed && <span className="error">{errors.agreed.message}</span>}
           
-          <button type="submit" className="btn-primary">Đăng ký</button>
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'Đang đăng ký...' : 'Đăng ký'}
+          </button>
         </form>
         
         <div className="auth-links">

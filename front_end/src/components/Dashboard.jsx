@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaLeaf, FaUser, FaWallet, FaHistory, FaNewspaper, FaChartLine, FaHandHoldingUsd, FaSearch, FaTimes } from 'react-icons/fa';
 import { BiMoney } from 'react-icons/bi';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabaseClient';
 import backgroundDb from '../assets/background_db.jpg';
 import logo from '../assets/logo.png';
 import newsInterestRate from '../assets/Ảnh chương trình lãi suất (trang chủ).png';
@@ -13,11 +15,77 @@ import './Dashboard.css';
 const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { signOut, user, getUserRole } = useAuth();
   const [userRole, setUserRole] = useState('borrower'); // 'borrower' or 'lender'
   const [depositAmount, setDepositAmount] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [userProfile, setUserProfile] = useState(null);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // Check if user is admin and redirect immediately
+  useEffect(() => {
+    const checkAdminAndRedirect = async () => {
+      if (!user) return;
+
+      try {
+        const { role, error } = await getUserRole();
+        
+        if (error) {
+          console.error('Error checking user role:', error);
+          return;
+        }
+
+        // If admin, redirect to admin dashboard immediately
+        if (role === 'admin') {
+          navigate('/admin-dashboard', { replace: true });
+        }
+      } catch (error) {
+        console.error('Error in admin check:', error);
+      }
+    };
+
+    checkAdminAndRedirect();
+  }, [user, getUserRole, navigate]);
+
+  // Load user profile và wallet balance
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (!user) return;
+
+      try {
+        setLoading(true);
+        
+        // Load user profile
+        const { data: profileData, error: profileError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) throw profileError;
+        setUserProfile(profileData);
+
+        // Load wallet balance
+        const { data: walletData, error: walletError } = await supabase
+          .from('wallets')
+          .select('balance')
+          .eq('user_id', user.id)
+          .single();
+
+        if (walletError) throw walletError;
+        setWalletBalance(walletData?.balance || 0);
+      } catch (error) {
+        console.error('Error loading user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, [user]);
 
   // Nhận userRole từ navigation state nếu có
   useEffect(() => {
@@ -59,9 +127,20 @@ const Dashboard = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLogout = () => {
-    // TODO: Implement logout logic
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      const { error } = await signOut();
+      if (error) {
+        console.error('Logout error:', error);
+        alert('Đã xảy ra lỗi khi đăng xuất');
+        return;
+      }
+      // Đăng xuất thành công, chuyển về trang đăng nhập
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error('Unexpected logout error:', error);
+      alert('Đã xảy ra lỗi không mong muốn');
+    }
   };
 
   const toggleRole = () => {
@@ -107,19 +186,27 @@ const Dashboard = () => {
             <div className="user-menu-container">
               <div className="user-menu-trigger" onClick={() => setShowUserMenu(!showUserMenu)}>
                 <div className="user-avatar-small">
-                  <FaUser />
+                  {userProfile?.avatar_url ? (
+                    <img src={userProfile.avatar_url} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                  ) : (
+                    <FaUser />
+                  )}
                 </div>
-                <span className="user-name">Nguyễn Văn A</span>
+                <span className="user-name">{userProfile?.full_name || 'Người dùng'}</span>
                 </div>
               
               {showUserMenu && (
                 <div className="user-dropdown-menu">
                   <div className="dropdown-header">
                     <div className="dropdown-avatar">
-                      <FaUser />
+                      {userProfile?.avatar_url ? (
+                        <img src={userProfile.avatar_url} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                      ) : (
+                        <FaUser />
+                      )}
                     </div>
                     <div className="dropdown-info">
-                      <p className="dropdown-name">Nguyễn Văn A</p>
+                      <p className="dropdown-name">{userProfile?.full_name || 'Người dùng'}</p>
                       <p className="dropdown-role">Người vay vốn</p>
                     </div>
                   </div>
@@ -170,7 +257,9 @@ const Dashboard = () => {
               <div className="account-balance">
                 <span className="balance-label">Số dư khả dụng</span>
                 <div className="balance-amount">
-                  <span className="balance-value">15,000,000 <span className="currency">VND</span></span>
+                  <span className="balance-value">
+                    {loading ? '...' : new Intl.NumberFormat('vi-VN').format(walletBalance)} <span className="currency">VND</span>
+                  </span>
                 </div>
               </div>
 
@@ -281,19 +370,27 @@ const Dashboard = () => {
             <div className="user-menu-container">
               <div className="user-menu-trigger" onClick={() => setShowUserMenu(!showUserMenu)}>
                 <div className="user-avatar-small">
-                  <FaUser />
+                  {userProfile?.avatar_url ? (
+                    <img src={userProfile.avatar_url} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                  ) : (
+                    <FaUser />
+                  )}
                 </div>
-                <span className="user-name">Nguyễn Văn A</span>
+                <span className="user-name">{userProfile?.full_name || 'Người dùng'}</span>
                 </div>
               
               {showUserMenu && (
                 <div className="user-dropdown-menu">
                   <div className="dropdown-header">
                     <div className="dropdown-avatar">
-                      <FaUser />
+                      {userProfile?.avatar_url ? (
+                        <img src={userProfile.avatar_url} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                      ) : (
+                        <FaUser />
+                      )}
                     </div>
                     <div className="dropdown-info">
-                      <p className="dropdown-name">Nguyễn Văn A</p>
+                      <p className="dropdown-name">{userProfile?.full_name || 'Người dùng'}</p>
                       <p className="dropdown-role">Nhà đầu tư</p>
                     </div>
                   </div>
@@ -329,7 +426,9 @@ const Dashboard = () => {
               <div className="account-balance">
                 <span className="balance-label">Số dư khả dụng</span>
                 <div className="balance-amount">
-                  <span className="balance-value">15,000,000 <span className="currency">VND</span></span>
+                  <span className="balance-value">
+                    {loading ? '...' : new Intl.NumberFormat('vi-VN').format(walletBalance)} <span className="currency">VND</span>
+                  </span>
                 </div>
               </div>
 
