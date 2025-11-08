@@ -116,8 +116,6 @@ const LoanManagement = () => {
   const getStatusBadge = (status) => {
     const badges = {
       pending: { text: 'Chờ duyệt', class: 'status-pending' },
-      approved: { text: 'Đã duyệt', class: 'status-approved' },
-      funding: { text: 'Đang gọi vốn', class: 'status-funding' },
       active: { text: 'Đang hoạt động', class: 'status-active' },
       completed: { text: 'Đã hoàn thành', class: 'status-completed' },
       rejected: { text: 'Đã từ chối', class: 'status-rejected' },
@@ -651,18 +649,6 @@ const LoanManagement = () => {
             Chờ duyệt ({loans.filter(l => l.status === 'pending').length})
           </button>
           <button 
-            className={statusFilter === 'approved' ? 'filter-btn active' : 'filter-btn'}
-            onClick={() => setStatusFilter('approved')}
-          >
-            Đã duyệt ({loans.filter(l => l.status === 'approved').length})
-          </button>
-          <button 
-            className={statusFilter === 'funding' ? 'filter-btn active' : 'filter-btn'}
-            onClick={() => setStatusFilter('funding')}
-          >
-            Đang gọi vốn ({loans.filter(l => l.status === 'funding').length})
-          </button>
-          <button 
             className={statusFilter === 'active' ? 'filter-btn active' : 'filter-btn'}
             onClick={() => setStatusFilter('active')}
           >
@@ -767,12 +753,6 @@ const LoanManagement = () => {
                 {loan.status === 'rejected' && (
                   <div className="rejected-notice">
                     <p>❌ Dự án đã bị từ chối. Vui lòng liên hệ với quản trị viên để biết thêm chi tiết.</p>
-                  </div>
-                )}
-
-                {loan.status === 'funding' && (
-                  <div className="funding-notice">
-                    <p>💰 Dự án đang gọi vốn. Nhà đầu tư có thể đầu tư vào dự án này.</p>
                   </div>
                 )}
 

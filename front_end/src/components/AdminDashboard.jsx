@@ -298,48 +298,6 @@ const AdminDashboard = () => {
     setFilteredUsers(filtered);
   }, [userSearchTerm, users]);
 
-  // Function này đã bị disable vì không dùng action buttons nữa
-  // Giữ lại để tham khảo hoặc dùng sau này
-  /*
-  const updateLoanStatus = async (loanId, newStatus) => {
-    try {
-      setErrorMessage('');
-      setSuccessMessage('');
-
-      const updateData = { 
-        status: newStatus,
-        updated_at: new Date().toISOString()
-      };
-
-      // Nếu approved -> funding, set start_date
-      if (newStatus === 'funding') {
-        updateData.start_date = new Date().toISOString();
-      }
-
-      // Nếu active, set funded_date (giả sử đã đủ vốn)
-      if (newStatus === 'active') {
-        updateData.funded_date = new Date().toISOString();
-      }
-
-      const { error } = await supabase
-        .from('loans')
-        .update(updateData)
-        .eq('id', loanId);
-
-      if (error) throw error;
-
-      setSuccessMessage(`Đã cập nhật trạng thái thành: ${getStatusLabel(newStatus)}`);
-      loadLoans();
-      loadStatistics();
-
-      setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (error) {
-      console.error('Error updating loan status:', error);
-      setErrorMessage(error.message || 'Lỗi khi cập nhật trạng thái');
-    }
-  };
-  */
-
   const deleteLoan = async (loanId) => {
     if (!window.confirm('Bạn có chắc chắn muốn xóa khoản vay này?')) {
       return;
@@ -694,8 +652,6 @@ const AdminDashboard = () => {
   const getStatusLabel = (status) => {
     const labels = {
       'pending': 'Chờ duyệt',
-      'approved': 'Đã duyệt',
-      'funding': 'Đang gọi vốn',
       'active': 'Đang hoạt động',
       'completed': 'Hoàn thành',
       'rejected': 'Từ chối',
@@ -707,8 +663,6 @@ const AdminDashboard = () => {
   const getStatusClass = (status) => {
     const classes = {
       'pending': 'status-pending',
-      'approved': 'status-approved',
-      'funding': 'status-funding',
       'active': 'status-active',
       'completed': 'status-completed',
       'rejected': 'status-rejected',
@@ -865,8 +819,6 @@ const AdminDashboard = () => {
                 <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
                   <option value="all">Tất cả trạng thái</option>
                   <option value="pending">Chờ duyệt</option>
-                  <option value="approved">Đã duyệt</option>
-                  <option value="funding">Đang gọi vốn</option>
                   <option value="active">Đang hoạt động</option>
                   <option value="completed">Hoàn thành</option>
                   <option value="rejected">Từ chối</option>

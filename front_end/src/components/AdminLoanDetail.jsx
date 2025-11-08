@@ -276,13 +276,14 @@ const AdminLoanDetail = () => {
   // Function handleDelete đã bị xóa vì nút Delete đã được chuyển vào table actions
 
   const handleApprove = async () => {
-    if (!window.confirm('Bạn chắc chắn muốn duyệt khoản vay này?')) return;
+    if (!window.confirm('Bạn chắc chắn muốn duyệt khoản vay này? Dự án sẽ chuyển sang trạng thái "Đang hoạt động".')) return;
     
     try {
       const { error } = await supabase
         .from('loans')
         .update({
-          status: 'approved',
+          status: 'active',
+          start_date: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
         .eq('id', id);
@@ -334,8 +335,6 @@ const AdminLoanDetail = () => {
   const getStatusLabel = (status) => {
     const labels = {
       pending: 'Chờ duyệt',
-      approved: 'Đã duyệt',
-      funding: 'Đang huy động vốn',
       active: 'Đang hoạt động',
       completed: 'Hoàn thành',
       rejected: 'Từ chối',
@@ -552,8 +551,6 @@ const AdminLoanDetail = () => {
                     onChange={(e) => setEditedLoan({...editedLoan, status: e.target.value})}
                   >
                     <option value="pending">Chờ duyệt</option>
-                    <option value="approved">Đã duyệt</option>
-                    <option value="funding">Đang huy động vốn</option>
                     <option value="active">Đang hoạt động</option>
                     <option value="completed">Hoàn thành</option>
                     <option value="rejected">Từ chối</option>
@@ -753,34 +750,7 @@ const AdminLoanDetail = () => {
             </div>
           </div>
 
-          {/* Row 4: Funding Progress */}
-          <div className="detail-card">
-            <h3>Tiến độ huy động vốn</h3>
-            <div className="funding-info">
-              <div className="funding-stats">
-                <div className="stat-item">
-                  <label>Đã huy động:</label>
-                  <span className="highlight">{formatCurrency(loan.funded_amount || 0)}</span>
-                </div>
-                <div className="stat-item">
-                  <label>Còn thiếu:</label>
-                  <span>{formatCurrency(loan.amount - (loan.funded_amount || 0))}</span>
-                </div>
-                <div className="stat-item">
-                  <label>Tiến độ:</label>
-                  <span>{((loan.funded_amount || 0) / loan.amount * 100).toFixed(1)}%</span>
-                </div>
-              </div>
-              <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
-                  style={{ width: `${((loan.funded_amount || 0) / loan.amount * 100)}%` }}
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Row 5: Loan Documents */}
+          {/* Row 4: Loan Documents */}
           <div className="detail-card">
             <h3><FaFileAlt /> Tài liệu đính kèm</h3>
             {loadingDocuments ? (
