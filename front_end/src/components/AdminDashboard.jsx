@@ -16,7 +16,7 @@ import './AdminDashboard.css';
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, signOut, getUserRole } = useAuth();
+  const { user, signOut, getUserRole, deleteImageFromStorage } = useAuth();
   const [activeTab, setActiveTab] = useState('statistics'); // statistics, loans, users (changed order)
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
@@ -326,6 +326,30 @@ const AdminDashboard = () => {
 
     try {
       setErrorMessage('');
+      
+      // Bước 1: Lấy thông tin loan để xóa ảnh
+      const { data: loanData, error: fetchError } = await supabase
+        .from('loans')
+        .select('image_url')
+        .eq('id', loanId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Bước 2: Xóa ảnh từ storage nếu có
+      if (loanData?.image_url) {
+        const { error: deleteImageError } = await deleteImageFromStorage(
+          loanData.image_url, 
+          'loan-images'
+        );
+        
+        if (deleteImageError) {
+          console.warn('Warning: Could not delete loan image:', deleteImageError);
+          // Không throw error, vẫn tiếp tục xóa loan
+        }
+      }
+
+      // Bước 3: Xóa loan từ database
       const { error } = await supabase
         .from('loans')
         .delete()
@@ -333,7 +357,7 @@ const AdminDashboard = () => {
 
       if (error) throw error;
 
-      setSuccessMessage('Đã xóa khoản vay thành công');
+      setSuccessMessage('Đã xóa khoản vay và ảnh liên quan thành công');
       loadLoans();
       loadStatistics();
 
@@ -436,12 +460,59 @@ const AdminDashboard = () => {
   };
 
   const deleteUser = async (userId) => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa người dùng này? Hành động này không thể hoàn tác!')) {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa người dùng này? Hành động này sẽ xóa cả avatar, tất cả loans và ảnh liên quan. Không thể hoàn tác!')) {
       return;
     }
 
     try {
       setErrorMessage('');
+      
+      // Bước 1: Lấy thông tin user để xóa avatar
+      const { data: userData, error: fetchUserError } = await supabase
+        .from('users')
+        .select('avatar_url')
+        .eq('id', userId)
+        .single();
+
+      if (fetchUserError) throw fetchUserError;
+
+      // Bước 2: Lấy tất cả loans của user để xóa ảnh
+      const { data: userLoans, error: fetchLoansError } = await supabase
+        .from('loans')
+        .select('id, image_url')
+        .eq('borrower_id', userId);
+
+      if (fetchLoansError) throw fetchLoansError;
+
+      // Bước 3: Xóa tất cả ảnh của loans
+      if (userLoans && userLoans.length > 0) {
+        for (const loan of userLoans) {
+          if (loan.image_url) {
+            const { error: deleteLoanImageError } = await deleteImageFromStorage(
+              loan.image_url,
+              'loan-images'
+            );
+            
+            if (deleteLoanImageError) {
+              console.warn(`Warning: Could not delete loan image for loan ${loan.id}:`, deleteLoanImageError);
+            }
+          }
+        }
+      }
+
+      // Bước 4: Xóa avatar của user
+      if (userData?.avatar_url) {
+        const { error: deleteAvatarError } = await deleteImageFromStorage(
+          userData.avatar_url,
+          'avatars'
+        );
+        
+        if (deleteAvatarError) {
+          console.warn('Warning: Could not delete user avatar:', deleteAvatarError);
+        }
+      }
+
+      // Bước 5: Xóa user từ database (CASCADE sẽ tự động xóa loans, wallet, etc.)
       const { error } = await supabase
         .from('users')
         .delete()
@@ -449,7 +520,7 @@ const AdminDashboard = () => {
 
       if (error) throw error;
 
-      setSuccessMessage('Đã xóa người dùng thành công');
+      setSuccessMessage('Đã xóa người dùng, avatar và tất cả dữ liệu liên quan thành công');
       closeUserModal();
       await loadUsers();
       loadStatistics();

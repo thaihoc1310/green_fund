@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { FaArrowLeft, FaBuilding, FaLeaf, FaUpload, FaInfoCircle } from 'react-icons/fa';
+import { FaArrowLeft, FaBuilding, FaLeaf, FaUpload, FaInfoCircle, FaTimes, FaPlus } from 'react-icons/fa';
 import { BiMoney } from 'react-icons/bi';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabaseClient';
@@ -11,7 +11,7 @@ const CreateLoan = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userRole = location.state?.userRole || 'borrower';
-  const { user } = useAuth();
+  const { user, deleteImageFromStorage } = useAuth();
   const { register, handleSubmit, formState: { errors }, watch } = useForm({
     defaultValues: {
       interestRate: 8,
@@ -25,6 +25,12 @@ const CreateLoan = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  
+  // Documents state
+  const [documentRows, setDocumentRows] = useState([
+    { id: 1, docType: 'business_license', files: [] }
+  ]); // Mỗi row có files riêng
+  const [uploadingDocument, setUploadingDocument] = useState(false);
 
   const onSubmit = async (data) => {
     if (!user) {
@@ -63,7 +69,7 @@ const CreateLoan = () => {
       }
 
       // Tạo loan record
-      const { error: insertError } = await supabase
+      const { data: loanData, error: insertError } = await supabase
         .from('loans')
         .insert({
           borrower_id: user.id,
@@ -88,11 +94,79 @@ const CreateLoan = () => {
           repayment_method: data.repaymentMethod,
           image_url: imageUrl,
           status: 'pending'
-        });
+        })
+        .select()
+        .single();
 
       if (insertError) throw insertError;
 
-      alert('Yêu cầu vay vốn đã được gửi thành công! Vui lòng đợi admin phê duyệt.');
+      const loanId = loanData.id;
+
+      // Upload documents nếu có
+      if (documentRows.length > 0) {
+        setUploadingDocument(true);
+        
+        // Lấy tất cả files từ tất cả rows và lọc ra files hợp lệ
+        const allFiles = documentRows
+          .flatMap(row => row.files)
+          .filter(file => file && file.file && file.fileName);
+        
+        for (const doc of allFiles) {
+          try {
+            // Generate unique document ID
+            const docId = `${Date.now()}-${Math.random().toString(36).substring(7)}`;
+            
+            // Sanitize filename for storage
+            const sanitizedFileName = sanitizeFileName(doc.fileName);
+            
+            // Upload file to storage: loan-documents/<loan_id>/<doc_id>/<filename>
+            const filePath = `${loanId}/${docId}/${sanitizedFileName}`;
+            
+            const { error: uploadDocError } = await supabase.storage
+              .from('loan-documents')
+              .upload(filePath, doc.file, {
+                cacheControl: '3600',
+                upsert: false
+              });
+
+            if (uploadDocError) {
+              console.error('Error uploading document:', uploadDocError);
+              continue; // Skip this document but continue with others
+            }
+
+            // Get file URL (for private bucket, we store the path)
+            const fileUrl = filePath;
+
+            // Insert document record into loan_documents table
+            const { error: insertDocError } = await supabase
+              .from('loan_documents')
+              .insert({
+                loan_id: loanId,
+                document_type: doc.documentType,
+                file_url: fileUrl,
+                file_name: doc.fileName,
+                file_size: doc.fileSize,
+                mime_type: doc.mimeType,
+                is_verified: false
+              });
+
+            if (insertDocError) {
+              console.error('Error inserting document record:', insertDocError);
+              // If insert fails, try to delete the uploaded file
+              await supabase.storage
+                .from('loan-documents')
+                .remove([filePath]);
+            }
+          } catch (docError) {
+            console.error('Error processing document:', doc.fileName, docError);
+            // Continue with next document
+          }
+        }
+        
+        setUploadingDocument(false);
+      }
+
+      alert('Yêu cầu vay vốn và tài liệu đã được gửi thành công! Vui lòng đợi admin phê duyệt.');
       navigate('/loan-management', { state: { userRole } });
     } catch (error) {
       console.error('Error creating loan:', error);
@@ -100,6 +174,7 @@ const CreateLoan = () => {
     } finally {
       setLoading(false);
       setUploadingImage(false);
+      setUploadingDocument(false);
     }
   };
 
@@ -123,6 +198,143 @@ const CreateLoan = () => {
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
     setErrorMessage('');
+  };
+
+  // Handle document upload - Chỉ thêm vào state của row đó
+  const handleDocumentChange = (event, rowId) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    // Lấy row hiện tại
+    const currentRow = documentRows.find(row => row.id === rowId);
+    if (!currentRow) return;
+
+    const newDocuments = [];
+    let hasError = false;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      // Validate file size (10MB max)
+      if (file.size > 10 * 1024 * 1024) {
+        setErrorMessage(`File "${file.name}" vượt quá 10MB`);
+        hasError = true;
+        break;
+      }
+
+      // Validate file type (PDF, images, Word, Excel)
+      const allowedTypes = [
+        'application/pdf',
+        'image/jpeg',
+        'image/png',
+        'image/jpg',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+        setErrorMessage(`File "${file.name}" không đúng định dạng. Chỉ chấp nhận PDF, Word, Excel hoặc ảnh`);
+        hasError = true;
+        break;
+      }
+
+      // Add to new documents list
+      newDocuments.push({
+        id: `${Date.now()}-${i}-${Math.random().toString(36).substring(7)}`,
+        file: file,
+        documentType: currentRow.docType,
+        fileName: file.name,
+        fileSize: file.size,
+        mimeType: file.type
+      });
+    }
+
+    if (!hasError && newDocuments.length > 0) {
+      // Thêm files vào row hiện tại
+      setDocumentRows(documentRows.map(row => 
+        row.id === rowId 
+          ? { ...row, files: [...row.files, ...newDocuments] }
+          : row
+      ));
+      setErrorMessage('');
+    }
+
+    event.target.value = ''; // Reset input
+  };
+
+  // Change document type for a specific row
+  const handleDocTypeChange = (rowId, newDocType) => {
+    setDocumentRows(documentRows.map(row => 
+      row.id === rowId ? { ...row, docType: newDocType } : row
+    ));
+  };
+
+  // Add new document row
+  const addDocumentRow = () => {
+    const newRow = {
+      id: Date.now(),
+      docType: 'business_license',
+      files: []
+    };
+    setDocumentRows([...documentRows, newRow]);
+  };
+
+  // Remove document from a specific row
+  const removeDocument = (rowId, docId) => {
+    setDocumentRows(prevRows => {
+      const updatedRows = prevRows.map(row => {
+        if (row.id === rowId) {
+          const filteredFiles = row.files.filter(file => file.id !== docId);
+          return { ...row, files: filteredFiles };
+        }
+        return row;
+      });
+      return updatedRows;
+    });
+  };
+
+  // Get document type label
+  const getDocumentTypeLabel = (type) => {
+    const labels = {
+      'business_license': 'Giấy phép ĐKKD',
+      'financial_report': 'Báo cáo tài chính',
+      'related_contract': 'Hợp đồng liên quan',
+      'id_card': 'CCCD/CMND',
+      'tax_certificate': 'Giấy tờ thuế',
+      'other': 'Khác'
+    };
+    return labels[type] || type;
+  };
+
+  // Format file size
+  // Sanitize filename for storage (remove Vietnamese accents and special chars)
+  const sanitizeFileName = (fileName) => {
+    // Remove Vietnamese accents
+    const from = "àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềấệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ";
+    const to = "aaaaaaaaaaaaaaaaaeeeeeeeeeeeiiiiiooooooooooooooooouuuuuuuuuuuyyyyydAAAAAAAAAAAAAAAAAEEEEEEEEEEEIIIIIOOOOOOOOOOOOOOOOOUUUUUUUUUUUYYYYYD";
+    
+    let sanitized = fileName;
+    for (let i = 0; i < from.length; i++) {
+      sanitized = sanitized.replace(new RegExp(from[i], 'g'), to[i]);
+    }
+    
+    // Replace spaces and special chars with underscore
+    sanitized = sanitized.replace(/[^a-zA-Z0-9._-]/g, '_');
+    
+    // Remove multiple consecutive underscores
+    sanitized = sanitized.replace(/_+/g, '_');
+    
+    return sanitized;
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
   };
 
   const loanAmount = watch('amount', 0);
@@ -224,6 +436,98 @@ const CreateLoan = () => {
               Tối đa 5MB, định dạng: JPG, PNG
             </small>
           </div>
+        </div>
+
+        {/* Tài liệu khoản vay */}
+        <div className="form-card">
+          <h2><FaUpload /> Tài liệu khoản vay</h2>
+          <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>
+            Vui lòng upload các tài liệu cần thiết để chứng minh tính khả thi của dự án. Có thể upload nhiều file cho mỗi loại tài liệu.
+          </p>
+
+          {/* Document Rows */}
+          {documentRows.map((row, index) => (
+            <div key={row.id} className="document-upload-row">
+              <div className="form-row">
+                <div className="input-group" style={{ flex: 1 }}>
+                  <label>Loại tài liệu</label>
+                  <select 
+                    value={row.docType} 
+                    onChange={(e) => handleDocTypeChange(row.id, e.target.value)}
+                    className="doc-type-select"
+                  >
+                    <option value="business_license">Giấy phép ĐKKD</option>
+                    <option value="financial_report">Báo cáo tài chính</option>
+                    <option value="id_card">CCCD/CMND</option>
+                    <option value="tax_certificate">Giấy tờ thuế</option>
+                    <option value="related_contract">Hợp đồng liên quan</option>
+                    <option value="other">Khác</option>
+                  </select>
+                </div>
+
+                <div className="input-group" style={{ flex: 2 }}>
+                  <label>Chọn file (có thể chọn nhiều)</label>
+                  <div className="file-input-wrapper">
+                    <input
+                      type="file"
+                      id={`file-input-${row.id}`}
+                      accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"
+                      onChange={(e) => handleDocumentChange(e, row.id)}
+                      className="file-input-hidden"
+                      disabled={uploadingDocument}
+                      multiple
+                    />
+                    <label htmlFor={`file-input-${row.id}`} className="btn-choose-file">
+                      <FaPlus /> Thêm file
+                    </label>
+                  </div>
+                  <small style={{ color: '#666', fontSize: '12px', display: 'block', marginTop: '5px' }}>
+                    Định dạng: PDF, Word, Excel, JPG, PNG. Tối đa 10MB/file
+                  </small>
+                </div>
+              </div>
+
+              {/* Files đã chọn cho row này */}
+              {row.files.length > 0 && (
+                <div className="row-files-list">
+                  {row.files.map((doc) => (
+                    <div key={doc.id} className="document-item">
+                      <div className="document-icon">
+                        {doc.mimeType.includes('pdf') && '📄'}
+                        {doc.mimeType.includes('image') && '🖼️'}
+                        {doc.mimeType.includes('word') && '📝'}
+                        {doc.mimeType.includes('sheet') && '📊'}
+                      </div>
+                      <div className="document-info">
+                        <div className="document-name">{doc.fileName}</div>
+                        <div className="document-meta">
+                          <span className="document-size">{formatFileSize(doc.fileSize)}</span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn-remove-doc"
+                        onClick={() => removeDocument(row.id, doc.id)}
+                        title="Xóa tài liệu"
+                      >
+                        <FaTimes />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Nút Thêm Loại Tài Liệu */}
+          <button
+            type="button"
+            className="btn-add-doc-row"
+            onClick={addDocumentRow}
+            disabled={uploadingDocument}
+          >
+            <FaPlus /> Thêm loại tài liệu
+          </button>
         </div>
 
         {/* Thông tin doanh nghiệp */}
@@ -501,16 +805,19 @@ const CreateLoan = () => {
             type="button" 
             className="btn-secondary" 
             onClick={() => navigate('/dashboard', { state: { userRole } })}
-            disabled={loading}
+            disabled={loading || uploadingImage || uploadingDocument}
           >
             Hủy
           </button>
           <button 
             type="submit" 
             className="btn-primary btn-submit"
-            disabled={loading || uploadingImage}
+            disabled={loading || uploadingImage || uploadingDocument}
           >
-            {loading ? 'Đang gửi...' : uploadingImage ? 'Đang tải ảnh...' : 'Gửi yêu cầu vay vốn'}
+            {uploadingDocument ? 'Đang tải tài liệu...' : 
+             uploadingImage ? 'Đang tải ảnh...' : 
+             loading ? 'Đang gửi...' : 
+             'Gửi yêu cầu vay vốn'}
           </button>
         </div>
       </form>

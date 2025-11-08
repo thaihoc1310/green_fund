@@ -3,7 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { 
   FaArrowLeft, FaEdit, FaCheck, FaTimes, 
   FaBuilding, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt,
-  FaCalendar, FaLeaf
+  FaCalendar, FaLeaf, FaFileAlt, FaFilePdf, FaFileImage, 
+  FaFileWord, FaFileExcel, FaDownload, FaEye, FaCheckCircle
 } from 'react-icons/fa';
 import { supabase } from '../lib/supabaseClient';
 import './AdminLoanDetail.css';
@@ -15,9 +16,13 @@ const AdminLoanDetail = () => {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [editedLoan, setEditedLoan] = useState(null);
+  const [loanDocuments, setLoanDocuments] = useState([]);
+  const [loadingDocuments, setLoadingDocuments] = useState(false);
+  const [previewDoc, setPreviewDoc] = useState(null);
 
   useEffect(() => {
     loadLoanDetail();
+    loadLoanDocuments();
   }, [id]);
 
   const loadLoanDetail = async () => {
@@ -48,6 +53,140 @@ const AdminLoanDetail = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadLoanDocuments = async () => {
+    try {
+      setLoadingDocuments(true);
+      const { data, error } = await supabase
+        .from('loan_documents')
+        .select('*')
+        .eq('loan_id', id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setLoanDocuments(data || []);
+    } catch (error) {
+      console.error('Error loading loan documents:', error);
+    } finally {
+      setLoadingDocuments(false);
+    }
+  };
+
+  const handleDownloadDocument = async (doc) => {
+    try {
+      // file_url is already the path in storage (loan_id/doc_id/filename)
+      const filePath = doc.file_url;
+
+      const { data, error } = await supabase.storage
+        .from('loan-documents')
+        .download(filePath);
+
+      if (error) throw error;
+
+      // Create download link
+      const blobUrl = URL.createObjectURL(data);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = doc.file_name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Error downloading document:', error);
+      alert('Không thể tải file: ' + error.message);
+    }
+  };
+
+  const handlePreviewDocument = async (doc) => {
+    try {
+      // Check if it's previewable (PDF or image)
+      const previewableTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+      
+      if (!previewableTypes.includes(doc.mime_type)) {
+        alert('File này không hỗ trợ xem trước. Vui lòng tải xuống để xem.');
+        return;
+      }
+
+      // file_url is already the path in storage (loan_id/doc_id/filename)
+      const filePath = doc.file_url;
+
+      // Create signed URL for preview (valid for 1 hour)
+      const { data, error } = await supabase.storage
+        .from('loan-documents')
+        .createSignedUrl(filePath, 3600);
+
+      if (error) throw error;
+
+      setPreviewDoc({
+        ...doc,
+        signedUrl: data.signedUrl
+      });
+    } catch (error) {
+      console.error('Error previewing document:', error);
+      alert('Không thể xem trước file: ' + error.message);
+    }
+  };
+
+  const handleVerifyDocument = async (docId, currentStatus) => {
+    try {
+      // Get current admin user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        alert('Không thể xác thực. Vui lòng đăng nhập lại.');
+        return;
+      }
+
+      const newStatus = !currentStatus;
+      const updateData = {
+        is_verified: newStatus,
+        verified_by: newStatus ? user.id : null,
+        verified_at: newStatus ? new Date().toISOString() : null
+      };
+
+      const { error } = await supabase
+        .from('loan_documents')
+        .update(updateData)
+        .eq('id', docId);
+
+      if (error) throw error;
+
+      alert(newStatus ? 'Đã xác minh tài liệu!' : 'Đã hủy xác minh tài liệu!');
+      await loadLoanDocuments();
+    } catch (error) {
+      console.error('Error verifying document:', error);
+      alert('Không thể cập nhật trạng thái xác minh: ' + error.message);
+    }
+  };
+
+  const getDocumentIcon = (mimeType) => {
+    if (mimeType.startsWith('image/')) return <FaFileImage style={{ color: '#3b82f6' }} />;
+    if (mimeType === 'application/pdf') return <FaFilePdf style={{ color: '#ef4444' }} />;
+    if (mimeType.includes('word') || mimeType.includes('document')) return <FaFileWord style={{ color: '#2563eb' }} />;
+    if (mimeType.includes('sheet') || mimeType.includes('excel')) return <FaFileExcel style={{ color: '#16a34a' }} />;
+    return <FaFileAlt style={{ color: '#6b7280' }} />;
+  };
+
+  const getDocumentTypeLabel = (type) => {
+    const labels = {
+      business_license: 'Giấy phép kinh doanh',
+      financial_report: 'Báo cáo tài chính',
+      id_card: 'CMND/CCCD',
+      tax_certificate: 'Chứng nhận thuế',
+      related_contract: 'Hợp đồng liên quan',
+      other: 'Khác'
+    };
+    return labels[type] || type;
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
   };
 
   const handleUpdate = async () => {
@@ -599,6 +738,74 @@ const AdminLoanDetail = () => {
             </div>
           </div>
 
+          {/* Row 5: Loan Documents */}
+          <div className="detail-card">
+            <h3><FaFileAlt /> Tài liệu đính kèm</h3>
+            {loadingDocuments ? (
+              <div style={{ textAlign: 'center', padding: '20px' }}>
+                <p>Đang tải tài liệu...</p>
+              </div>
+            ) : loanDocuments.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '20px', color: '#6b7280' }}>
+                <FaFileAlt size={40} style={{ marginBottom: '10px', opacity: 0.5 }} />
+                <p>Chưa có tài liệu nào được tải lên</p>
+              </div>
+            ) : (
+              <div className="documents-list">
+                {loanDocuments.map((doc) => (
+                  <div key={doc.id} className="document-item">
+                    <div className="document-info">
+                      <div className="document-icon">
+                        {getDocumentIcon(doc.mime_type)}
+                      </div>
+                      <div className="document-details">
+                        <h4>{doc.file_name}</h4>
+                        <div className="document-meta">
+                          <span className="doc-type">{getDocumentTypeLabel(doc.document_type)}</span>
+                          <span className="doc-size">{formatFileSize(doc.file_size)}</span>
+                          <span className="doc-date">{formatDate(doc.created_at)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="document-actions">
+                      {doc.is_verified ? (
+                        <div className="verified-badge">
+                          <FaCheckCircle style={{ color: '#16a34a', marginRight: '5px' }} />
+                          <span>Đã xác minh</span>
+                        </div>
+                      ) : (
+                        <div className="unverified-badge">
+                          <span style={{ color: '#f59e0b' }}>Chưa xác minh</span>
+                        </div>
+                      )}
+                      <button
+                        className="btn-doc-action btn-preview"
+                        onClick={() => handlePreviewDocument(doc)}
+                        title="Xem trước"
+                      >
+                        <FaEye /> Xem
+                      </button>
+                      <button
+                        className="btn-doc-action btn-download"
+                        onClick={() => handleDownloadDocument(doc)}
+                        title="Tải xuống"
+                      >
+                        <FaDownload /> Tải
+                      </button>
+                      <button
+                        className={`btn-doc-action ${doc.is_verified ? 'btn-unverify' : 'btn-verify'}`}
+                        onClick={() => handleVerifyDocument(doc.id, doc.is_verified)}
+                        title={doc.is_verified ? 'Hủy xác minh' : 'Xác minh'}
+                      >
+                        {doc.is_verified ? '✕ Hủy' : '✓ Xác minh'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Timestamps */}
           <div className="detail-card">
             <h3><FaCalendar /> Thông tin thời gian</h3>
@@ -633,6 +840,45 @@ const AdminLoanDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Document Preview Modal */}
+      {previewDoc && (
+        <div className="preview-modal" onClick={() => setPreviewDoc(null)}>
+          <div className="preview-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="preview-modal-header">
+              <h3>{previewDoc.file_name}</h3>
+              <button className="btn-close-preview" onClick={() => setPreviewDoc(null)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="preview-modal-body">
+              {previewDoc.mime_type === 'application/pdf' ? (
+                <iframe
+                  src={previewDoc.signedUrl}
+                  title={previewDoc.file_name}
+                />
+              ) : previewDoc.mime_type.startsWith('image/') ? (
+                <img
+                  src={previewDoc.signedUrl}
+                  alt={previewDoc.file_name}
+                />
+              ) : (
+                <div style={{ textAlign: 'center', padding: '40px' }}>
+                  <p>Không thể xem trước file này</p>
+                </div>
+              )}
+            </div>
+            <div className="preview-modal-footer">
+              <button
+                className="btn-download-modal"
+                onClick={() => handleDownloadDocument(previewDoc)}
+              >
+                <FaDownload /> Tải xuống
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

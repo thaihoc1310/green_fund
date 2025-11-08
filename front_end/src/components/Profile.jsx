@@ -9,7 +9,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userRole = location.state?.userRole || 'borrower';
-  const { user } = useAuth();
+  const { user, deleteImageFromStorage } = useAuth();
   
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -177,12 +177,17 @@ const Profile = () => {
       const fileName = `${user.id}-${Date.now()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      // Xóa avatar cũ nếu có
+      // Xóa avatar cũ nếu có (sử dụng helper function)
       if (profile.avatar) {
-        const oldFileName = profile.avatar.split('/').pop();
-        await supabase.storage
-          .from('avatars')
-          .remove([oldFileName]);
+        const { error: deleteError } = await deleteImageFromStorage(
+          profile.avatar,
+          'avatars'
+        );
+        
+        if (deleteError) {
+          console.warn('Warning: Could not delete old avatar:', deleteError);
+          // Không throw error, vẫn tiếp tục upload avatar mới
+        }
       }
 
       // Upload avatar mới

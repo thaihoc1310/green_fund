@@ -186,6 +186,34 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Xóa ảnh từ Supabase Storage
+  const deleteImageFromStorage = async (imageUrl, bucket = 'avatars') => {
+    try {
+      if (!imageUrl) return { success: true, error: null };
+
+      // Extract file path from URL
+      // URL format: https://[project].supabase.co/storage/v1/object/public/[bucket]/[path]
+      const urlParts = imageUrl.split(`/${bucket}/`);
+      if (urlParts.length < 2) {
+        console.warn('Invalid image URL format:', imageUrl);
+        return { success: false, error: new Error('Invalid URL format') };
+      }
+
+      const filePath = urlParts[1];
+
+      const { error } = await supabase.storage
+        .from(bucket)
+        .remove([filePath]);
+
+      if (error) throw error;
+
+      return { success: true, error: null };
+    } catch (error) {
+      console.error('Delete image error:', error);
+      return { success: false, error };
+    }
+  };
+
   const value = {
     user,
     session,
@@ -197,6 +225,7 @@ export const AuthProvider = ({ children }) => {
     updatePassword,
     getUserProfile,
     getUserRole,
+    deleteImageFromStorage,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
