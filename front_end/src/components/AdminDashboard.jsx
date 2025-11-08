@@ -349,7 +349,36 @@ const AdminDashboard = () => {
         }
       }
 
-      // Bước 3: Xóa loan từ database
+      // Bước 3: Xóa loan documents từ storage
+      const { data: docs } = await supabase
+        .from('loan_documents')
+        .select('id')
+        .eq('loan_id', loanId);
+
+      if (docs && docs.length > 0) {
+        // Delete each document's folder and all files inside
+        for (const doc of docs) {
+          try {
+            const folderPath = `${loanId}/${doc.id}`;
+            
+            // List all files in the document folder
+            const { data: fileList, error: listError } = await supabase.storage
+              .from('loan-documents')
+              .list(folderPath);
+
+            if (!listError && fileList && fileList.length > 0) {
+              const filePaths = fileList.map(file => `${folderPath}/${file.name}`);
+              await supabase.storage
+                .from('loan-documents')
+                .remove(filePaths);
+            }
+          } catch (docErr) {
+            console.error('Error deleting document folder:', docErr);
+          }
+        }
+      }
+
+      // Bước 4: Xóa loan từ database (cascade sẽ xóa loan_documents records)
       const { error } = await supabase
         .from('loans')
         .delete()
@@ -357,7 +386,7 @@ const AdminDashboard = () => {
 
       if (error) throw error;
 
-      setSuccessMessage('Đã xóa khoản vay và ảnh liên quan thành công');
+      setSuccessMessage('Đã xóa khoản vay và tất cả tài liệu liên quan thành công');
       loadLoans();
       loadStatistics();
 

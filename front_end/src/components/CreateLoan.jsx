@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { FaArrowLeft, FaBuilding, FaLeaf, FaUpload, FaInfoCircle, FaTimes, FaPlus } from 'react-icons/fa';
+import { FaArrowLeft, FaBuilding, FaLeaf, FaUpload, FaInfoCircle, FaTimes, FaPlus, FaFilePdf, FaFileWord, FaFileExcel, FaFileImage, FaFileAlt } from 'react-icons/fa';
 import { BiMoney } from 'react-icons/bi';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabaseClient';
@@ -31,6 +31,15 @@ const CreateLoan = () => {
     { id: 1, docType: 'business_license', files: [] }
   ]); // Mỗi row có files riêng
   const [uploadingDocument, setUploadingDocument] = useState(false);
+
+  // Get document icon based on MIME type
+  const getDocumentIcon = (mimeType) => {
+    if (mimeType.startsWith('image/')) return <FaFileImage style={{ color: '#3b82f6', fontSize: '40px' }} />;
+    if (mimeType === 'application/pdf') return <FaFilePdf style={{ color: '#ef4444', fontSize: '40px' }} />;
+    if (mimeType.includes('word') || mimeType.includes('document')) return <FaFileWord style={{ color: '#2563eb', fontSize: '40px' }} />;
+    if (mimeType.includes('sheet') || mimeType.includes('excel')) return <FaFileExcel style={{ color: '#16a34a', fontSize: '40px' }} />;
+    return <FaFileAlt style={{ color: '#6b7280', fontSize: '40px' }} />;
+  };
 
   const onSubmit = async (data) => {
     if (!user) {
@@ -113,8 +122,8 @@ const CreateLoan = () => {
         
         for (const doc of allFiles) {
           try {
-            // Generate unique document ID
-            const docId = `${Date.now()}-${Math.random().toString(36).substring(7)}`;
+            // Generate unique document ID using crypto.randomUUID()
+            const docId = crypto.randomUUID();
             
             // Sanitize filename for storage
             const sanitizedFileName = sanitizeFileName(doc.fileName);
@@ -137,10 +146,11 @@ const CreateLoan = () => {
             // Get file URL (for private bucket, we store the path)
             const fileUrl = filePath;
 
-            // Insert document record into loan_documents table
+            // Insert document record into loan_documents table with specific ID
             const { error: insertDocError } = await supabase
               .from('loan_documents')
               .insert({
+                id: docId,
                 loan_id: loanId,
                 document_type: doc.documentType,
                 file_url: fileUrl,
@@ -493,10 +503,7 @@ const CreateLoan = () => {
                   {row.files.map((doc) => (
                     <div key={doc.id} className="document-item">
                       <div className="document-icon">
-                        {doc.mimeType.includes('pdf') && '📄'}
-                        {doc.mimeType.includes('image') && '🖼️'}
-                        {doc.mimeType.includes('word') && '📝'}
-                        {doc.mimeType.includes('sheet') && '📊'}
+                        {getDocumentIcon(doc.mimeType)}
                       </div>
                       <div className="document-info">
                         <div className="document-name">{doc.fileName}</div>

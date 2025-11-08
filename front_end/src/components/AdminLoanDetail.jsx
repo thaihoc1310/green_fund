@@ -4,7 +4,7 @@ import {
   FaArrowLeft, FaEdit, FaCheck, FaTimes, 
   FaBuilding, FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt,
   FaCalendar, FaLeaf, FaFileAlt, FaFilePdf, FaFileImage, 
-  FaFileWord, FaFileExcel, FaDownload, FaEye, FaCheckCircle
+  FaFileWord, FaFileExcel, FaDownload, FaEye, FaCheckCircle, FaTrash
 } from 'react-icons/fa';
 import { supabase } from '../lib/supabaseClient';
 import './AdminLoanDetail.css';
@@ -126,6 +126,48 @@ const AdminLoanDetail = () => {
     } catch (error) {
       console.error('Error previewing document:', error);
       alert('Không thể xem trước file: ' + error.message);
+    }
+  };
+
+  const handleDeleteDocument = async (doc) => {
+    if (!window.confirm(`Bạn có chắc chắn muốn xóa tài liệu "${doc.file_name}"?`)) {
+      return;
+    }
+
+    try {
+      // Extract folder path: loan-id/doc-id
+      const folderPath = `${doc.loan_id}/${doc.id}`;
+      
+      // List all files in the document folder
+      const { data: fileList, error: listError } = await supabase.storage
+        .from('loan-documents')
+        .list(folderPath);
+
+      if (listError) throw listError;
+
+      // Delete all files in the folder
+      if (fileList && fileList.length > 0) {
+        const filePaths = fileList.map(file => `${folderPath}/${file.name}`);
+        const { error: storageError } = await supabase.storage
+          .from('loan-documents')
+          .remove(filePaths);
+
+        if (storageError) throw storageError;
+      }
+
+      // Delete from database
+      const { error: dbError } = await supabase
+        .from('loan_documents')
+        .delete()
+        .eq('id', doc.id);
+
+      if (dbError) throw dbError;
+
+      alert('Đã xóa tài liệu thành công!');
+      await loadLoanDocuments();
+    } catch (err) {
+      console.error('Error deleting document:', err);
+      alert('Không thể xóa tài liệu: ' + err.message);
     }
   };
 
@@ -785,12 +827,19 @@ const AdminLoanDetail = () => {
                       >
                         <FaEye /> Xem
                       </button>
-                      <button
+                      {/* <button
                         className="btn-doc-action btn-download"
                         onClick={() => handleDownloadDocument(doc)}
                         title="Tải xuống"
                       >
                         <FaDownload /> Tải
+                      </button> */}
+                      <button
+                        className="btn-doc-action btn-delete-doc"
+                        onClick={() => handleDeleteDocument(doc)}
+                        title="Xóa tài liệu"
+                      >
+                        <FaTrash /> Xóa
                       </button>
                       <button
                         className={`btn-doc-action ${doc.is_verified ? 'btn-unverify' : 'btn-verify'}`}
