@@ -12,7 +12,7 @@ import './LoanManagement.css';
 const LoanManagement = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, deleteImageFromStorage } = useAuth();
   const userRole = location.state?.userRole || 'borrower';
   
   const [statusFilter, setStatusFilter] = useState('all');
@@ -41,8 +41,12 @@ const LoanManagement = () => {
 
   // Fetch loans from Supabase
   useEffect(() => {
-    fetchLoans();
-  }, [user]);
+    // Chỉ fetch một lần khi component mount
+    if (user?.id) {
+      fetchLoans();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array - chỉ chạy 1 lần khi mount
 
   const fetchLoans = async () => {
     if (!user) {
@@ -324,19 +328,14 @@ const LoanManagement = () => {
 
       // Delete loan image if exists
       if (loan.image_url) {
-        try {
-          const urlParts = loan.image_url.split('/');
-          const fileName = urlParts[urlParts.length - 1].split('?')[0];
-          
-          const { error: imgDeleteError } = await supabase.storage
-            .from('loan-images')
-            .remove([fileName]);
-            
-          if (imgDeleteError) {
-            console.error('Error deleting loan image:', imgDeleteError);
-          }
-        } catch (imgErr) {
-          console.error('Error processing image deletion:', imgErr);
+        const { error: imgDeleteError } = await deleteImageFromStorage(
+          loan.image_url,
+          'loan-images'
+        );
+        
+        if (imgDeleteError) {
+          console.warn('Warning: Could not delete loan image:', imgDeleteError);
+          // Không throw error, vẫn tiếp tục xóa loan
         }
       }
 
@@ -377,7 +376,6 @@ const LoanManagement = () => {
 
       if (error) throw error;
 
-      alert('Đã xóa dự án thành công!');
       await fetchLoans();
     } catch (err) {
       console.error('Error deleting loan:', err);

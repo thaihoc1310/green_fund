@@ -17,7 +17,10 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, signOut, getUserRole, deleteImageFromStorage } = useAuth();
-  const [activeTab, setActiveTab] = useState('statistics'); // statistics, loans, users (changed order)
+  const [activeTab, setActiveTab] = useState(() => {
+    // Restore tab from sessionStorage if available
+    return sessionStorage.getItem('adminDashboardTab') || 'statistics';
+  });
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -32,8 +35,12 @@ const AdminDashboard = () => {
   // Loans data
   const [loans, setLoans] = useState([]);
   const [filteredLoans, setFilteredLoans] = useState([]);
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState(() => {
+    return sessionStorage.getItem('adminDashboardFilterStatus') || 'all';
+  });
+  const [searchTerm, setSearchTerm] = useState(() => {
+    return sessionStorage.getItem('adminDashboardSearchTerm') || '';
+  });
   
   // Users data
   const [users, setUsers] = useState([]);
@@ -75,6 +82,20 @@ const AdminDashboard = () => {
 
     checkAdminAccess();
   }, [user, getUserRole, navigate]);
+
+  // Save dashboard state to sessionStorage whenever state changes
+  useEffect(() => {
+    sessionStorage.setItem('adminDashboardTab', activeTab);
+  }, [activeTab]);
+
+  useEffect(() => {
+    sessionStorage.setItem('adminDashboardFilterStatus', filterStatus);
+  }, [filterStatus]);
+
+  useEffect(() => {
+    sessionStorage.setItem('adminDashboardSearchTerm', searchTerm);
+  }, [searchTerm]);
+
   const [newUser, setNewUser] = useState({
     full_name: '',
     email: '',
@@ -327,64 +348,68 @@ const AdminDashboard = () => {
     try {
       setErrorMessage('');
       
-      // Bước 1: Lấy thông tin loan để xóa ảnh
+      // Bước 1: Lấy thông tin loan trước khi xóa (để lấy image_url)
       const { data: loanData, error: fetchError } = await supabase
         .from('loans')
         .select('image_url')
         .eq('id', loanId)
-        .single();
+        .maybeSingle(); // Dùng maybeSingle() thay vì single() để tránh lỗi nếu không tìm thấy
 
       if (fetchError) throw fetchError;
 
-      // Bước 2: Xóa ảnh từ storage nếu có
-      if (loanData?.image_url) {
-        const { error: deleteImageError } = await deleteImageFromStorage(
-          loanData.image_url, 
-          'loan-images'
-        );
-        
-        if (deleteImageError) {
-          console.warn('Warning: Could not delete loan image:', deleteImageError);
-          // Không throw error, vẫn tiếp tục xóa loan
-        }
-      }
-
-      // Bước 3: Xóa loan documents từ storage
-      const { data: docs } = await supabase
-        .from('loan_documents')
-        .select('id')
-        .eq('loan_id', loanId);
-
-      if (docs && docs.length > 0) {
-        // Delete each document's folder and all files inside
-        for (const doc of docs) {
-          try {
-            const folderPath = `${loanId}/${doc.id}`;
-            
-            // List all files in the document folder
-            const { data: fileList, error: listError } = await supabase.storage
-              .from('loan-documents')
-              .list(folderPath);
-
-            if (!listError && fileList && fileList.length > 0) {
-              const filePaths = fileList.map(file => `${folderPath}/${file.name}`);
-              await supabase.storage
-                .from('loan-documents')
-                .remove(filePaths);
-            }
-          } catch (docErr) {
-            console.error('Error deleting document folder:', docErr);
-          }
-        }
-      }
-
-      // Bước 4: Xóa loan từ database (cascade sẽ xóa loan_documents records)
-      const { error } = await supabase
+      // Bước 2: Xóa loan từ database TRƯỚC (cascade sẽ xóa loan_documents records)
+      const { error: deleteError } = await supabase
         .from('loans')
         .delete()
         .eq('id', loanId);
 
-      if (error) throw error;
+      if (deleteError) throw deleteError;
+
+      // Bước 3: Xóa ảnh loan từ storage nếu có
+      if (loanData?.image_url) {
+        try {
+          const urlParts = loanData.image_url.split('/');
+          const fileName = urlParts[urlParts.length - 1].split('?')[0];
+          
+          const { error: imgDeleteError } = await supabase.storage
+            .from('loan-images')
+            .remove([fileName]);
+          
+          if (imgDeleteError) {
+            console.warn('Warning: Could not delete loan image from storage:', imgDeleteError);
+          }
+        } catch (imgErr) {
+          console.warn('Warning: Error processing loan image deletion:', imgErr);
+        }
+      }
+
+      // Bước 4: Xóa tất cả loan documents từ storage
+      try {
+        // List all folders trong loan này (loan_id/)
+        const { data: docFolders, error: listError } = await supabase.storage
+          .from('loan-documents')
+          .list(loanId);
+
+        if (!listError && docFolders && docFolders.length > 0) {
+          // Với mỗi document folder, xóa tất cả files bên trong
+          for (const folder of docFolders) {
+            const folderPath = `${loanId}/${folder.name}`;
+            
+            const { data: files } = await supabase.storage
+              .from('loan-documents')
+              .list(folderPath);
+
+            if (files && files.length > 0) {
+              const filePaths = files.map(file => `${folderPath}/${file.name}`);
+              await supabase.storage
+                .from('loan-documents')
+                .remove(filePaths);
+            }
+          }
+        }
+      } catch (docErr) {
+        console.warn('Warning: Error deleting document storage:', docErr);
+      }
 
       setSuccessMessage('Đã xóa khoản vay và tất cả tài liệu liên quan thành công');
       loadLoans();
@@ -489,7 +514,7 @@ const AdminDashboard = () => {
   };
 
   const deleteUser = async (userId) => {
-    if (!window.confirm('Bạn có chắc chắn muốn xóa người dùng này? Hành động này sẽ xóa cả avatar, tất cả loans và ảnh liên quan. Không thể hoàn tác!')) {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa người dùng này? Hành động này sẽ xóa cả avatar, tất cả loans, documents và ảnh liên quan. Không thể hoàn tác!')) {
       return;
     }
 
@@ -505,7 +530,7 @@ const AdminDashboard = () => {
 
       if (fetchUserError) throw fetchUserError;
 
-      // Bước 2: Lấy tất cả loans của user để xóa ảnh
+      // Bước 2: Lấy tất cả loans của user để xóa ảnh từ storage
       const { data: userLoans, error: fetchLoansError } = await supabase
         .from('loans')
         .select('id, image_url')
@@ -513,7 +538,7 @@ const AdminDashboard = () => {
 
       if (fetchLoansError) throw fetchLoansError;
 
-      // Bước 3: Xóa tất cả ảnh của loans
+      // Bước 3: Xóa tất cả ảnh của loans từ storage
       if (userLoans && userLoans.length > 0) {
         for (const loan of userLoans) {
           if (loan.image_url) {
@@ -526,10 +551,42 @@ const AdminDashboard = () => {
               console.warn(`Warning: Could not delete loan image for loan ${loan.id}:`, deleteLoanImageError);
             }
           }
+
+          // Xóa loan documents từ storage (cascade sẽ xóa DB record)
+          try {
+            const { data: docs } = await supabase
+              .from('loan_documents')
+              .select('id')
+              .eq('loan_id', loan.id);
+
+            if (docs && docs.length > 0) {
+              for (const doc of docs) {
+                try {
+                  const folderPath = `${loan.id}/${doc.id}`;
+                  
+                  // List all files in document folder
+                  const { data: fileList, error: listError } = await supabase.storage
+                    .from('loan-documents')
+                    .list(folderPath);
+
+                  if (!listError && fileList && fileList.length > 0) {
+                    const filePaths = fileList.map(file => `${folderPath}/${file.name}`);
+                    await supabase.storage
+                      .from('loan-documents')
+                      .remove(filePaths);
+                  }
+                } catch (docErr) {
+                  console.error(`Error deleting document folder for loan ${loan.id}:`, docErr);
+                }
+              }
+            }
+          } catch (docListErr) {
+            console.error(`Error fetching documents for loan ${loan.id}:`, docListErr);
+          }
         }
       }
 
-      // Bước 4: Xóa avatar của user
+      // Bước 4: Xóa avatar từ storage
       if (userData?.avatar_url) {
         const { error: deleteAvatarError } = await deleteImageFromStorage(
           userData.avatar_url,
@@ -541,15 +598,14 @@ const AdminDashboard = () => {
         }
       }
 
-      // Bước 5: Xóa user từ database (CASCADE sẽ tự động xóa loans, wallet, etc.)
-      const { error } = await supabase
-        .from('users')
-        .delete()
-        .eq('id', userId);
+      // Bước 5: Gọi database function để xóa user từ auth.users
+      // CASCADE sẽ tự động: auth.users → public.users → wallets, loans, loan_documents
+      const { error: deleteUserError } = await supabase
+        .rpc('admin_delete_user', { target_user_id: userId });
 
-      if (error) throw error;
+      if (deleteUserError) throw deleteUserError;
 
-      setSuccessMessage('Đã xóa người dùng, avatar và tất cả dữ liệu liên quan thành công');
+      setSuccessMessage('Đã xóa người dùng, avatar, tất cả loans, documents và ảnh liên quan thành công');
       closeUserModal();
       await loadUsers();
       loadStatistics();

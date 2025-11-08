@@ -383,7 +383,7 @@ const AdminLoanDetail = () => {
     <div className="admin-loan-detail">
       {/* Header */}
       <div className="detail-header">
-        <button className="btn-back" onClick={() => navigate('/admin-dashboard')}>
+        <button className="btn-back" onClick={() => navigate(-1)}>
           <FaArrowLeft /> Quay lại Dashboard
         </button>
         <div className="header-actions">
