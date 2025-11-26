@@ -9,8 +9,14 @@ export default defineConfig({
     emptyOutDir: true,
     // Ensure assets are copied correctly
     assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        // Don't hash service worker file name - it needs to be /sw.js
+        manualChunks: undefined,
+      }
+    }
   },
-  // Ensure public assets are accessible
+  // Ensure public assets are accessible (includes sw.js and manifest.json)
   publicDir: 'public',
   server: {
     host: '0.0.0.0', // Listen on all network interfaces
