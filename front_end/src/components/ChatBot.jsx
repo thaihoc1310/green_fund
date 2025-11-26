@@ -37,7 +37,7 @@ const ChatBot = () => {
   // Call Gemini API
   const callGeminiAPI = async (userMessage) => {
     const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-    const GEMINI_MODEL = 'gemini-2.5-flash-lite'; 
+    const GEMINI_MODEL = 'gemini-flash-lite-latest'; 
     
     if (!GEMINI_API_KEY) {
       throw new Error('API key chưa được cấu hình');
