@@ -787,7 +787,7 @@ const AdminDashboard = () => {
             <div className="stat-card">
               <div className="stat-info">
                 <h3>{formatCurrency(stats.totalFunded)}</h3>
-                <p>Tổng vốn đã huy động</p>
+                <p>Tổng vốn đầu tư</p>
               </div>
             </div>
 
@@ -834,7 +834,6 @@ const AdminDashboard = () => {
                     <th>Dự án</th>
                     <th>Người vay</th>
                     <th>Số tiền</th>
-                    <th>Đã huy động</th>
                     <th>Lãi suất</th>
                     <th>Kỳ hạn</th>
                     <th>Trạng thái</th>
@@ -845,7 +844,7 @@ const AdminDashboard = () => {
                 <tbody>
                   {filteredLoans.length === 0 ? (
                     <tr>
-                      <td colSpan="9" style={{ textAlign: 'center', padding: '40px' }}>
+                      <td colSpan="8" style={{ textAlign: 'center', padding: '40px' }}>
                         Không tìm thấy khoản vay nào
                       </td>
                     </tr>
@@ -865,7 +864,6 @@ const AdminDashboard = () => {
                           </div>
                         </td>
                         <td><strong>{formatCurrency(loan.amount)}</strong></td>
-                        <td>{formatCurrency(loan.funded_amount)}</td>
                         <td>{loan.interest_rate}%/năm</td>
                         <td>{loan.term_months} tháng</td>
                         <td>

@@ -28,7 +28,7 @@ export const loansData = [
     id: 1,
     package: 'green-agriculture',
     projectName: 'Trang trại rau hữu cơ công nghệ cao "Xanh Tự Nhiên"',
-    amount: 3500000000,
+    amount: 350000000,
     purpose: 'Mở rộng quy mô sản xuất lên 5ha với nhà màng, hệ thống tưới nhỏ giọt, nhà sơ chế và kho lạnh đạt chuẩn xuất khẩu',
     creditRating: 'A',
     interestRate: 10.2,
@@ -38,7 +38,6 @@ export const loansData = [
       governance: 73
     },
     term: 36,
-    funded: 45,
     representative: {
       name: 'Nguyễn Văn An',
       position: 'Giám đốc',
@@ -79,7 +78,7 @@ export const loansData = [
     id: 2,
     package: 'green-agriculture',
     projectName: 'AgriDrone Việt - Ứng dụng drone giám sát cây trồng',
-    amount: 5000000000,
+    amount: 280000000,
     purpose: 'Mở rộng dây chuyền sản xuất và đầu tư 20 drone phục vụ 1.000ha canh tác, giúp giảm 50% thuốc trừ sâu',
     creditRating: 'A',
     interestRate: 11.0,
@@ -89,7 +88,6 @@ export const loansData = [
       governance: 70
     },
     term: 48,
-    funded: 30,
     representative: {
       name: 'Trần Văn Bình',
       position: 'CEO',
@@ -130,7 +128,7 @@ export const loansData = [
     id: 3,
     package: 'green-agriculture',
     projectName: 'BioFert Mekong - Nhà máy phân bón hữu cơ vi sinh',
-    amount: 7000000000,
+    amount: 380000000,
     purpose: 'Xây dựng nhà máy sản xuất 15.000 tấn phân hữu cơ/năm từ phế phẩm nông nghiệp, giảm phụ thuộc hóa chất',
     creditRating: 'A-',
     interestRate: 10.8,
@@ -140,7 +138,6 @@ export const loansData = [
       governance: 67
     },
     term: 60,
-    funded: 25,
     representative: {
       name: 'Lê Thị Cúc',
       position: 'Giám đốc',
@@ -181,7 +178,7 @@ export const loansData = [
     id: 4,
     package: 'green-agriculture',
     projectName: 'AgriLoop - Chuỗi nông sản tuần hoàn không rác thải',
-    amount: 4200000000,
+    amount: 220000000,
     purpose: 'Xây dựng hệ thống xử lý sinh học và chế biến rau sấy, biến 100% phần bỏ đi thành sản phẩm có giá trị',
     creditRating: 'A',
     interestRate: 9.8,
@@ -191,7 +188,6 @@ export const loansData = [
       governance: 75
     },
     term: 42,
-    funded: 40,
     representative: {
       name: 'Phạm Minh Đức',
       position: 'Giám đốc điều hành',
@@ -234,7 +230,7 @@ export const loansData = [
     id: 5,
     package: 'renewable-energy',
     projectName: 'SolarVillage - Điện mặt trời áp mái cho khu dân cư nông thôn',
-    amount: 6000000000,
+    amount: 320000000,
     purpose: 'Lắp đặt 400 hệ thống điện mặt trời (3 kWp/hộ) cho 400 hộ nghèo tại Nghệ An, giảm chi phí điện 35%',
     creditRating: 'A',
     interestRate: 9.8,
@@ -244,7 +240,6 @@ export const loansData = [
       governance: 76
     },
     term: 60,
-    funded: 50,
     representative: {
       name: 'Nguyễn Thị Em',
       position: 'Giám đốc dự án',
@@ -285,7 +280,7 @@ export const loansData = [
     id: 6,
     package: 'renewable-energy',
     projectName: 'Wind4Future - Turbine gió mini cho trường học vùng cao',
-    amount: 3800000000,
+    amount: 180000000,
     purpose: 'Lắp đặt 20 turbine gió mini (5 kW) cho 10 trường học và 3 trạm y tế tại Lào Cai & Hà Giang',
     creditRating: 'A',
     interestRate: 10.2,
@@ -295,7 +290,6 @@ export const loansData = [
       governance: 77
     },
     term: 48,
-    funded: 35,
     representative: {
       name: 'Hoàng Văn Phong',
       position: 'CEO',
@@ -336,7 +330,7 @@ export const loansData = [
     id: 7,
     package: 'renewable-energy',
     projectName: 'SolarCold - Kho lạnh năng lượng mặt trời cho nông sản',
-    amount: 4500000000,
+    amount: 250000000,
     purpose: 'Xây dựng kho lạnh 200 tấn sử dụng pin mặt trời tại Vĩnh Long, giảm thất thoát sau thu hoạch',
     creditRating: 'A',
     interestRate: 9.6,
@@ -346,7 +340,6 @@ export const loansData = [
       governance: 77
     },
     term: 48,
-    funded: 55,
     representative: {
       name: 'Trần Văn Giang',
       position: 'Giám đốc',
@@ -387,7 +380,7 @@ export const loansData = [
     id: 8,
     package: 'renewable-energy',
     projectName: 'GreenCharge - Mạng lưới trạm sạc EV năng lượng tái tạo',
-    amount: 6000000000,
+    amount: 400000000,
     purpose: 'Xây dựng 5 trạm sạc tốc độ vừa tại Đà Nẵng, tích hợp năng lượng tái tạo và hệ thống quản lý năng lượng',
     creditRating: 'A-',
     interestRate: 11.5,
@@ -397,7 +390,6 @@ export const loansData = [
       governance: 75
     },
     term: 60,
-    funded: 20,
     representative: {
       name: 'Lê Minh Hải',
       position: 'CEO',
@@ -440,7 +432,7 @@ export const loansData = [
     id: 9,
     package: 'sustainable-consumption',
     projectName: 'BioWrap - Dây chuyền sản xuất bao bì sinh học từ bã mía',
-    amount: 7000000000,
+    amount: 350000000,
     purpose: 'Đầu tư dây chuyền sản xuất bao bì phân hủy sinh học (1.200 tấn/năm) thay thế túi nilon',
     creditRating: 'A',
     interestRate: 10.0,
@@ -450,7 +442,6 @@ export const loansData = [
       governance: 72
     },
     term: 60,
-    funded: 38,
     representative: {
       name: 'Nguyễn Thị Hoa',
       position: 'Giám đốc',
@@ -491,7 +482,7 @@ export const loansData = [
     id: 10,
     package: 'sustainable-consumption',
     projectName: 'GreenCos - Mỹ phẩm thiên nhiên từ dược liệu bản địa',
-    amount: 3500000000,
+    amount: 175000000,
     purpose: 'Mở rộng nhà xưởng chiết xuất tinh dầu, đầu tư hệ thống chiết suất lạnh đạt chuẩn GMP',
     creditRating: 'A',
     interestRate: 10.5,
@@ -501,7 +492,6 @@ export const loansData = [
       governance: 71
     },
     term: 36,
-    funded: 60,
     representative: {
       name: 'Trần Thị Hương',
       position: 'CEO',
@@ -542,7 +532,7 @@ export const loansData = [
     id: 11,
     package: 'sustainable-consumption',
     projectName: 'EcoClean - Nước giặt enzym sinh học & chai tái chế',
-    amount: 2800000000,
+    amount: 140000000,
     purpose: 'Nghiên cứu enzyme, mở phòng thí nghiệm và đầu tư dây chuyền đóng chai PET tái chế',
     creditRating: 'A-',
     interestRate: 10.5,
@@ -552,7 +542,6 @@ export const loansData = [
       governance: 72
     },
     term: 36,
-    funded: 42,
     representative: {
       name: 'Lê Văn Kiên',
       position: 'Giám đốc R&D',
@@ -593,7 +582,7 @@ export const loansData = [
     id: 12,
     package: 'sustainable-consumption',
     projectName: 'ReBottle - Dây chuyền tái chế PET & sản xuất hạt tái chế',
-    amount: 5000000000,
+    amount: 290000000,
     purpose: 'Mua máy nghiền, rửa, sấy và ép hạt PET tái chế (200 tấn/năm) phục vụ ngành đóng gói',
     creditRating: 'A-',
     interestRate: 11.0,
@@ -603,7 +592,6 @@ export const loansData = [
       governance: 71
     },
     term: 60,
-    funded: 28,
     representative: {
       name: 'Phạm Văn Long',
       position: 'Giám đốc',
@@ -646,7 +634,7 @@ export const loansData = [
     id: 13,
     package: 'environmental-tech',
     projectName: 'AquaTech - Hệ thống xử lý nước thải KCN tích hợp AI',
-    amount: 8000000000,
+    amount: 400000000,
     purpose: 'Triển khai hệ thống xử lý nước thải tích hợp IoT + AI cho khu công nghiệp Long An',
     creditRating: 'A',
     interestRate: 11.8,
@@ -656,7 +644,6 @@ export const loansData = [
       governance: 83
     },
     term: 60,
-    funded: 32,
     representative: {
       name: 'Nguyễn Văn Minh',
       position: 'CTO',
@@ -697,7 +684,7 @@ export const loansData = [
     id: 14,
     package: 'environmental-tech',
     projectName: 'SmartWaste - Hệ thống phân loại rác tự động tại nguồn',
-    amount: 5500000000,
+    amount: 280000000,
     purpose: 'Triển khai 1.000 thùng rác thông minh tại TP.HCM với cảm biến AI phân loại rác',
     creditRating: 'A',
     interestRate: 10.5,
@@ -707,7 +694,6 @@ export const loansData = [
       governance: 76
     },
     term: 48,
-    funded: 48,
     representative: {
       name: 'Trần Thị Ngọc',
       position: 'CEO',
@@ -748,7 +734,7 @@ export const loansData = [
     id: 15,
     package: 'environmental-tech',
     projectName: 'ReLife - Nhà máy tái chế pin lithium & thiết bị điện tử',
-    amount: 6000000000,
+    amount: 300000000,
     purpose: 'Xây dựng xưởng tái chế pin lithium (200 tấn/năm) với quy trình tách chiết kim loại quý',
     creditRating: 'A',
     interestRate: 11.5,
@@ -758,7 +744,6 @@ export const loansData = [
       governance: 82
     },
     term: 60,
-    funded: 25,
     representative: {
       name: 'Lê Quốc Nam',
       position: 'Giám đốc kỹ thuật',
@@ -799,7 +784,7 @@ export const loansData = [
     id: 16,
     package: 'environmental-tech',
     projectName: 'CarbonTrack - Nền tảng đo lường & bán tín chỉ carbon',
-    amount: 6000000000,
+    amount: 360000000,
     purpose: 'Phát triển nền tảng blockchain ghi nhận phát thải và thị trường tín chỉ carbon cho SME',
     creditRating: 'A-',
     interestRate: 12.3,
@@ -809,7 +794,6 @@ export const loansData = [
       governance: 90
     },
     term: 48,
-    funded: 18,
     representative: {
       name: 'Phạm Thị Oanh',
       position: 'CEO',

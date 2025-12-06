@@ -172,23 +172,6 @@ const LoanDetail = () => {
             </div>
           </div>
 
-          <div className="progress-section-detail">
-            <div className="progress-header">
-              <span>Tiến độ huy động vốn</span>
-              <span className="progress-percent">{loanData.funded}%</span>
-            </div>
-            <div className="progress-bar-large">
-              <div 
-                className="progress-fill" 
-                style={{ width: `${loanData.funded}%` }}
-              ></div>
-            </div>
-            <div className="progress-info">
-              <span>Đã huy động: {formatCurrency(loanData.amount * loanData.funded / 100)}</span>
-              <span>Còn lại: {formatCurrency(loanData.amount * (100 - loanData.funded) / 100)}</span>
-            </div>
-          </div>
-
           <button className="btn-invest-large" onClick={() => setShowInvestModal(true)}>
             <BiMoney /> Đầu tư ngay
           </button>

@@ -53,7 +53,6 @@ const ChatBot = () => {
       interestRate: loan.interestRate,
       creditRating: loan.creditRating,
       term: loan.term,
-      funded: loan.funded,
       benefits: loan.benefits,
       description: loan.description,
       esgScore: Math.round((loan.esgDetails.environmental + loan.esgDetails.social + loan.esgDetails.governance) / 3)
@@ -268,10 +267,6 @@ CHÚ Ý:
                             <div className="loan-rec-item">
                               <span className="label">Xếp hạng:</span>
                               <span className="value rating">{message.loan.creditRating}</span>
-                            </div>
-                            <div className="loan-rec-item">
-                              <span className="label">Đã huy động:</span>
-                              <span className="value funded">{message.loan.funded}%</span>
                             </div>
                           </div>
                           <p className="loan-rec-purpose">{message.loan.purpose}</p>

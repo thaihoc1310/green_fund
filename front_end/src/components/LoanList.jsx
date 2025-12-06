@@ -200,18 +200,6 @@ const LoanList = () => {
                     </div>
                   </div>
 
-                  <div className="progress-section">
-                    <div className="progress-header">
-                      <span>Đã huy động: {loan.funded}%</span>
-                      <span>{formatCurrency(loan.amount * loan.funded / 100)}</span>
-                    </div>
-                    <div className="progress-bar">
-                      <div 
-                        className="progress-fill" 
-                        style={{ width: `${loan.funded}%` }}
-                      ></div>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="loan-card-footer">

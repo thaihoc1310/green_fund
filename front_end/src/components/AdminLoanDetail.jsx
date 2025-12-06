@@ -849,12 +849,6 @@ const AdminLoanDetail = () => {
                   <span>{formatDate(loan.end_date)}</span>
                 </div>
               )}
-              {loan.funded_date && (
-                <div className="timestamp-item">
-                  <label>Ngày huy động đủ vốn:</label>
-                  <span>{formatDate(loan.funded_date)}</span>
-                </div>
-              )}
             </div>
           </div>
         </div>

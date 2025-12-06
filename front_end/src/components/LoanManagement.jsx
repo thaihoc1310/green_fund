@@ -726,14 +726,6 @@ const LoanManagement = () => {
                   </div>
 
                   <div className="info-item">
-                    <span className="info-label">Tiến độ huy động</span>
-                    <div className="progress-bar-small">
-                      <div className="progress-fill" style={{ width: `${fundingProgress}%` }}></div>
-                    </div>
-                    <span className="progress-text">{fundingProgress}% ({formatCurrency(loan.funded_amount)} / {formatCurrency(loan.amount)})</span>
-                  </div>
-
-                  <div className="info-item">
                     <span className="info-label">Công ty</span>
                     <span className="info-value">{loan.company_name}</span>
                   </div>
@@ -842,16 +834,6 @@ const LoanManagement = () => {
                       {selectedLoan.repayment_method === 'quarterly' && 'Hàng quý'}
                       {selectedLoan.repayment_method === 'end_term' && 'Cuối kỳ'}
                     </strong>
-                  </div>
-                  
-                  <div className="detail-item">
-                    <span className="label">Đã huy động:</span>
-                    <strong>{formatCurrency(selectedLoan.funded_amount)}</strong>
-                  </div>
-                  
-                  <div className="detail-item">
-                    <span className="label">Tiến độ:</span>
-                    <strong>{calculateFundingProgress(selectedLoan.funded_amount, selectedLoan.amount)}%</strong>
                   </div>
                 </div>
               </div>

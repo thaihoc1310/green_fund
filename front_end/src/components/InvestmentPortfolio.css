@@ -216,24 +216,9 @@
 .progress-info {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
   font-size: 14px;
   color: #64748b;
   font-weight: 500;
-}
-
-.progress-bar-investment {
-  width: 100%;
-  height: 10px;
-  background-color: #e2e8f0;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.progress-bar-investment .progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #22c55e, #16a34a);
-  border-radius: 10px;
 }
 
 .completed-info {
@@ -507,25 +492,11 @@
   margin-bottom: 16px;
 }
 
-.progress-bar-modal {
-  width: 100%;
-  height: 12px;
-  background-color: #e2e8f0;
-  border-radius: 6px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-.progress-bar-modal .progress-fill {
-  height: 100%;
-  background: linear-gradient(135deg, #16a34a, #22c55e);
-  transition: width 0.3s ease;
-}
-
 .progress-text {
   font-size: 14px;
   color: #64748b;
   text-align: center;
+  margin-bottom: 12px;
 }
 
 .expected-return {

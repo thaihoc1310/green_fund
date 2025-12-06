@@ -183,12 +183,6 @@ const InvestmentPortfolio = () => {
                     <span>Còn lại: {investment.remainingMonths} / {investment.term} tháng</span>
                     <span>Thu nhập hàng tháng: {formatCurrency(investment.monthlyReturn)}</span>
                   </div>
-                  <div className="progress-bar-investment">
-                    <div 
-                      className="progress-fill" 
-                      style={{ width: `${((investment.term - investment.remainingMonths) / investment.term * 100)}%` }}
-                    ></div>
-                  </div>
                 </div>
               )}
 
@@ -287,12 +281,6 @@ const InvestmentPortfolio = () => {
                 <div className="detail-section">
                   <h4>⏱️ Tiến độ</h4>
                   <div className="progress-detail">
-                    <div className="progress-bar-modal">
-                      <div 
-                        className="progress-fill" 
-                        style={{ width: `${((selectedInvestment.term - selectedInvestment.remainingMonths) / selectedInvestment.term * 100)}%` }}
-                      ></div>
-                    </div>
                     <div className="progress-text">
                       Đã trải qua {selectedInvestment.term - selectedInvestment.remainingMonths}/{selectedInvestment.term} tháng 
                       ({Math.round((selectedInvestment.term - selectedInvestment.remainingMonths) / selectedInvestment.term * 100)}%)
