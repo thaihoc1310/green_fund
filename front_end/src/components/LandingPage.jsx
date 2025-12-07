@@ -380,19 +380,8 @@ const LandingPage = () => {
                 Chúng tôi tin rằng đầu tư không chỉ là tạo ra lợi nhuận, mà còn là góp phần 
                 xây dựng một tương lai xanh và bền vững cho thế hệ mai sau.
               </p>
-              <ul className="about-highlights">
-                <li>✓ Được cấp phép và giám sát bởi Ngân hàng Nhà nước</li>
-                <li>✓ Đối tác với hơn 100+ tổ chức tài chính uy tín</li>
-                <li>✓ Đã tài trợ thành công 500+ dự án xanh</li>
-                <li>✓ Cộng đồng 10,000+ nhà đầu tư tin tưởng</li>
-              </ul>
             </div>
             <div className="about-image">
-              <div className="about-card">
-                <div className="about-card-icon">🏆</div>
-                <h4>Giải thưởng xuất sắc</h4>
-                <p>Top 10 Fintech Việt Nam 2024</p>
-              </div>
             </div>
           </div>
         </div>
