@@ -130,7 +130,7 @@ function AppRoutes() {
             <div className="auth-container">
               <div className="auth-card">
                 <h2>Xác thực tài khoản</h2>
-                <p>Một email xác thực đã được gửi đến địa chỉ của bạn. Vui lòng kiểm tra email và làm theo hướng dẫn.</p>
+                <p>Một email xác thực đã được gửi đến địa chỉ của bạn. Vui lòng kiểm tra email (nhớ kiểm tra thư spam) và làm theo hướng dẫn.</p>
               </div>
             </div>
           } />
