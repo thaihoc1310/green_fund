@@ -16,7 +16,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { signOut, user, getUserRole } = useAuth();
-  const [userRole, setUserRole] = useState('borrower'); // 'borrower' or 'lender'
+  const [userRole, setUserRole] = useState('lender'); // 'borrower' or 'lender' - Mặc định là nhà đầu tư
   const [depositAmount, setDepositAmount] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -207,15 +207,15 @@ const Dashboard = () => {
                     </div>
                     <div className="dropdown-info">
                       <p className="dropdown-name">{userProfile?.full_name || 'Người dùng'}</p>
-                      <p className="dropdown-role">Người vay vốn</p>
+                      <p className="dropdown-role">{userRole === 'lender' ? 'Nhà đầu tư' : 'Người vay vốn'}</p>
                     </div>
                   </div>
                   <div className="dropdown-divider"></div>
-                  <button className="dropdown-item" onClick={() => { navigate('/profile', { state: { userRole: 'borrower' } }); setShowUserMenu(false); }}>
+                  <button className="dropdown-item" onClick={() => { navigate('/profile', { state: { userRole } }); setShowUserMenu(false); }}>
                     <FaUser /> Hồ sơ cá nhân
                   </button>
                   <button className="dropdown-item" onClick={() => { toggleRole(); setShowUserMenu(false); }}>
-                    <FaChartLine /> Chuyển sang người cho vay
+                    <FaChartLine /> {userRole === 'lender' ? 'Chuyển sang người vay' : 'Chuyển sang nhà đầu tư'}
                   </button>
                   <div className="dropdown-divider"></div>
                   <button className="dropdown-item logout" onClick={handleLogout}>
@@ -391,15 +391,15 @@ const Dashboard = () => {
                     </div>
                     <div className="dropdown-info">
                       <p className="dropdown-name">{userProfile?.full_name || 'Người dùng'}</p>
-                      <p className="dropdown-role">Nhà đầu tư</p>
+                      <p className="dropdown-role">{userRole === 'lender' ? 'Nhà đầu tư' : 'Người vay vốn'}</p>
                     </div>
                   </div>
                   <div className="dropdown-divider"></div>
-                  <button className="dropdown-item" onClick={() => { navigate('/profile', { state: { userRole: 'lender' } }); setShowUserMenu(false); }}>
+                  <button className="dropdown-item" onClick={() => { navigate('/profile', { state: { userRole } }); setShowUserMenu(false); }}>
                     <FaUser /> Hồ sơ cá nhân
                   </button>
                   <button className="dropdown-item" onClick={() => { toggleRole(); setShowUserMenu(false); }}>
-                    <FaChartLine /> Chuyển sang người vay
+                    <FaChartLine /> {userRole === 'lender' ? 'Chuyển sang người vay' : 'Chuyển sang nhà đầu tư'}
                   </button>
                   <div className="dropdown-divider"></div>
                   <button className="dropdown-item logout" onClick={handleLogout}>

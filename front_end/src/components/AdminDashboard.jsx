@@ -430,39 +430,33 @@ const AdminDashboard = () => {
         return;
       }
 
-      // Create user in auth
+      // Tạo user với metadata bao gồm role và is_verified
+      // Database trigger sẽ tự động tạo record trong public.users và wallets
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: newUser.email,
         password: newUser.password,
         options: {
           data: {
-            full_name: newUser.full_name
+            full_name: newUser.full_name,
+            phone: newUser.phone || null,
+            role: newUser.role || 'user',
+            is_verified: newUser.is_verified || false
           }
         }
       });
 
       if (authError) throw authError;
 
-      // Create user profile in users table
-      const { error: profileError } = await supabase
-        .from('users')
-        .insert({
-          id: authData.user.id,
-          email: newUser.email,
-          full_name: newUser.full_name,
-          phone: newUser.phone || null,
-          role: newUser.role,
-          is_verified: newUser.is_verified,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        });
-
-      if (profileError) throw profileError;
+      // Không cần INSERT vào public.users nữa - trigger sẽ tự động làm điều này
 
       setSuccessMessage('Tạo người dùng mới thành công');
       closeCreateUserModal();
-      await loadUsers();
-      loadStatistics();
+      
+      // Đợi một chút để trigger hoàn thành
+      setTimeout(async () => {
+        await loadUsers();
+        loadStatistics();
+      }, 500);
 
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {

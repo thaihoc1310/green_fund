@@ -10,6 +10,9 @@ createRoot(document.getElementById('root')).render(
 )
 
 // Register Service Worker for PWA
+// ⚠️ TEMPORARILY DISABLED - Service worker cache causing issues with updated code
+// TODO: Re-enable after testing registration fix
+/*
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
@@ -22,4 +25,5 @@ if ('serviceWorker' in navigator) {
       });
   });
 }
+*/
 

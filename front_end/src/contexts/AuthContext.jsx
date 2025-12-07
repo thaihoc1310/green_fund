@@ -39,7 +39,8 @@ export const AuthProvider = ({ children }) => {
   // Đăng ký
   const signUp = async (email, password, fullName, phone) => {
     try {
-      // Bước 1: Tạo auth user
+      // Tạo auth user với metadata
+      // Database trigger sẽ tự động tạo record trong public.users và wallets
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -53,29 +54,7 @@ export const AuthProvider = ({ children }) => {
 
       if (authError) throw authError;
 
-      if (authData.user) {
-        // Bước 2: Tạo user trong public.users table
-        const { error: userError } = await supabase
-          .from('users')
-          .insert([
-            {
-              id: authData.user.id,
-              email: email,
-              full_name: fullName,
-              phone: phone,
-              role: 'user',
-              is_verified: false,
-            }
-          ]);
-
-        if (userError) {
-          console.error('Error creating user profile:', userError);
-          throw userError;
-        }
-
-        // Trigger sẽ tự động tạo wallet cho user
-      }
-
+      // Không cần INSERT vào public.users nữa - trigger sẽ tự động làm điều này
       return { data: authData, error: null };
     } catch (error) {
       console.error('Sign up error:', error);
