@@ -1,5 +1,8 @@
-// Cloudflare Pages Function to send consultation request email
+// Cloudflare Pages Function to send consultation request email via Resend
 // Path: /functions/send-consultation-request.js
+// 
+// Environment variables required:
+// - RESEND_API_KEY: Get from https://resend.com/api-keys
 
 export async function onRequestPost(context) {
   try {
@@ -188,40 +191,34 @@ export async function onRequestPost(context) {
       </html>
     `;
 
-    // Prepare email data for MailChannels (Cloudflare's recommended email service)
-    const emailData = {
-      personalizations: [
-        {
-          to: [{ email: 'greenfund.contact@gmail.com', name: 'GreenFund Support' }],
-          subject: `🌱 Yêu cầu tư vấn đầu tư từ ${full_name}`
-        }
-      ],
-      from: {
-        email: 'noreply@greenfund.com',
-        name: 'GreenFund System'
-      },
-      content: [
-        {
-          type: 'text/html',
-          value: htmlContent
-        }
-      ]
-    };
+    // Check if RESEND_API_KEY exists
+    if (!env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY environment variable is not set');
+    }
 
-    // Send email using MailChannels API (Free for Cloudflare Workers)
-    const mailchannelsResponse = await fetch('https://api.mailchannels.net/tx/v1/send', {
+    // Send email using Resend API (Free 100 emails/day, no DNS config needed!)
+    const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(emailData)
+      body: JSON.stringify({
+        from: 'GreenFund System <noreply@greenfund.site>',
+        to: ['greenfund.contact@gmail.com'],
+        subject: `🌱 Yêu cầu tư vấn đầu tư từ ${full_name}`,
+        html: htmlContent
+      })
     });
 
-    if (!mailchannelsResponse.ok) {
-      const errorText = await mailchannelsResponse.text();
-      console.error('MailChannels error:', errorText);
-      throw new Error('Failed to send email via MailChannels');
+    if (!resendResponse.ok) {
+      const errorData = await resendResponse.json();
+      console.error('Resend error:', errorData);
+      throw new Error(`Failed to send email via Resend: ${errorData.message || 'Unknown error'}`);
     }
+
+    const resendResult = await resendResponse.json();
+    console.log('Email sent successfully via Resend:', resendResult.id);
 
     return new Response(JSON.stringify({ 
       success: true,
