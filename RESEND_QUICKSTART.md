@@ -118,31 +118,7 @@ git push
 
 ---
 
-## 📊 Monitor emails
 
-**Resend Dashboard:** https://resend.com/emails
-
-Xem tất cả emails đã gửi:
-- ✅ Delivered: Email gửi thành công
-- ⏳ Queued: Đang trong hàng đợi
-- ❌ Failed: Gửi thất bại (xem reason)
-
-Click vào email để xem:
-- HTML preview
-- Headers
-- Logs
-- Bounce/Complaint
-
----
-
-## 💡 Tips
-
-1. **Free tier:** 100 emails/day, 3,000 emails/month
-2. **Rate limit:** 10 requests/second
-3. **Email tracking:** Tự động track opens & clicks (nếu enable)
-4. **Test mode:** Có thể test ở local với same API key
-
----
 
 ## ✅ Done!
 
