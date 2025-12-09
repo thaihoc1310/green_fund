@@ -8,13 +8,17 @@ import { BiMoney, BiTime, BiTrendingUp } from 'react-icons/bi';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import './LoanDetail.css';
 import { loansData, calculateESGScore } from '../data/loansData';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabaseClient';
 
 const LoanDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
-  const [investAmount, setInvestAmount] = useState('');
+  const { user } = useAuth();
   const [showInvestModal, setShowInvestModal] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
   // Get selected package from navigation state
   const selectedPackage = location.state?.selectedPackage;
@@ -100,15 +104,73 @@ const LoanDetail = () => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   };
 
-  const handleInvest = () => {
-    if (!investAmount || investAmount < 1000000) {
-      alert('Số tiền đầu tư tối thiểu là 1,000,000 VND');
+  const handleRequestConsultation = async () => {
+    if (!user) {
+      setNotification({ 
+        show: true, 
+        message: 'Vui lòng đăng nhập để yêu cầu tư vấn', 
+        type: 'error' 
+      });
+      setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
       return;
     }
-    // TODO: Implement investment logic
-    alert(`Đầu tư thành công ${formatCurrency(investAmount)} vào dự án!`);
-    setShowInvestModal(false);
-    navigate('/investment-portfolio');
+
+    try {
+      setIsSending(true);
+
+      // Get user profile
+      const { data: userProfile, error: profileError } = await supabase
+        .from('users')
+        .select('email, full_name, phone, is_verified')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError) throw profileError;
+
+      // Send consultation request asynchronously
+      const requestData = {
+        email: userProfile.email,
+        full_name: userProfile.full_name,
+        id: user.id,
+        is_verified: userProfile.is_verified,
+        phone: userProfile.phone,
+        project_name: loanData.projectName,
+        loan_amount: loanData.amount,
+        interest_rate: loanData.interestRate
+      };
+
+      // Send to Cloudflare Pages Function (fire and forget)
+      fetch('/send-consultation-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData)
+      }).catch(err => console.error('Email send error:', err));
+
+      // Close modal immediately
+      setShowInvestModal(false);
+      
+      // Show success notification
+      setNotification({ 
+        show: true, 
+        message: '✓ Yêu cầu tư vấn đã được gửi! Chúng tôi sẽ liên hệ với bạn sớm nhất.', 
+        type: 'success' 
+      });
+
+      setTimeout(() => {
+        setNotification({ show: false, message: '', type: '' });
+      }, 5000);
+
+    } catch (error) {
+      console.error('Error requesting consultation:', error);
+      setNotification({ 
+        show: true, 
+        message: 'Có lỗi xảy ra. Vui lòng thử lại sau.', 
+        type: 'error' 
+      });
+      setTimeout(() => setNotification({ show: false, message: '', type: '' }), 3000);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -395,41 +457,63 @@ const LoanDetail = () => {
                 <span>Thời hạn:</span>
                 <strong>{loanData.term} tháng</strong>
               </div>
-            </div>
-
-            <div className="input-group">
-              <label>Số tiền muốn đầu tư (tối thiểu 1,000,000 VND)</label>
-              <input
-                type="number"
-                value={investAmount}
-                onChange={(e) => setInvestAmount(e.target.value)}
-                placeholder="Nhập số tiền"
-                min="1000000"
-                step="100000"
-              />
-            </div>
-
-            {investAmount >= 1000000 && (
-              <div className="investment-summary">
-                <p>Dự kiến nhận về sau {loanData.term} tháng:</p>
-                <h3 className="expected-return">
-                  {formatCurrency(investAmount * (1 + loanData.interestRate / 100 * loanData.term / 12))}
-                </h3>
-                <p className="profit">
-                  Lợi nhuận: {formatCurrency(investAmount * loanData.interestRate / 100 * loanData.term / 12)}
-                </p>
+              <div className="modal-info-item">
+                <span>Số tiền cần vay:</span>
+                <strong>{formatCurrency(loanData.amount)}</strong>
               </div>
-            )}
+            </div>
+
+            <div className="investment-summary" style={{ background: '#f0fdf4', border: '1px solid #86efac', marginTop: '20px' }}>
+
+              <p style={{ fontSize: '14px', color: '#166534' }}>
+                Nhấn nút bên dưới để yêu cầu tư vấn chi tiết về cơ hội đầu tư này. 
+                Đội ngũ GreenFund sẽ liên hệ với bạn trong 24h.
+              </p>
+            </div>
 
             <div className="modal-actions">
               <button className="btn-cancel" onClick={() => setShowInvestModal(false)}>
                 Hủy
               </button>
-              <button className="btn-confirm" onClick={handleInvest}>
-                Xác nhận đầu tư
+              <button 
+                className="btn-confirm" 
+                onClick={handleRequestConsultation}
+                disabled={isSending}
+                style={{ opacity: isSending ? 0.6 : 1 }}
+              >
+                {isSending ? 'Đang gửi...' : 'Yêu cầu tư vấn ngay'}
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Notification Toast */}
+      {notification.show && (
+        <div 
+          className="notification-toast" 
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            zIndex: 10000,
+            background: notification.type === 'success' ? '#f0fdf4' : '#fef2f2',
+            border: `2px solid ${notification.type === 'success' ? '#22c55e' : '#ef4444'}`,
+            borderRadius: '12px',
+            padding: '16px 24px',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+            maxWidth: '400px',
+            animation: 'slideInRight 0.3s ease-out'
+          }}
+        >
+          <p style={{ 
+            margin: 0, 
+            color: notification.type === 'success' ? '#15803d' : '#dc2626',
+            fontSize: '15px',
+            fontWeight: 500
+          }}>
+            {notification.message}
+          </p>
         </div>
       )}
     </div>
