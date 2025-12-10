@@ -288,7 +288,7 @@ const LandingPage = () => {
         <div className="section-container">
           <div className="section-header">
             <h2>Cách hoạt động</h2>
-            <p>Dành cho cả nhà đầu tư và người đi vay</p>
+            <p>Dành cho cả nhà đầu tư và người gọi vốn</p>
           </div>
 
           {/* Tabs */}
@@ -305,7 +305,7 @@ const LandingPage = () => {
               onClick={() => setActiveTab('borrower')}
             >
               <span className="tab-icon">🏢</span>
-              Dành cho Người đi vay
+              Dành cho Người gọi vốn
             </button>
           </div>
 

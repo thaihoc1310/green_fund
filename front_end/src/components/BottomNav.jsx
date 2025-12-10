@@ -17,7 +17,7 @@ const BottomNav = ({ userRole = 'borrower' }) => {
 
   const lenderNavItems = [
     { path: '/dashboard', icon: FaHome, label: 'Trang chủ' },
-    { path: '/loan-list', icon: FaHandHoldingUsd, label: 'Cho vay' },
+    { path: '/loan-list', icon: FaHandHoldingUsd, label: 'Gói dự án' },
     { path: '/investment-portfolio', icon: FaChartLine, label: 'Đầu tư' },
     { path: '/deposit', icon: FaWallet, label: 'Nạp tiền' },
     { path: '/profile', icon: FaUser, label: 'Cá nhân' },

@@ -21,6 +21,8 @@ const Dashboard = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [selectedResultIndex, setSelectedResultIndex] = useState(-1);
   const [userProfile, setUserProfile] = useState(null);
   const [walletBalance, setWalletBalance] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -100,6 +102,11 @@ const Dashboard = () => {
       if (showUserMenu && !event.target.closest('.user-menu-container')) {
         setShowUserMenu(false);
       }
+      // Close search results when clicking outside
+      if (showSearchResults && !event.target.closest('.search-container') && !event.target.closest('.search-overlay-mobile')) {
+        setShowSearchResults(false);
+        setSelectedResultIndex(-1);
+      }
       // Close search overlay when clicking outside
       if (isSearchExpanded && !event.target.closest('.search-overlay-mobile') && !event.target.closest('.search-icon-mobile')) {
         setIsSearchExpanded(false);
@@ -108,7 +115,7 @@ const Dashboard = () => {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showUserMenu, isSearchExpanded]);
+  }, [showUserMenu, isSearchExpanded, showSearchResults]);
 
   // Handle scroll for header animation
   useEffect(() => {
@@ -147,6 +154,142 @@ const Dashboard = () => {
     setUserRole(userRole === 'borrower' ? 'lender' : 'borrower');
   };
 
+  // Search routes configuration
+  const searchRoutes = [
+    {
+      title: 'Gọi vốn',
+      description: 'Tạo yêu cầu gọi vốn cho dự án xanh',
+      path: '/create-loan',
+      icon: BiMoney,
+      keywords: ['goi von', 'tao du an', 'yeu cau von', 'vay', 'tao loan', 'create'],
+      role: 'borrower'
+    },
+    {
+      title: 'Dự án của tôi',
+      description: 'Quản lý các dự án gọi vốn',
+      path: '/loan-management',
+      icon: FaChartLine,
+      keywords: ['du an', 'quan ly du an', 'loan management', 'project'],
+      role: 'borrower'
+    },
+    {
+      title: 'Gói dự án',
+      description: 'Xem danh sách các dự án cần đầu tư',
+      path: '/loan-list',
+      icon: FaHandHoldingUsd,
+      keywords: ['goi du an', 'cho vay', 'du an dau tu', 'loan list', 'invest'],
+      role: 'lender'
+    },
+    {
+      title: 'Danh mục đầu tư',
+      description: 'Xem các khoản đầu tư của bạn',
+      path: '/investment-portfolio',
+      icon: FaChartLine,
+      keywords: ['dau tu', 'danh muc', 'portfolio', 'investment'],
+      role: 'lender'
+    },
+    {
+      title: 'Thông tin cá nhân',
+      description: 'Xem và chỉnh sửa hồ sơ cá nhân',
+      path: '/profile',
+      icon: FaUser,
+      keywords: ['ca nhan', 'ho so', 'profile', 'thong tin', 'account'],
+      role: 'both'
+    },
+    {
+      title: 'Nạp tiền',
+      description: 'Nạp tiền vào ví GreenFund',
+      path: '/deposit',
+      icon: FaWallet,
+      keywords: ['nap tien', 'wallet', 'vi', 'deposit', 'balance'],
+      role: 'both'
+    },
+    {
+      title: 'Lịch sử giao dịch',
+      description: 'Xem lịch sử các giao dịch',
+      path: '/transaction-history',
+      icon: FaHistory,
+      keywords: ['lich su', 'giao dich', 'transaction', 'history'],
+      role: 'both'
+    }
+  ];
+
+  // Filter search results based on query and user role
+  const getFilteredResults = () => {
+    if (!searchQuery.trim()) return [];
+    
+    const query = searchQuery.toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove Vietnamese accents
+      .replace(/đ/g, 'd');
+    
+    return searchRoutes.filter(route => {
+      // Filter by role
+      if (route.role !== 'both' && route.role !== userRole) return false;
+      
+      // Check if query matches title, description, or keywords
+      const titleMatch = route.title.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .includes(query);
+      
+      const descMatch = route.description.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .includes(query);
+      
+      const keywordMatch = route.keywords.some(keyword => 
+        keyword.includes(query) || query.includes(keyword)
+      );
+      
+      return titleMatch || descMatch || keywordMatch;
+    });
+  };
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setShowSearchResults(value.trim().length > 0);
+    setSelectedResultIndex(-1);
+  };
+
+  // Handle search result selection
+  const handleSearchSelect = (route) => {
+    navigate(route.path, { state: { userRole } });
+    setSearchQuery('');
+    setShowSearchResults(false);
+    setSelectedResultIndex(-1);
+    setIsSearchExpanded(false);
+  };
+
+  // Handle keyboard navigation
+  const handleSearchKeyDown = (e) => {
+    const results = getFilteredResults();
+    
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedResultIndex(prev => 
+        prev < results.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedResultIndex(prev => prev > 0 ? prev - 1 : -1);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedResultIndex >= 0 && results[selectedResultIndex]) {
+        handleSearchSelect(results[selectedResultIndex]);
+      }
+    } else if (e.key === 'Escape') {
+      setShowSearchResults(false);
+      setSearchQuery('');
+      setSelectedResultIndex(-1);
+      setIsSearchExpanded(false);
+    }
+  };
+
   const handleDeposit = () => {
     if (depositAmount && depositAmount > 0) {
       alert(`Đã nạp ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(depositAmount)} vào tài khoản`);
@@ -172,13 +315,37 @@ const Dashboard = () => {
           
           <div className="header-center">
             <div className="search-container">
+              <FaSearch className="search-icon-left" />
               <input 
                 type="text" 
-                placeholder="Tìm kiếm trong GreenFund" 
+                placeholder="Tìm kiếm: Gọi vốn, Dự án, Đầu tư..." 
                 className="search-input"
                 value={searchQuery || ''}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchKeyDown}
+                onFocus={() => searchQuery.trim() && setShowSearchResults(true)}
               />
+              {showSearchResults && getFilteredResults().length > 0 && (
+                <div className="search-results-dropdown">
+                  {getFilteredResults().map((result, index) => {
+                    const Icon = result.icon;
+                    return (
+                      <button
+                        key={result.path}
+                        className={`search-result-item ${selectedResultIndex === index ? 'selected' : ''}`}
+                        onClick={() => handleSearchSelect(result)}
+                        onMouseEnter={() => setSelectedResultIndex(index)}
+                      >
+                        <Icon className="result-icon" />
+                        <div className="result-content">
+                          <div className="result-title">{result.title}</div>
+                          <div className="result-description">{result.description}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
           
@@ -215,7 +382,7 @@ const Dashboard = () => {
                     <FaUser /> Hồ sơ cá nhân
                   </button>
                   <button className="dropdown-item" onClick={() => { toggleRole(); setShowUserMenu(false); }}>
-                    <FaChartLine /> {userRole === 'lender' ? 'Chuyển sang người vay' : 'Chuyển sang nhà đầu tư'}
+                    <FaChartLine /> {userRole === 'lender' ? 'Chuyển sang người gọi vốn' : 'Chuyển sang nhà đầu tư'}
                   </button>
                   <div className="dropdown-divider"></div>
                   <button className="dropdown-item logout" onClick={handleLogout}>
@@ -228,17 +395,46 @@ const Dashboard = () => {
 
           {/* Mobile Search Overlay */}
           <div className={`search-overlay-mobile ${isSearchExpanded ? 'active' : ''}`}>
-            <input 
-              type="text" 
-              placeholder="Tìm kiếm trong GreenFund" 
-              className="search-input"
-              value={searchQuery || ''}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoFocus
-            />
-            <button className="close-search" onClick={() => setIsSearchExpanded(false)}>
-              <FaTimes />
-            </button>
+            <div className="search-mobile-header">
+              <FaSearch className="search-icon-left" />
+              <input 
+                type="text" 
+                placeholder="Tìm kiếm: Gọi vốn, Dự án, Đầu tư..." 
+                className="search-input"
+                value={searchQuery || ''}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchKeyDown}
+                autoFocus
+              />
+              <button className="close-search" onClick={() => {
+                setIsSearchExpanded(false);
+                setSearchQuery('');
+                setShowSearchResults(false);
+              }}>
+                <FaTimes />
+              </button>
+            </div>
+            {showSearchResults && getFilteredResults().length > 0 && (
+              <div className="search-results-mobile">
+                {getFilteredResults().map((result, index) => {
+                  const Icon = result.icon;
+                  return (
+                    <button
+                      key={result.path}
+                      className={`search-result-item ${selectedResultIndex === index ? 'selected' : ''}`}
+                      onClick={() => handleSearchSelect(result)}
+                      onMouseEnter={() => setSelectedResultIndex(index)}
+                    >
+                      <Icon className="result-icon" />
+                      <div className="result-content">
+                        <div className="result-title">{result.title}</div>
+                        <div className="result-description">{result.description}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </header>
         <main className="dashboard-content">
@@ -252,7 +448,7 @@ const Dashboard = () => {
             <div className="account-card">
               <div className="account-header">
                 <span className="account-label">Ví GreenFund</span>
-                <span className="account-role">Người đi vay</span>
+                <span className="account-role">Người gọi vốn</span>
               </div>
               <div className="account-balance">
                 <span className="balance-label">Số dư khả dụng</span>
@@ -277,7 +473,7 @@ const Dashboard = () => {
                   onClick={() => navigate('/create-loan', { state: { userRole: 'borrower' } })}
                 >
                   <BiMoney className="service-icon" />
-                  <span>Vay vốn</span>
+                  <span>Gọi vốn</span>
                 </button>
                 <button 
                   className="service-btn"
@@ -358,11 +554,45 @@ const Dashboard = () => {
               <img src={logo} alt="GreenFund Logo" className="logo-image" />
               <span className="logo-text">GreenFund</span>
             </div>
+            {/* Mobile Search Icon */}
+            <button className="search-icon-mobile" onClick={() => setIsSearchExpanded(true)}>
+              <FaSearch />
+            </button>
           </div>
           
           <div className="header-center">
             <div className="search-container">
-              <input type="text" placeholder="Tìm kiếm trong GreenFund" className="search-input" />
+              <FaSearch className="search-icon-left" />
+              <input 
+                type="text" 
+                placeholder="Tìm kiếm: Gọi vốn, Dự án, Đầu tư..." 
+                className="search-input"
+                value={searchQuery || ''}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchKeyDown}
+                onFocus={() => searchQuery.trim() && setShowSearchResults(true)}
+              />
+              {showSearchResults && getFilteredResults().length > 0 && (
+                <div className="search-results-dropdown">
+                  {getFilteredResults().map((result, index) => {
+                    const Icon = result.icon;
+                    return (
+                      <button
+                        key={result.path}
+                        className={`search-result-item ${selectedResultIndex === index ? 'selected' : ''}`}
+                        onClick={() => handleSearchSelect(result)}
+                        onMouseEnter={() => setSelectedResultIndex(index)}
+                      >
+                        <Icon className="result-icon" />
+                        <div className="result-content">
+                          <div className="result-title">{result.title}</div>
+                          <div className="result-description">{result.description}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
           
@@ -399,7 +629,7 @@ const Dashboard = () => {
                     <FaUser /> Hồ sơ cá nhân
                   </button>
                   <button className="dropdown-item" onClick={() => { toggleRole(); setShowUserMenu(false); }}>
-                    <FaChartLine /> {userRole === 'lender' ? 'Chuyển sang người vay' : 'Chuyển sang nhà đầu tư'}
+                    <FaChartLine /> {userRole === 'lender' ? 'Chuyển sang người gọi vốn' : 'Chuyển sang nhà đầu tư'}
                   </button>
                   <div className="dropdown-divider"></div>
                   <button className="dropdown-item logout" onClick={handleLogout}>
@@ -408,6 +638,50 @@ const Dashboard = () => {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Mobile Search Overlay */}
+          <div className={`search-overlay-mobile ${isSearchExpanded ? 'active' : ''}`}>
+            <div className="search-mobile-header">
+              <FaSearch className="search-icon-left" />
+              <input 
+                type="text" 
+                placeholder="Tìm kiếm: Gọi vốn, Dự án, Đầu tư..." 
+                className="search-input"
+                value={searchQuery || ''}
+                onChange={handleSearchChange}
+                onKeyDown={handleSearchKeyDown}
+                autoFocus
+              />
+              <button className="close-search" onClick={() => {
+                setIsSearchExpanded(false);
+                setSearchQuery('');
+                setShowSearchResults(false);
+              }}>
+                <FaTimes />
+              </button>
+            </div>
+            {showSearchResults && getFilteredResults().length > 0 && (
+              <div className="search-results-mobile">
+                {getFilteredResults().map((result, index) => {
+                  const Icon = result.icon;
+                  return (
+                    <button
+                      key={result.path}
+                      className={`search-result-item ${selectedResultIndex === index ? 'selected' : ''}`}
+                      onClick={() => handleSearchSelect(result)}
+                      onMouseEnter={() => setSelectedResultIndex(index)}
+                    >
+                      <Icon className="result-icon" />
+                      <div className="result-content">
+                        <div className="result-title">{result.title}</div>
+                        <div className="result-description">{result.description}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </header>
         <main className="dashboard-content">
@@ -446,7 +720,7 @@ const Dashboard = () => {
                   onClick={() => navigate('/loan-list', { state: { userRole: 'lender' } })}
                 >
                   <FaHandHoldingUsd className="service-icon" />
-                  <span>Cho vay</span>
+                  <span>Gói dự án</span>
                 </button>
                 <button 
                   className="service-btn"
